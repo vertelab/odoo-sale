@@ -29,7 +29,7 @@
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['stock',],
+    'depends': ['stock', 'partner_show_credit'],
     'data': [
         'stock_view.xml',
     ],
