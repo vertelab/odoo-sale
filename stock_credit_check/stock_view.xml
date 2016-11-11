@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="view_picking_form" model="ir.ui.view">
+            <field name="name">stock.picking.credit_check.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                
+                <button name="do_enter_transfer_details" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', ('credit_check', '!=', True)]}</attribute>
+                </button>
+                
+                <button name="do_enter_transfer_details" position="after">
+                    <button name="do_enter_transfer_details" states="assigned,partially_available" string="Transfer despite credit" groups="stock.group_stock_user" attrs="{'invisible': ['|', ('credit_check', '=', True)]}" type="object"/>
+                </button>
+                
+                <field name="partner_id" position="after">
+                    <field name="credit_check"/>
+                </field>
+            </field>
+        </record>
+        
+    </data>
+</openerp>
