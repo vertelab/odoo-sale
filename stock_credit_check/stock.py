@@ -31,21 +31,20 @@ class stock_picking(models.Model):
     def _get_credit_check(self):
         self.credit_check = self.partner_id.credit <= self.partner_id.credit_limit
 
-class stock_transfer_details(models.TransientModel):
-    _inherit = 'stock.transfer_details'
-    
-    @api.one
-    def do_detailed_transfer(self):
-        res = super(stock_transfer_details, self).do_detailed_transfer()
+    @api.multi
+    def do_transfer(self):
+        res = super(stock_picking, self).do_transfer()
         if res:
-            self.env['mail.message'].create({
-                'body': 'The delivery was sent despite a failed credit check.',
-                'subject': 'Ignored credit check',
-                'author_id': self.env.user.partner_id.id,
-                'res_id': self.picking_id.id,
-                'model': self.picking_id._name,
-                'type': 'comment',
-            })
+            for p in self:
+                if not p.credit_check:
+                    self.env['mail.message'].create({
+                        'body': _('The delivery was sent despite a failed credit check.'),
+                        'subject': _('Ignored credit check'),
+                        'author_id': self.env.user.partner_id.id,
+                        'res_id': p.id,
+                        'model': p._name,
+                        'type': 'comment',
+                    })
         return res
         
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
