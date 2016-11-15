@@ -33,7 +33,7 @@ class stock_picking(models.Model):
     
     @api.multi
     def do_transfer(self):
-        res = super(stock_transfer_details, self).do_detailed_transfer()
+        res = super(stock_picking, self).do_transfer()
         if res:
             for p in self:
                 if not p.credit_check:
@@ -44,6 +44,7 @@ class stock_picking(models.Model):
                         'res_id': p.id,
                         'model': p._name,
                         'type': 'comment',
+                        'subtype_id': self.env.ref('mail.mt_note').id,
                     })
         return res
         

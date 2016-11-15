@@ -2,13 +2,13 @@
 <openerp>
     <data>
         
-        <record id="account.view_partner_property_form" model="ir.ui.view">
+        <record id="view_partner_property_form" model="ir.ui.view">
             <field name="name">res.partner.property.form.credit_check.inherit</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="account.view_partner_property_form"/>
             <field name="arch" type="xml">
                 <field name="credit" position="attributes">
-                    <attributes name="groups"/>
+                    <attribute name="groups"/>
                 </field>
                 <field name="credit" position="after">
                     <field name="credit_limit"/>

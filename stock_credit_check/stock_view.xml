@@ -13,7 +13,7 @@
                 </button>
                 
                 <button name="do_new_transfer" position="after">
-                    <button name="do_new_transfer" attrs="{'invisible': ['|', ('credit_check', '=', True)]}" states="draft,partially_available,assigned" string="Validate" groups="stock.group_stock_user" type="object" class="oe_highlight"/>
+                    <button name="do_new_transfer" attrs="{'invisible': ['|', ('credit_check', '=', True)]}" states="draft,partially_available,assigned" string="Validate despite credit" groups="stock.group_stock_user" type="object"/>
                 </button>
                 
                 <field name="partner_id" position="after">
