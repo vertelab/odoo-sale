@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <record id="wizard_price_export" model="ir.ui.view">
+            <field name="name">Export Price-files</field>
+            <field name="model">price.export</field>
+            <field name="arch" type="xml">
+                <form string="Export Price-files">
+                    <field invisible="1" name="state"/>
+                    <field name="name" invisible="1"/>
+                    <notebook states="choose">
+                        <page string="Export">
+                            <group>
+
+                            </group>
+                        </page>
+                        <page string="Import">
+                            <group rowspan="4" string="Filebox">
+                                <field name="data"/><newline/>
+                                <div>
+                                    <p>File to upload</p>
+                                </div>
+                            </group>
+                        </page>
+                    </notebook>
+                    <div states="get">
+                         <h2>Export Complete</h2>
+                         <p>Here is the exported csv-file: <field name="csv_file" readonly="1" filename="name"/></p>
+                    </div>
+                    <footer states="choose">
+                                <button name="send_form" string="Send" type="object" class="oe_highlight"/>
+                                or
+                                <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                     <footer states="get">
+                                <button special="cancel" string="Close" type="object"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_wizard_price_export" model="ir.actions.act_window">
+            <field name="name">Export/import CSV-files</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">price.export</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem action="action_wizard_price_export" id="menu_wizard_price_export" parent="account.menu_finance_periodical_processing"/>
+        
+        <menuitem id="menu_product_pricelist_export" name="Export Pricelists" action="action_wizard_price_export"
+            parent="base.menu_base_config" groups="product.group_sale_pricelist" sequence="90"/>
+
+        
+  </data>
+</openerp>
