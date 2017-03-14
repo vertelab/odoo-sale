@@ -26,7 +26,7 @@
 'description': """""",
 'author': 'Vertel AB',
 'website': 'http://www.vertel.se',
-'depends': ['sale_journal', 'sale'],
+'depends': ['sale_journal','account'],
 'data': [
 'sale_journal_view.xml',
 ],
