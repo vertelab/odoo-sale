@@ -45,6 +45,7 @@ class stock_picking(models.Model):
                     'fiscal_position': picking.sale_id.fiscal_position,
                     'product': picking.sale_id.invoice_type_id.admin_fee if picking.sale_id.invoice_type_id and picking.sale_id.invoice_type_id.admin_fee else None,
                     'project': picking.sale_id.project_id.id if picking.sale_id.project_id else None,
+                    'pricelist': picking.sale_id.pricelist_id,
                 }
         invoices = super(stock_picking, self).action_invoice_create(journal_id, group, type) 
         for invoice in self.env['account.invoice'].browse(invoices):
@@ -55,7 +56,7 @@ class stock_picking(models.Model):
                     'name': partner[invoice.partner_id.id]['product'].name,
                     'sequence': 999,
                     'origin': partner[invoice.partner_id.id]['origin'],
-                    'price_unit': partner[invoice.partner_id.id]['product'].lst_price,
+                    'price_unit': partner[invoice.partner_id.id]['pricelist'].price_get(partner[invoice.partner_id.id]['product'].id,1.0, invoice.partner_id.id)[partner[invoice.partner_id.id]['pricelist'].id],
                     'quantity': 1,
                     'product_id': partner[invoice.partner_id.id]['product'].id,
                     'invoice_line_tax_id': [(6, 0, [x.id for x in partner[invoice.partner_id.id]['product'].taxes_id])],
@@ -80,7 +81,7 @@ class sale_order(models.Model):
                     'name': self.invoice_type_id.admin_fee.name,
                     'sequence': 999,
                     'origin': self.name,
-                    'price_unit': self.invoice_type_id.admin_fee.lst_price,
+                    'price_unit': self.pricelist_id.price_get(self.invoice_type_id.admin_fee.id,1.0, self.partner_id.id)[self.pricelist_id.id],
                     'quantity': 1,
                     'product_id': self.invoice_type_id.admin_fee.id,
                     'invoice_line_tax_id': [(6, 0, [x.id for x in self.invoice_type_id.admin_fee.taxes_id])],
