@@ -38,7 +38,7 @@ class stock_picking(models.Model):
         partner = {}
         for picking in self:
             if picking.sale_id.invoice_type_id and picking.sale_id.invoice_type_id.admin_fee:
-                partner[picking.sale_id.partner_id.id] = {
+                partner[picking.sale_id.partner_invoice_id.id if picking.sale_id.partner_invoice_id else picking.sale_id.partner_id.id] = {
                     'order_id': picking.sale_id.id,
                     'account_id': picking.sale_id.invoice_type_id.admin_fee.property_account_income.id if picking.sale_id.invoice_type_id.admin_fee.property_account_income else picking.sale_id.invoice_type_id.admin_fee.categ_id.property_account_income_categ.id,
                     'origin': picking.sale_id.name,
@@ -46,7 +46,7 @@ class stock_picking(models.Model):
                     'product': picking.sale_id.invoice_type_id.admin_fee if picking.sale_id.invoice_type_id and picking.sale_id.invoice_type_id.admin_fee else None,
                     'project': picking.sale_id.project_id.id if picking.sale_id.project_id else None,
                 }
-        invoices = super(stock_picking, self).action_invoice_create(journal_id, group, type)        
+        invoices = super(stock_picking, self).action_invoice_create(journal_id, group, type) 
         for invoice in self.env['account.invoice'].browse(invoices):
             #~ raise Warning(partner,partner[invoice.partner_id.id])
             if partner.get(invoice.partner_id.id):
