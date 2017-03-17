@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="seq_type_customer_no" model="ir.sequence.type">
+            <field name="name">Customer Number</field>
+            <field name="code">res.partner.customer.no</field>
+        </record>
+
+        <record id="seq_customer_no" model="ir.sequence">
+            <field name="name">Customer Number</field>
+            <field name="code">res.partner.customer.no</field>
+            <field name="prefix"></field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_type_supplier_no" model="ir.sequence.type">
+            <field name="name">Supplier Number</field>
+            <field name="code">res.partner.supplier.no</field>
+        </record>
+
+        <record id="seq_supplier_no" model="ir.sequence">
+            <field name="name">Supplier Number</field>
+            <field name="code">res.partner.supplier.no</field>
+            <field name="prefix">L-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+<record model="ir.actions.server" id="action_create_customer_no">
+        <field name="name">Generate Customer Number</field>
+        <field name="state">code</field>
+        <field name="condition" eval="True"/>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="code">
+obj = object.browse(context.get('active_ids', []))
+for o in obj:
+    o.generate_new_customer_no()
+</field>
+    </record>
+    
+    <record model="ir.values" id="customer_no_action_menu">
+        <field name="name" >Generate Customer Number</field>
+        <field name="model">res.partner</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="key2">client_action_multi</field>
+        <field name="value" eval="'ir.actions.server,%d' % action_create_customer_no"/>
+    </record>
+
+<record model="ir.actions.server" id="action_get_customer_no">
+        <field name="name">Get Customer Number</field>
+        <field name="state">code</field>
+        <field name="condition" eval="True"/>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="code">
+obj = object.browse(context.get('active_ids', []))
+for o in obj:
+    o.get_customer_no()
+</field>
+    </record>
+    
+    <record model="ir.values" id="get_customer_no_action_menu">
+        <field name="name" >Get Customer Number</field>
+        <field name="model">sale.order</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="key2">client_action_multi</field>
+        <field name="value" eval="'ir.actions.server,%d' % action_get_customer_no"/>
+    </record>
+
+    <record model="ir.actions.server" id="action_create_customer_no">
+        <field name="menu_ir_values_id" ref="customer_no_action_menu"/>
+    </record>
+    </data>
+</openerp>
