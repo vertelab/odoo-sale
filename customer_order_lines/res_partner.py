@@ -42,6 +42,11 @@ class ResPartner(models.Model):
 class OrderLine(models.Model):
     _inherit = 'sale.order.line'
     
-    date_order = fields.Datetime(related='order_id.date_order', store=True)
+    date_order = fields.Date(compute='_get_date_order', store=True)
+    
+    @api.one
+    @api.depends('order_id', 'order_id.date_order')
+    def _get_date_order(self):
+        self.date_order = self.order_id.date_order
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

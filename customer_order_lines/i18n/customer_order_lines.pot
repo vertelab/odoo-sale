@@ -1,0 +1,68 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* customer_order_lines
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0-20161208\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-03-17 10:46+0000\n"
+"PO-Revision-Date: 2017-03-17 10:46+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: customer_order_lines
+#: field:sale.order.line,date_order:0
+msgid "Date order"
+msgstr ""
+
+#. module: customer_order_lines
+#: view:sale.order.line:customer_order_lines.view_sales_order_line_filter
+msgid "Group By"
+msgstr ""
+
+#. module: customer_order_lines
+#: field:res.partner,order_line_count:0
+msgid "Order Lines"
+msgstr ""
+
+#. module: customer_order_lines
+#: view:sale.order.line:customer_order_lines.view_sales_order_line_filter
+msgid "Order Month"
+msgstr ""
+
+#. module: customer_order_lines
+#: model:ir.model,name:customer_order_lines.model_res_partner
+msgid "Partner"
+msgstr ""
+
+#. module: customer_order_lines
+#: view:sale.order.line:customer_order_lines.view_order_line_tree
+msgid "Qty"
+msgstr ""
+
+#. module: customer_order_lines
+#: model:ir.model,name:customer_order_lines.model_sale_order_line
+msgid "Sales Order Line"
+msgstr ""
+
+#. module: customer_order_lines
+#: model:ir.actions.act_window,name:customer_order_lines.action_order_line_tree
+#: view:sale.order.line:customer_order_lines.view_order_line_tree
+msgid "Sales Order Lines"
+msgstr ""
+
+#. module: customer_order_lines
+#: view:sale.order.line:customer_order_lines.view_order_line_tree
+msgid "Total"
+msgstr ""
+
+#. module: customer_order_lines
+#: view:sale.order.line:customer_order_lines.view_order_line_tree
+msgid "Unit of Measure"
+msgstr ""
+
