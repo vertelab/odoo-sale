@@ -1,0 +1,95 @@
+<openerp>
+<data>
+
+    <record id="view_order_customer_number_form" model="ir.ui.view">
+        <field name="name">sale.order.customer.no.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="project_id" position="after">
+                <field name="customer_no"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_sales_order_customer_number_filter" model="ir.ui.view">
+            <field name="name">sale.order.customer.number.list.select</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <field name="user_id" position="after">
+                    <field name="customer_no"/>
+                </field>
+            </field>
+    </record>
+
+    <record id="view_quotation_customer_number_tree" model="ir.ui.view">
+        <field name="name">sale.quotations.customer.number.tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="customer_no"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_order_tree" model="ir.ui.view">
+        <field name="name">sale.order.tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="customer_no"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- res.partner -->
+    <record id="view_partner_tree" model="ir.ui.view">
+        <field name="name">res.partner.customer.no.tree</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <field name="display_name" position="after">
+                <field name="customer_no"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">res.partner.customer.no.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="customer_no"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_res_partner_filter" model="ir.ui.view">
+        <field name="name">res.partner.select</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <field name="name" position="replace">
+                <field name="name"
+                   filter_domain="['|','|', ('display_name','ilike', self), ('customer_no','=',self), ('email','ilike', self)]"/>
+<!--
+                   <field name="name"filter_domain="['|','|','|','|','|', ('display_name','ilike', self), ('customer_no','=ilike','%s%%' % self), ('email','ilike', self), ('phone','ilike', self), ('mobile','ilike', self), ('city','ilike', self),]"/>
+-->
+            </field>
+            <field name="parent_id" position="after">
+                <field name="customer_no"/>
+                <field name="city"/>
+            </field>
+            <group string="Group By" position="inside">
+                <filter string="Customer Number" context="{'group_by': 'customer_no'}"/>
+                <filter string="City" context="{'group_by': 'city'}"/>
+           </group>
+        </field>
+    </record>
+
+</data>
+</openerp>

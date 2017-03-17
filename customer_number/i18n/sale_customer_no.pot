@@ -1,0 +1,53 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* sale_customer_no
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0-20160410\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-04-25 07:58+0000\n"
+"PO-Revision-Date: 2016-04-25 07:58+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_customer_no
+#: view:res.partner:sale_customer_no.view_res_partner_filter
+msgid "City"
+msgstr ""
+
+#. module: sale_customer_no
+#: view:res.partner:sale_customer_no.view_res_partner_filter
+#: field:sale.order,customer_no:0
+msgid "Customer Number"
+msgstr ""
+
+#. module: sale_customer_no
+#: model:ir.actions.server,name:sale_customer_no.action_create_customer_no
+msgid "Generate Customer Number"
+msgstr ""
+
+#. module: sale_customer_no
+#: model:ir.actions.server,name:sale_customer_no.action_get_customer_no
+msgid "Get Customer Number"
+msgstr ""
+
+#. module: sale_customer_no
+#: view:res.partner:sale_customer_no.view_res_partner_filter
+msgid "Group By"
+msgstr ""
+
+#. module: sale_customer_no
+#: model:ir.model,name:sale_customer_no.model_res_partner
+msgid "Partner"
+msgstr ""
+
+#. module: sale_customer_no
+#: model:ir.model,name:sale_customer_no.model_sale_order
+msgid "Sales Order"
+msgstr ""
+
