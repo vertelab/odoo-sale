@@ -30,7 +30,7 @@ This year, last year and the year before that
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['sales',],
+    'depends': ['sale','web_kanban_graph'],
     'data': [
         'res_partner_view.xml',
         ],

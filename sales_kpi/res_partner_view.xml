@@ -1,60 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-
-<!--
         <record id="view_partner_form" model="ir.ui.view">
-            <field name="name">res.partner.form.inherit.base_district</field>
+            <field name="name">res.partner.form.sales_kpi.button</field>
             <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-                <field name="website" position="after">
-                    <field name="district_id"/>
-                </field>
-                <page string="Contacts" position="after">
-                    <page string="Products" attrs="{'invisible': [('supplier','=',False)]}">
-                        <field name="product_ids" mode="kanban">
+                <div name="buttons" position="inside">
+                    <button type="object" class="oe_stat_button" name="action_view_order_lines" icon="fa-list">
+                        <field name="kpi_sales_y1" widget="gauge"/>                        
+                    </button>
+                    
+                        <div class="oe_salesteams_quotations" t-if="record.use_quotations.raw_value">
+                            <a name="action_quotations_salesteams" type="action" class="oe_sparkline_bar_link">Quotations</a>
+                            <a name="action_order_report_quotation_salesteam" type="action" class="oe_sparkline_bar_link">
+                                <field name="monthly_quoted" widget="sparkline_bar" options="{'delayIn': '3000'}">
+                                    Revenue of created quotations per month.<br/>Click to see a detailed analysis.
+                                </field>
+                            </a>
+                        </div>
+                    
+<!--
+                    <button type="object" class="oe_stat_button" name="action_view_order_lines2" icon="fa-list">
+                        <field name="kpi_sales_y3" widget="kanban_graph"/>                        
+                    </button>
+-->
+                        <field name="kpi_sales_y3" widget="kanban_graph"/>                        
+                    
+                </div>
+                <notebook position="inside">
+                <page string="KPI" >
                             <kanban>
-                                <field name="color"/>
-                                <field name="image_medium"/>
-                                <field name="name"/>
-                                <field name="list_price"/>
-                                <field name="default_code"/>
+                                <field name="kpi_sales_y1"/>
+                                <field name="kpi_sales_y2"/>
+                                <field name="kpi_sales_y3"/>
+                                <field name="monthly_quoted"/>
                                 <templates>
                                     <t t-name="kanban-box">
-                                        <t t-set="color" t-value="kanban_color(record.color.raw_value)"/>
-                                        <div t-att-class="color + (record.title.raw_value == 1 ? ' oe_kanban_color_alert' : '')" style="position: relative">
-                                            <a t-if="! read_only_mode" type="delete" style="position: absolute; right: 0; padding: 4px; diplay: inline-block">X</a>
-                                            <div class="oe_module_vignette">
-                                                <a type="open">
-                                                    <img t-att-src="kanban_image('product.template', 'image_small', record.id.value)" class="oe_avatar oe_kanban_avatar_smallbox"/>
-                                                </a>
-                                                <div class="oe_module_desc">
-                                                    <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
-                                                        <table class="oe_kanban_table">
-                                                            <tr>
-                                                                <td class="oe_kanban_title1" align="left" valign="middle">
-                                                                    <h4><a type="open"><field name="name"/></a></h4>
-                                                                    <i><div t-if="record.function.raw_value">
-                                                                    <field name="list_price"/></div></i>
-                                                                    <div>
-                                                                        <field name="default_code"/>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div class="oe_module_vignette">
+                                            <h4><field name="name"/></h4>
+                                            <t-field name="monthly_quoted" widget="sparkline_bar" options="{'delayIn': '3000'}"/>
+                                            <t-field name="kpi_sales_y3" widget="kanban_graph" options="{'delayIn': '3000'}"/>
+                                            
                                         </div>
                                     </t>
                                 </templates>
                             </kanban>
-                        </field>
                     </page>
-                </page>
+                </notebook>
             </field>
         </record>
+
+<!--
+<field name="rate_picking_late" widget="gauge" style="width:150px; height: 110px;" options="{'levelcolors': ['#a9d70b', '#f9c802', '#ff0000'], 'action_jump': '%(action_picking_tree_late)d'}">Late (%%)</field>
 -->
 
     </data>
