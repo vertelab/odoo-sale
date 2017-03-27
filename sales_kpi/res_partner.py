@@ -53,7 +53,20 @@ class Partner(models.Model):
         #~ self.kpi_sales_y1 = sum(self.sale_order_ids.filtered(lambda o: o.date >= y1_start ).mapped('amount_untaxed'))
         #~ self.kpi_sales_y2 = sum(self.sale_order_ids.filtered(lambda o: o.date >= y2_start and o.date < y1_start ).mapped('amount_untaxed'))
         #~ self.kpi_sales_y3 = sum(self.sale_order_ids.filteroed(lambda o: o.date >= y3_start and o.date < y2_start ).mapped('amount_untaxed'))
-        self.kpi_sales_y3 =  '[{"values": [ {"value": 584.0, "label": "Anteriores"}, {"value": 739.73, "label": "29 feb-6 mar"}, {"value": 506.12, "label": "Esta semana"}, {"value": 233.6, "label": "14-20 mar"}, {"value": 0.0, "label": "21-27 mar"}, {"value": 0.0, "label": "Futuras"} ], "id": 2}]'
+        
+        
+                    #~ :return list section_result: a list of dicts: [
+                                                #~ {   'value': (int) bar_column_value,
+                                                    #~ 'tootip': (str) bar_column_tooltip,
+                                                #~ }
+                                            #~ ]
+        
+                    #res[mailing.id]['opened_daily'] = json.dumps(self.__get_bar_values(cr, uid, obj, domain, ['opened'], 'opened_count', 'opened:day', date_begin, context=context))
+
+        
+        self.kpi_sales_y3 =  json.dumps([{'value': 57.0,'tooltip':'2017'},{'value': 573.0,'tooltip':'2016'},{'value': 372.0,'tooltip':'2015'}])
+
+        #~ self.kpi_sales_y3 =  '[{"values": [ {"value": 584.0, "label": "Anteriores"}, {"value": 739.73, "label": "29 feb-6 mar"}, {"value": 506.12, "label": "Esta semana"}, {"value": 233.6, "label": "14-20 mar"}, {"value": 0.0, "label": "21-27 mar"}, {"value": 0.0, "label": "Futuras"} ], "id": 2}]'
         self.monthly_quoted =  '[{"values": [ {"value": 584.0, "label": "Anteriores"}, {"value": 739.73, "label": "29 feb-6 mar"}, {"value": 506.12, "label": "Esta semana"}, {"value": 233.6, "label": "14-20 mar"}, {"value": 0.0, "label": "21-27 mar"}, {"value": 0.0, "label": "Futuras"} ], "id": 2}]'
         #self.monthly_quoted = json.dumps(self.env['sale.order'].__get_bar_values( [ ('state', 'in', ['draft', 'sent']), ], ['amount_total', 'date_order'], 'amount_total', 'date_order'))
     

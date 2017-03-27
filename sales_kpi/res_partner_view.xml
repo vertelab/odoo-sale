@@ -25,7 +25,18 @@
                         <field name="kpi_sales_y3" widget="kanban_graph"/>                        
                     </button>
 -->
-                        <field name="kpi_sales_y3" widget="kanban_graph"/>                        
+                    <button type="object" class="oe_stat_button" name="action_view_order_lines2" icon="fa-list">
+                        <field name="kpi_sales_y3" widget="barchart"/>                        
+                    </button>
+
+                        
+<!--
+                            <button name="% ( action_view_mail_mail_statistics_mailing ) d"
+                                    context="{'search_default_filter_opened': True, 'search_default_group_open_date': True}"
+                                    type="action" class="oe_stat_button oe_inline">
+                                <field name="opened_daily" string="Opened Daily" widget="barchart"/>
+                            </button>                        
+-->
                     
                 </div>
                 <notebook position="inside">
@@ -33,14 +44,18 @@
                             <kanban>
                                 <field name="kpi_sales_y1"/>
                                 <field name="kpi_sales_y2"/>
+<!--
                                 <field name="kpi_sales_y3"/>
+-->
                                 <field name="monthly_quoted"/>
                                 <templates>
                                     <t t-name="kanban-box">
                                         <div class="oe_module_vignette">
                                             <h4><field name="name"/></h4>
                                             <t-field name="monthly_quoted" widget="sparkline_bar" options="{'delayIn': '3000'}"/>
+<!--
                                             <t-field name="kpi_sales_y3" widget="kanban_graph" options="{'delayIn': '3000'}"/>
+-->
                                             
                                         </div>
                                     </t>
