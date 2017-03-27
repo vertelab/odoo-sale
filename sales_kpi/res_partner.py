@@ -28,51 +28,44 @@ _logger = logging.getLogger(__name__)
 class Partner(models.Model):
     _inherit = 'res.partner'
 
-                
-    def _get_sale_orders_data(self, cr, uid, ids, field_name, arg, context=None):
-        obj = self.pool['sale.order']
-        month_begin = date.today().replace(day=1)
-        date_begin = (month_begin - relativedelta.relativedelta(months=self._period_number - 1)).strftime(tools.DEFAULT_SERVER_DATE_FORMAT)
-        date_end = month_begin.replace(day=calendar.monthrange(month_begin.year, month_begin.month)[1]).strftime(tools.DEFAULT_SERVER_DATE_FORMAT)
-
-        res = {}
-        for id in ids:
-            res[id] = {}
-            created_domain = [('section_id', '=', id), ('state', 'in', ['draft', 'sent']), ('date_order', '>=', date_begin), ('date_order', '<=', date_end)]
-            validated_domain = [('section_id', '=', id), ('state', 'not in', ['draft', 'sent', 'cancel']), ('date_order', '>=', date_begin), ('date_order', '<=', date_end)]
-            res[id]['monthly_quoted'] = json.dumps(self.__get_bar_values(cr, uid, obj, created_domain, ['amount_total', 'date_order'], 'amount_total', 'date_order', context=context))
-            res[id]['monthly_confirmed'] = json.dumps(self.__get_bar_values(cr, uid, obj, validated_domain, ['amount_untaxed', 'date_order'], 'amount_untaxed', 'date_order', context=context))
-        return res
-
     @api.one
-    def _kpi_sales_y1(self):
-        today = fields.Datetime.now()
-        #~ y1_start = fields.Datetime.to_string(year=-1,month=1,day=1)
-        #~ y2_start = fields.Datetime.to_string(year=-2,month=1,day=1)
-        #~ y3_start = fields.Datetime.to_string(year=-3,month=1,day=1)
-        #~ self.kpi_sales_y1 = sum(self.sale_order_ids.filtered(lambda o: o.date >= y1_start ).mapped('amount_untaxed'))
-        #~ self.kpi_sales_y2 = sum(self.sale_order_ids.filtered(lambda o: o.date >= y2_start and o.date < y1_start ).mapped('amount_untaxed'))
-        #~ self.kpi_sales_y3 = sum(self.sale_order_ids.filteroed(lambda o: o.date >= y3_start and o.date < y2_start ).mapped('amount_untaxed'))
-        
-        
-                    #~ :return list section_result: a list of dicts: [
-                                                #~ {   'value': (int) bar_column_value,
-                                                    #~ 'tootip': (str) bar_column_tooltip,
-                                                #~ }
-                                            #~ ]
-        
-                    #res[mailing.id]['opened_daily'] = json.dumps(self.__get_bar_values(cr, uid, obj, domain, ['opened'], 'opened_count', 'opened:day', date_begin, context=context))
+    @api.depends('sale_order_ids')
+    def _kpi_sales(self):
+        y1 = self.env['account.fiscalyear'].browse(self.env['account.fiscalyear'].finds(exception=False,dt=fields.Date.today()))
+        y2 = self.env['account.fiscalyear'].browse(self.env['account.fiscalyear'].finds(exception=False,dt=fields.Date.to_string(datetime(year=datetime.today().year-1,month=datetime.today().month,day=datetime.today().day))))
+        y3 = self.env['account.fiscalyear'].browse(self.env['account.fiscalyear'].finds(exception=False,dt=fields.Date.to_string(datetime(year=datetime.today().year-2,month=datetime.today().month,day=datetime.today().day))))
+         
+        #~ today = fields.Datetime.now()
+        #~ y1_start = fields.Datetime.to_string(datetime(year=datetime.today().year,month=1,day=1))
+        #~ y2_start = fields.Datetime.to_string(datetime(year=datetime.today().year-1,month=1,day=1))
+        #~ y3_start = fields.Datetime.to_string(datetime(year=datetime.today().year-2,month=1,day=1))
+        #~ self.kpi_sales =  json.dumps([
+            #~ {'value': sum(self.sale_order_ids.filtered(lambda o: o.date >= y1_start ).mapped('amount_untaxed')),
+                #~ 'tooltip':'2017'},
+            #~ {'value': sum(self.sale_order_ids.filtered(lambda o: o.date >= y2_start and o.date < y1_start ).mapped('amount_untaxed')),
+                #~ 'tooltip':'2016'},
+            #~ {'value': sum(self.sale_order_ids.filtered(lambda o: o.date >= y3_start and o.date < y2_start ).mapped('amount_untaxed')),
+                #~ 'tooltip':'2015'}])
+        self.kpi_sales =  json.dumps([
+            {'value': sum(self.sale_order_ids.filtered(lambda o: o.date >= y1.date_start ).mapped('amount_untaxed')) if y1 else 0.0,
+                'tooltip':y1.code if y1 else ''},
+            {'value': sum(self.sale_order_ids.filtered(lambda o: o.date >= y2.date_start and o.date < y2.date_end ).mapped('amount_untaxed')) if y2 else 0.0,
+                'tooltip':y2.code if y2 else ''},
+            {'value': sum(self.sale_order_ids.filtered(lambda o: o.date >= y3.date_start and o.date < y3.date_end ).mapped('amount_untaxed')) if y3 else 0.0,
+                'tooltip':y3.code if y3 else ''}])
 
-        
-        self.kpi_sales_y3 =  json.dumps([{'value': 57.0,'tooltip':'2017'},{'value': 573.0,'tooltip':'2016'},{'value': 372.0,'tooltip':'2015'}])
 
-        #~ self.kpi_sales_y3 =  '[{"values": [ {"value": 584.0, "label": "Anteriores"}, {"value": 739.73, "label": "29 feb-6 mar"}, {"value": 506.12, "label": "Esta semana"}, {"value": 233.6, "label": "14-20 mar"}, {"value": 0.0, "label": "21-27 mar"}, {"value": 0.0, "label": "Futuras"} ], "id": 2}]'
-        self.monthly_quoted =  '[{"values": [ {"value": 584.0, "label": "Anteriores"}, {"value": 739.73, "label": "29 feb-6 mar"}, {"value": 506.12, "label": "Esta semana"}, {"value": 233.6, "label": "14-20 mar"}, {"value": 0.0, "label": "21-27 mar"}, {"value": 0.0, "label": "Futuras"} ], "id": 2}]'
-        #self.monthly_quoted = json.dumps(self.env['sale.order'].__get_bar_values( [ ('state', 'in', ['draft', 'sent']), ], ['amount_total', 'date_order'], 'amount_total', 'date_order'))
-    
-    monthly_quoted = fields.Char(compute="_kpi_sales_y1")
-    kpi_sales_y1 = fields.Char(compute="_kpi_sales_y1")
-    kpi_sales_y2 = fields.Char(compute="_kpi_sales_y1")
-    kpi_sales_y3 = fields.Char(compute="_kpi_sales_y1")
+    kpi_sales = fields.Char(compute="_kpi_sales",store=True)
     # https://www.odoo.com/apps/modules/8.0/web_kanban_graph/
     
+class SaleOrderLine(models.Model): 
+    _inherit = 'sale.order.line'
+    
+    @api.one
+    @api.depends('order_id.date_confirm')
+    def _kpi_year(self):
+        self.kpi_year = self.env['account.fiscalyear'].browse(self.env['account.fiscalyear'].finds(exception=False,dt=self.order_id.order_confirm)).code
+    kpi_year = fields.Char(compute='_kpi_year',store=True)
+    
+    #date_order
+    #date_confirm
