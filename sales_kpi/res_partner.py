@@ -34,7 +34,7 @@ class Partner(models.Model):
         y1 = self.env['account.fiscalyear'].browse(self.env['account.fiscalyear'].finds(exception=False,dt=fields.Date.today()))
         y2 = self.env['account.fiscalyear'].browse(self.env['account.fiscalyear'].finds(exception=False,dt=fields.Date.to_string(datetime(year=datetime.today().year-1,month=datetime.today().month,day=datetime.today().day))))
         y3 = self.env['account.fiscalyear'].browse(self.env['account.fiscalyear'].finds(exception=False,dt=fields.Date.to_string(datetime(year=datetime.today().year-2,month=datetime.today().month,day=datetime.today().day))))
-         
+
         #~ today = fields.Datetime.now()
         #~ y1_start = fields.Datetime.to_string(datetime(year=datetime.today().year,month=1,day=1))
         #~ y2_start = fields.Datetime.to_string(datetime(year=datetime.today().year-1,month=1,day=1))
@@ -47,25 +47,25 @@ class Partner(models.Model):
             #~ {'value': sum(self.sale_order_ids.filtered(lambda o: o.date >= y3_start and o.date < y2_start ).mapped('amount_untaxed')),
                 #~ 'tooltip':'2015'}])
         self.kpi_sales =  json.dumps([
-            {'value': sum(self.sale_order_ids.filtered(lambda o: o.date >= y1.date_start ).mapped('amount_untaxed')) if y1 else 0.0,
+            {'value': sum(self.sale_order_ids.filtered(lambda o: o.order_confirm >= y1.date_start ).mapped('amount_untaxed')) if y1 else 0.0,
                 'tooltip':y1.code if y1 else ''},
-            {'value': sum(self.sale_order_ids.filtered(lambda o: o.date >= y2.date_start and o.date < y2.date_end ).mapped('amount_untaxed')) if y2 else 0.0,
+            {'value': sum(self.sale_order_ids.filtered(lambda o: o.order_confirm >= y2.date_start and o.date < y2.date_end ).mapped('amount_untaxed')) if y2 else 0.0,
                 'tooltip':y2.code if y2 else ''},
-            {'value': sum(self.sale_order_ids.filtered(lambda o: o.date >= y3.date_start and o.date < y3.date_end ).mapped('amount_untaxed')) if y3 else 0.0,
+            {'value': sum(self.sale_order_ids.filtered(lambda o: o.order_confirm >= y3.date_start and o.date < y3.date_end ).mapped('amount_untaxed')) if y3 else 0.0,
                 'tooltip':y3.code if y3 else ''}])
 
 
     kpi_sales = fields.Char(compute="_kpi_sales",store=True)
     # https://www.odoo.com/apps/modules/8.0/web_kanban_graph/
-    
-class SaleOrderLine(models.Model): 
+
+class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
-    
+
     @api.one
     @api.depends('order_id.date_confirm')
     def _kpi_year(self):
         self.kpi_year = self.env['account.fiscalyear'].browse(self.env['account.fiscalyear'].finds(exception=False,dt=self.order_id.order_confirm)).code
     kpi_year = fields.Char(compute='_kpi_year',store=True)
-    
+
     #date_order
     #date_confirm
