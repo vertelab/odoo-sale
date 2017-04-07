@@ -47,11 +47,11 @@ class Partner(models.Model):
             #~ {'value': sum(self.sale_order_ids.filtered(lambda o: o.date >= y3_start and o.date < y2_start ).mapped('amount_untaxed')),
                 #~ 'tooltip':'2015'}])
         self.kpi_sales =  json.dumps([
-            {'value': sum(self.sale_order_ids.filtered(lambda o: o.order_confirm >= y1.date_start ).mapped('amount_untaxed')) if y1 else 0.0,
+            {'value': sum(self.sale_order_ids.filtered(lambda o: o.date_confirm >= y1.date_start ).mapped('amount_untaxed')) if y1 else 0.0,
                 'tooltip':y1.code if y1 else ''},
-            {'value': sum(self.sale_order_ids.filtered(lambda o: o.order_confirm >= y2.date_start and o.date < y2.date_end ).mapped('amount_untaxed')) if y2 else 0.0,
+            {'value': sum(self.sale_order_ids.filtered(lambda o: o.date_confirm >= y2.date_start and o.date < y2.date_end ).mapped('amount_untaxed')) if y2 else 0.0,
                 'tooltip':y2.code if y2 else ''},
-            {'value': sum(self.sale_order_ids.filtered(lambda o: o.order_confirm >= y3.date_start and o.date < y3.date_end ).mapped('amount_untaxed')) if y3 else 0.0,
+            {'value': sum(self.sale_order_ids.filtered(lambda o: o.date_confirm >= y3.date_start and o.date < y3.date_end ).mapped('amount_untaxed')) if y3 else 0.0,
                 'tooltip':y3.code if y3 else ''}])
 
 
@@ -64,7 +64,7 @@ class SaleOrderLine(models.Model):
     @api.one
     @api.depends('order_id.date_confirm')
     def _kpi_year(self):
-        self.kpi_year = self.env['account.fiscalyear'].browse(self.env['account.fiscalyear'].finds(exception=False,dt=self.order_id.order_confirm)).code
+        self.kpi_year = self.env['account.fiscalyear'].browse(self.env['account.fiscalyear'].finds(exception=False,dt=self.order_id.date_confirm)).code
     kpi_year = fields.Char(compute='_kpi_year',store=True)
 
     #date_order
