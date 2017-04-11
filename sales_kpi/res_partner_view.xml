@@ -21,7 +21,7 @@
       <field name="inherit_id" ref="base.view_partner_form" />
       <field name="arch" type="xml">
         <div name="buttons" position="inside">
-          <button type="action" class="oe_stat_button" name="%(action_order_line_kpi)d" context="{'search_default_order_partner_id': id,  'search_default_group_kpi_year':1,'search_default_group_product':1,}">
+          <button type="action" class="oe_stat_button" name="%(action_order_line_kpi)d" context="{'search_default_order_partner_id': id,'search_default_group_kpi_year':1,}">  <!-- 'search_default_group_product':1  -->
             <field name="kpi_sales" widget="barchart" />
           </button>
         </div>
@@ -39,7 +39,7 @@
         <field name="product_id" position="after">
           <field name="kpi_year" />
         </field>
-        <filter string="Product" position="after">
+        <filter string="Product" position="before">
           <filter name="group_kpi_year" string="KPI Year" context="{'group_by':'kpi_year'}" />
         </filter>
       </field>
