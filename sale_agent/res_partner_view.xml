@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_partner_form" model="ir.ui.view">
+            <field name="name">res.partner.form.sales_kpi.button</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <div name="buttons" position="inside">
+                    <button type="object" class="oe_stat_button" name="action_view_order_lines" icon="fa-list">
+                        <field name="kpi_sales_y1" widget="gauge"/>                        
+                    </button>
+                    
+                        <div class="oe_salesteams_quotations" t-if="record.use_quotations.raw_value">
+                            <a name="action_quotations_salesteams" type="action" class="oe_sparkline_bar_link">Quotations</a>
+                            <a name="action_order_report_quotation_salesteam" type="action" class="oe_sparkline_bar_link">
+                                <field name="monthly_quoted" widget="sparkline_bar" options="{'delayIn': '3000'}">
+                                    Revenue of created quotations per month.<br/>Click to see a detailed analysis.
+                                </field>
+                            </a>
+                        </div>
+                    
+<!--
+                    <button type="object" class="oe_stat_button" name="action_view_order_lines2" icon="fa-list">
+                        <field name="kpi_sales_y3" widget="kanban_graph"/>                        
+                    </button>
+-->
+                    <button type="object" class="oe_stat_button" name="action_view_order_lines2" icon="fa-list">
+                        <field name="kpi_sales_y3" widget="barchart"/>                        
+                    </button>
+
+                        
+<!--
+                            <button name="% ( action_view_mail_mail_statistics_mailing ) d"
+                                    context="{'search_default_filter_opened': True, 'search_default_group_open_date': True}"
+                                    type="action" class="oe_stat_button oe_inline">
+                                <field name="opened_daily" string="Opened Daily" widget="barchart"/>
+                            </button>                        
+-->
+                    
+                </div>
+                <notebook position="inside">
+                <page string="KPI" >
+                            <kanban>
+                                <field name="kpi_sales_y1"/>
+                                <field name="kpi_sales_y2"/>
+<!--
+                                <field name="kpi_sales_y3"/>
+-->
+                                <field name="monthly_quoted"/>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div class="oe_module_vignette">
+                                            <h4><field name="name"/></h4>
+                                            <t-field name="monthly_quoted" widget="sparkline_bar" options="{'delayIn': '3000'}"/>
+<!--
+                                            <t-field name="kpi_sales_y3" widget="kanban_graph" options="{'delayIn': '3000'}"/>
+-->
+                                            
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+<!--
+<field name="rate_picking_late" widget="gauge" style="width:150px; height: 110px;" options="{'levelcolors': ['#a9d70b', '#f9c802', '#ff0000'], 'action_jump': '%(action_picking_tree_late)d'}">Late (%%)</field>
+-->
+
+    </data>
+</openerp>
