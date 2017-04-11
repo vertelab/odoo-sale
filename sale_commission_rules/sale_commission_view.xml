@@ -1,0 +1,36 @@
+<openerp>
+<data>
+
+    <record model="ir.ui.view" id="sale_commission_form">
+        <field name="name">Sales commissions Rules form</field>
+        <field name="model">sale.commission</field>
+        <field name="inherit_id" ref="sale_commission.sale_commission_form"/>
+        <field name="arch" type="xml">
+            <field name="sections" position="after">
+                <field name="commission_rule_ids" attrs="{'invisible': [('commission_type', '!=', 'rules')]}">
+                    <tree string="Rules" editable="bottom">
+                        <field name="sequence" widget="handle"/>
+                        <field name="name" />
+                        <field name="percent" />
+                        <field name="min_age" />
+                        <field name="categ_ids" widget="many2many_tags"/>
+                        <field name="product_ids" widget="many2many_tags"/>
+                        <field name="product_tmpl_ids" widget="many2many_tags"/>
+                    </tree>
+                </field>
+            </field>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_partner_form">
+        <field name="name">Partner Commissions Rules Form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="sale_commission.view_partner_form_agent"/>
+        <field name="arch" type="xml">
+            <field name="agents" position="after">
+                <field name="customer_date" attrs="{'invisible': [('customer', '=', False)]}"/>
+            </field>
+        </field>
+    </record>
+
+</data>
+</openerp>
