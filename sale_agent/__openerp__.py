@@ -20,19 +20,16 @@
 ##############################################################################
 
 {
-    'name': 'Partner KPI',
+    'name': 'Sale Agents',
     'version': '0.1',
     'category': '',
-    'description': """
-Adds KPI (Key Performance Indicator) for  sales
-This year, last year and the year before that
-
-""",
+    'description': """""",
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['sale','web_kanban_graph'],
+    'depends': ['sale_commission'],
     'data': [
-        'res_partner_view.xml',
+        #'res_partner_view.xml',
+        'security/sale_security.xml',
         ],
     'application': False,
     'installable': True,
