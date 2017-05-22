@@ -36,7 +36,7 @@ class ResPartner(models.Model):
                     return t[1]
         result = []
         for record in self:
-            if record.type and record.type in self.env['ir.config_parameter'].get_param('partner_show_contact_type.types', 'invoice delivery'):
+            if record.type and record.type in self.env['ir.config_parameter'].get_param('partner_show_contact_type.types', 'default invoice delivery contact other'):
                 result.append((record.id, '%s (%s)' % (find_name(record.id), types.convert_to_export(record.type, self.env))))
             else:
                 result.append((record.id, find_name(record.id)))
