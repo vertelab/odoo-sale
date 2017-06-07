@@ -28,7 +28,7 @@ Which types that should show in the name can be configured through the parameter
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
     'depends': ['sale'],
-    'data': [
+    'data': ['sale_view.xml'
     ],
     'installable': True,
 }
