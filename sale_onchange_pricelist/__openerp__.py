@@ -19,13 +19,13 @@
 #
 ##############################################################################
 {
-'name': 'Sale Order Line Double Warning',
+'name': 'Sale Onchange Pricelist',
 'version': '0.1',
 'summary': '',
 'category': 'Sale',
 'description': """
-Warning for double sale order lines have same product
-=====================================================
+Update price in sale order line when pricelist of sale order changed
+====================================================================
 """,
 'author': 'Vertel AB',
 'website': 'http://www.vertel.se',
