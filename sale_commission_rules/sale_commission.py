@@ -32,9 +32,10 @@ class ResPartner(models.Model):
     order_line_agent_ids = fields.One2many(string='Agent Lines', comodel_name='sale.order.line.agent', inverse_name='agent')
 
     @api.one
-    @api.depends('order_line_agent_ids.sale_line.price_subtotal')
+    @api.depends('order_line_agent_ids.sale_line.price_subtotal', 'order_line_agent_ids.sale_line.state')
     def _get_agent_revenue(self):
-        self.agent_revenue = sum(self.order_line_agent_ids.mapped('sale_line.price_subtotal'))
+        self.agent_revenue = sum(self.order_line_agent_ids.mapped(
+            lambda r: r.sale_line.price_subtotal if r.sale_line.state == 'done' else 0.0))
 
 class SaleCommission(models.Model):
     _inherit = "sale.commission"
@@ -61,8 +62,8 @@ class SaleCommissionRule(models.Model):
     product_ids = fields.Many2many(comodel_name='product.product', string='Product')
     product_tmpl_ids = fields.Many2many(comodel_name='product.template', string='Product Template')
     categ_ids = fields.Many2many(comodel_name='product.category', string='Product Category')
-    min_age = fields.Integer(string="Partner Age", help="The minimum age (in days) of the partner to match this rule.")
-    min_revenue = fields.Float(string='Agent Revenue', help="The minimum ammount of revenue accrued by the agent.")
+    min_age = fields.Integer(string="Minimum age Age", help="The minimum age (in days) of the customer to match this rule.")
+    min_revenue = fields.Float(string='Minimum Revenue', help="The minimum ammount of revenue accrued by the agent.")
     percent = fields.Float(string="Percent", required=True)
 
     @api.multi
@@ -78,7 +79,7 @@ class SaleCommissionRule(models.Model):
             return False
         if self.min_age and (not line.order_partner_id.customer_date or (fields.Date.from_string(line.order_id.date_order) - fields.Date.from_string(line.order_partner_id.customer_date)).days < self.min_age):
             return False
-        if self.min_revenue and agent.agent_revenue - line.price_subtotal < self.min_revenue:
+        if self.min_revenue and agent.agent_revenue < self.min_revenue:
             return False
         return True
 
