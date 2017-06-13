@@ -9,10 +9,11 @@
             <field name="sections" position="after">
                 <field name="commission_rule_ids" attrs="{'invisible': [('commission_type', '!=', 'rules')]}">
                     <tree string="Rules" editable="bottom">
-                        <field name="sequence" widget="handle"/>
+                        <field name="sequence"/>
                         <field name="name" />
                         <field name="percent" />
                         <field name="min_age" />
+                        <field name="min_revenue" />
                         <field name="categ_ids" widget="many2many_tags"/>
                         <field name="product_ids" widget="many2many_tags"/>
                         <field name="product_tmpl_ids" widget="many2many_tags"/>
@@ -26,6 +27,9 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="sale_commission.view_partner_form_agent"/>
         <field name="arch" type="xml">
+            <field name="commission" position="after">
+                <field name="agent_revenue"/>
+            </field>
             <field name="agents" position="after">
                 <field name="customer_date" attrs="{'invisible': [('customer', '=', False)]}"/>
             </field>
