@@ -35,12 +35,11 @@ class ResPartner(models.Model):
         def find_name(id):
             for t in res:
                 if id == t[0]:
-                    return t[1].split('\n')[0] #in case show_address_only is active. Anything past the first \n will not be shown in the dropdown
+                    return t[1]
         result = []
         for record in self:
             if record.type and record.type in self.env['ir.config_parameter'].get_param('partner_show_contact_type.types', 'default invoice delivery contact other'):
-                result.append((record.id, '%s (%s)' % (find_name(record.id), types.convert_to_export(record.type, self.env))))
+                result.append((record.id, '(%s) %s' % (types.convert_to_export(record.type, self.env), find_name(record.id))))
             else:
                 result.append((record.id, find_name(record.id)))
-        _logger.warn(result)
         return result
