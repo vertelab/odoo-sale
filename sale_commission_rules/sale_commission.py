@@ -28,14 +28,18 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     customer_date = fields.Date(string='Customer Since', default=fields.Date.today)
-    agent_revenue = fields.Float(string='Revenue', compute='_get_agent_revenue', store=True)
-    order_line_agent_ids = fields.One2many(string='Agent Lines', comodel_name='sale.order.line.agent', inverse_name='agent')
+    #~ agent_revenue_line_ids = fields.One2many(
+        #~ string='Agent Revenue Lines', comodel_name='agent.revenue.line',
+        #~ inverse_name='agent_id', compute='_get_agent_revenue',
+        #~ store=True)
+    order_line_agent_ids = fields.One2many(string='Agent Lines',
+        comodel_name='sale.order.line.agent', inverse_name='agent')
 
-    @api.one
-    @api.depends('order_line_agent_ids.sale_line.price_subtotal', 'order_line_agent_ids.sale_line.state')
-    def _get_agent_revenue(self):
-        self.agent_revenue = sum(self.order_line_agent_ids.mapped(
-            lambda r: r.sale_line.price_subtotal if r.sale_line.state == 'done' else 0.0))
+    @api.multi
+    def get_accrued_revenue(self):
+        """Return the revenue accrued for the given partner."""
+        return sum(self.env['sale.order'].search([('partner_id', '=', self.id), ('state', '=', 'done')]).mapped(
+                    lambda r: r.amount_untaxed))
 
 class SaleCommission(models.Model):
     _inherit = "sale.commission"
@@ -62,14 +66,12 @@ class SaleCommissionRule(models.Model):
     product_ids = fields.Many2many(comodel_name='product.product', string='Product')
     product_tmpl_ids = fields.Many2many(comodel_name='product.template', string='Product Template')
     categ_ids = fields.Many2many(comodel_name='product.category', string='Product Category')
-    min_age = fields.Integer(string="Minimum age Age", help="The minimum age (in days) of the customer to match this rule.")
-    min_revenue = fields.Float(string='Minimum Revenue', help="The minimum ammount of revenue accrued by the agent.")
+    min_age = fields.Integer(string="Minimum Age", help="The minimum age (in days) of the customer to match this rule.")
+    min_revenue = fields.Float(string='Minimum Revenue', help="The minimum ammount of revenue accrued by the agent for this customer.")
     percent = fields.Float(string="Percent", required=True)
 
     @api.multi
     def match_rule(self, line, agent):
-        _logger.warn(line.order_partner_id)
-        _logger.warn(line.order_partner_id.customer_date)
         self.ensure_one()
         if self.product_ids and line.product_id not in self.product_id:
             return False
@@ -77,9 +79,9 @@ class SaleCommissionRule(models.Model):
             return False
         if self.categ_ids and line.product_id.categ_id not in self.categ_ids:
             return False
-        if self.min_age and (not line.order_partner_id.customer_date or (fields.Date.from_string(line.order_id.date_order) - fields.Date.from_string(line.order_partner_id.customer_date)).days < self.min_age):
+        if self.min_age and (not line.order_id.partner_id.customer_date or (fields.Date.from_string(line.order_id.date_order) - fields.Date.from_string(line.order_id.partner_id.customer_date)).days < self.min_age):
             return False
-        if self.min_revenue and agent.agent_revenue < self.min_revenue:
+        if self.min_revenue and line.order_id.partner_id.get_accrued_revenue() < self.min_revenue:
             return False
         return True
 
@@ -99,18 +101,18 @@ class SaleOrderLineAgent(models.Model):
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    @api.multi
-    def unlink(self):
-        """This is a workaround to update agent revenue on sale order line deletion.
-        ondelete='cascade' works on an SQL level and bypasses api.depends.
-        """
-        partners = self.env['res.partner'].browse()
-        for record in self:
-            partners |= record.order_line.get_agent_line_partners()
-        res = super(SaleOrder, self).unlink()
-        if partners:
-            partners._get_agent_revenue()
-        return res
+    #~ @api.multi
+    #~ def unlink(self):
+        #~ """This is a workaround to update agent revenue on sale order line deletion.
+        #~ ondelete='cascade' works on an SQL level and bypasses api.depends.
+        #~ """
+        #~ partners = self.env['res.partner'].browse()
+        #~ for record in self:
+            #~ partners |= record.order_line.get_agent_line_partners()
+        #~ res = super(SaleOrder, self).unlink()
+        #~ if partners:
+            #~ partners._get_agent_revenue()
+        #~ return res
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
@@ -119,13 +121,13 @@ class SaleOrderLine(models.Model):
     def get_agent_line_partners(self):
         return self.mapped('agents.agent')
 
-    @api.multi
-    def unlink(self):
-        """This is a workaround to update agent revenue on sale order line deletion.
-        ondelete='cascade' works on an SQL level and bypasses api.depends.
-        """
-        partners = self.get_agent_line_partners()
-        res = super(SaleOrderLine, self).unlink()
-        if partners:
-            partners._get_agent_revenue()
-        return res
+    #~ @api.multi
+    #~ def unlink(self):
+        #~ """This is a workaround to update agent revenue on sale order line deletion.
+        #~ ondelete='cascade' works on an SQL level and bypasses api.depends.
+        #~ """
+        #~ partners = self.get_agent_line_partners()
+        #~ res = super(SaleOrderLine, self).unlink()
+        #~ if partners:
+            #~ partners._get_agent_revenue()
+        #~ return res

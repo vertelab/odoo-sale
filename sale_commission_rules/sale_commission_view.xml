@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <openerp>
 <data>
 
@@ -24,7 +25,7 @@
                     <p><b>Sequence:</b> Order that rules will be considered in. The first matching rule with the lowest sequence will be used.</p>
                     <p><b>Name:</b> The name of the rule. Only used for human readability.</p>
                     <p><b>Percent:</b> The percentage of the commission.</p>
-                    <p><b>Minimum Revenue:</b> The minimum amount of revenue accrued by the agent.</p>
+                    <p><b>Minimum Revenue:</b> The minimum amount of revenue accrued for the customer.</p>
                     <p><b>Product Category:</b> The categories this rule applies to.</p>
                     <p><b>Product:</b> The products this rule applies to.</p>
                     <p><b>Product Template:</b> The templates this rule applies to.</p>
@@ -37,14 +38,10 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="sale_commission.view_partner_form_agent"/>
         <field name="arch" type="xml">
-            <field name="commission" position="after">
-                <field name="agent_revenue"/>
-            </field>
             <field name="agents" position="after">
                 <field name="customer_date" attrs="{'invisible': [('customer', '=', False)]}"/>
             </field>
         </field>
     </record>
-
 </data>
 </openerp>
