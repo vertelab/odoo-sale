@@ -73,15 +73,15 @@ class SaleCommissionRule(models.Model):
     @api.multi
     def match_rule(self, line, agent):
         self.ensure_one()
-        if self.product_ids and line.product_id not in self.product_id:
+        if self.product_ids and (line.product_id not in self.product_id):
             return False
-        if self.product_tmpl_ids and line.product_id.product_tmpl_id not in self.product_tmpl_id:
+        if self.product_tmpl_ids and (line.product_id.product_tmpl_id not in self.product_tmpl_id):
             return False
-        if self.categ_ids and line.product_id.categ_id not in self.categ_ids:
+        if self.categ_ids and (line.product_id.categ_id not in self.categ_ids):
             return False
         if self.min_age and (not line.order_id.partner_id.customer_date or (fields.Date.from_string(line.order_id.date_order) - fields.Date.from_string(line.order_id.partner_id.customer_date)).days < self.min_age):
             return False
-        if self.min_revenue and line.order_id.partner_id.get_accrued_revenue() < self.min_revenue:
+        if self.min_revenue and (line.order_id.partner_id.get_accrued_revenue() < self.min_revenue):
             return False
         return True
 
