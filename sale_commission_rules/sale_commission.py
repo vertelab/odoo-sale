@@ -98,22 +98,6 @@ class SaleOrderLineAgent(models.Model):
             else:
                 super(SaleOrderLineAgent, line_agent)._compute_amount()
 
-class SaleOrder(models.Model):
-    _inherit = 'sale.order'
-
-    #~ @api.multi
-    #~ def unlink(self):
-        #~ """This is a workaround to update agent revenue on sale order line deletion.
-        #~ ondelete='cascade' works on an SQL level and bypasses api.depends.
-        #~ """
-        #~ partners = self.env['res.partner'].browse()
-        #~ for record in self:
-            #~ partners |= record.order_line.get_agent_line_partners()
-        #~ res = super(SaleOrder, self).unlink()
-        #~ if partners:
-            #~ partners._get_agent_revenue()
-        #~ return res
-
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
@@ -121,13 +105,23 @@ class SaleOrderLine(models.Model):
     def get_agent_line_partners(self):
         return self.mapped('agents.agent')
 
-    #~ @api.multi
-    #~ def unlink(self):
-        #~ """This is a workaround to update agent revenue on sale order line deletion.
-        #~ ondelete='cascade' works on an SQL level and bypasses api.depends.
-        #~ """
-        #~ partners = self.get_agent_line_partners()
-        #~ res = super(SaleOrderLine, self).unlink()
-        #~ if partners:
-            #~ partners._get_agent_revenue()
-        #~ return res
+class AccountInvoiceLineAgent(models.Model):
+    _inherit = "account.invoice.line.agent"
+
+    @api.one
+    @api.depends('commission.commission_type', 'invoice_line.price_subtotal',
+                 'commission.amount_base_type', 'invoice_line.partner_id', 'invoice_line.product_id')
+    def _compute_amount(self):
+        for line_agent in self:
+            if (line_agent.commission.commission_type == 'rules' and not line_agent.invoice_line.product_id.commission_free):
+                line_agent.amount = line_agent.commission.calculate_rules(line_agent.invoice_line, self.agent)
+            else:
+                super(AccountInvoiceLineAgent, line_agent)._compute_amount()
+
+class AccountInvoiceLine(models.Model):
+    _inherit = 'account.invoice.line'
+
+    @api.multi
+    def get_agent_line_partners(self):
+        return self.mapped('agents.agent')
+
