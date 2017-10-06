@@ -1,0 +1,29 @@
+<openerp>
+<data>
+
+    <record id="change_salesman_form" model="ir.ui.view">
+        <field name="name">res.partner.change.salesman.form</field>
+        <field name="model">res.partner.change.salesman</field>
+        <field name="arch" type="xml">
+            <form string="Change Salesman">
+                <group>
+                    <field name="user_id"/>
+                    <field name="partner_ids" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="change_salesman" string="Change Salesman" type="object" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="launch_res_change_salesman_wizard_form"
+        name="Change Salesman"
+        src_model="res.partner"
+        res_model="res.partner.change.salesman"
+        view_mode="form"
+        target="new"
+        key2="client_action_multi"/>
+
+</data>
+</openerp>

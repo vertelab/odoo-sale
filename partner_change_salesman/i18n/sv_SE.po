@@ -1,0 +1,68 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* partner_change_salesman
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0-20170901\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-10-06 09:20+0000\n"
+"PO-Revision-Date: 2017-10-06 09:20+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: partner_change_salesman
+#: model:ir.actions.act_window,name:partner_change_salesman.launch_res_change_salesman_wizard_form
+#: view:res.partner.change.salesman:partner_change_salesman.change_salesman_form
+msgid "Change Salesman"
+msgstr "Ändra Säljare"
+
+#. module: partner_change_salesman
+#: field:res.partner.change.salesman,create_uid:0
+msgid "Created by"
+msgstr "Skapad av"
+
+#. module: partner_change_salesman
+#: field:res.partner.change.salesman,create_date:0
+msgid "Created on"
+msgstr "Skapad"
+
+#. module: partner_change_salesman
+#: field:res.partner.change.salesman,partner_ids:0
+msgid "Customers"
+msgstr "Kunder"
+
+#. module: partner_change_salesman
+#: field:res.partner.change.salesman,display_name:0
+msgid "Display Name"
+msgstr "Visningsnamn"
+
+#. module: partner_change_salesman
+#: field:res.partner.change.salesman,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: partner_change_salesman
+#: field:res.partner.change.salesman,__last_update:0
+msgid "Last Modified on"
+msgstr "Senast uppdaterad"
+
+#. module: partner_change_salesman
+#: field:res.partner.change.salesman,write_uid:0
+msgid "Last Updated by"
+msgstr "Senast uppdaterad av"
+
+#. module: partner_change_salesman
+#: field:res.partner.change.salesman,write_date:0
+msgid "Last Updated on"
+msgstr "Senast uppdaterad"
+
+#. module: partner_change_salesman
+#: field:res.partner.change.salesman,user_id:0
+msgid "Salesman"
+msgstr "Säljare"
+

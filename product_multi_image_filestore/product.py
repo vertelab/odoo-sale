@@ -69,5 +69,5 @@ class ProductProduct(models.Model):
                     image.write({
                         'image_attachment_id': attachment.id,
                         'storage': 'filestore',
-                        'file_db_store': False
+                        'file_db_store': False,
                     })
