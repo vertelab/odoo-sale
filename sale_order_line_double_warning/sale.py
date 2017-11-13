@@ -50,4 +50,4 @@ class sale_order(models.Model):
                 'context': {'active_id': self.id},
             }
         else:
-            return super(sale_order, self).action_button_confirm()
+            return self.action_button_confirm()
