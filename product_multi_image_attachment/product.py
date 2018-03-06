@@ -50,27 +50,29 @@ class ProductTemplate(models.Model):
             images = self.product_variant_ids.mapped('image_attachment_ids')
             self.image_main_id = images and images[0]
 
-    @api.one
+    @api.multi
     def _get_multi_image(self):
         """Get the main image for this object.
         """
-        self.env.cr.execute('SELECT image_main_id FROM %s WHERE id=%%s;' % self._table, [self.id])
-        res = self.env.cr.dictfetchone()
-        image = res and self.env['ir.attachment'].with_context(bin_size=False).search_read([('id', '=', res['image_main_id'])], ['datas'])
-        if image:
-            image = image[0]['datas']
-            values = None
-            try:
-                images = tools.image_get_resized_images(image)
-                values = {
-                    'image_main': image,
-                    'image_main_medium': images['image_medium'],
-                    'image_main_small': images['image_small'],
-                }
-            except:
-                pass
-            if values:
-                self.update(values)
+        self.env.cr.execute('SELECT id, image_main_id FROM %s WHERE id IN %%s;' % self._table, [self._ids])
+        res = self.env.cr.dictfetchall()
+        attachments = self.env['ir.attachment'].with_context(bin_size=False).search_read([('id', 'in', [d['image_main_id'] for d in res if d['image_main_id']])], ['datas'])
+        for product in self:
+            att_id = filter(lambda x: x.get('id') == product.id, res)[0]['image_main_id']
+            image = att_id and filter(lambda x: x.get('id') == att_id, attachments)[0]['datas']
+            if image:
+                values = None
+                try:
+                    images = tools.image_get_resized_images(image)
+                    values = {
+                        'image_main': image,
+                        'image_main_medium': images['image_medium'],
+                        'image_main_small': images['image_small'],
+                    }
+                except:
+                    pass
+                if values:
+                    product.update(values)
 
     @api.one
     def get_image_attachment_ids(self):
@@ -129,28 +131,30 @@ class ProductProduct(models.Model):
     def get_image_attachment_ids(self):
         return self.image_attachment_ids.mapped('id') + self.product_tmpl_id.image_attachment_ids.mapped('id')
     
-    @api.one
+    @api.multi
     def _get_multi_image(self):
         """Get the main image for this object.
         """
         # Workaround to avoid recomputing our stored image_main_id
-        self.env.cr.execute('SELECT v_image_main_id FROM %s WHERE id=%%s;' % self._table, [self.id])
-        res = self.env.cr.dictfetchone()
-        image = res and self.env['ir.attachment'].with_context(bin_size=False).search_read([('id', '=', res['v_image_main_id'])], ['datas'])
-        if image:
-            image = image[0]['datas']
-            values = None
-            try:
-                images = tools.image_get_resized_images(image)
-                values = {
-                    'image_main': image,
-                    'image_main_medium': images['image_medium'],
-                    'image_main_small': images['image_small'],
-                }
-            except:
-                pass
-            if values:
-                self.update(values)
+        self.env.cr.execute('SELECT id, v_image_main_id FROM %s WHERE id IN %%s;' % self._table, [self._ids])
+        res = self.env.cr.dictfetchall()
+        attachments = self.env['ir.attachment'].with_context(bin_size=False).search_read([('id', 'in', [d['v_image_main_id'] for d in res if d['v_image_main_id']])], ['datas'])
+        for product in self:
+            att_id = filter(lambda x: x.get('id') == product.id, res)[0]['v_image_main_id']
+            image = att_id and filter(lambda x: x.get('id') == att_id, attachments)[0]['datas']
+            if image:
+                values = None
+                try:
+                    images = tools.image_get_resized_images(image)
+                    values = {
+                        'image_main': image,
+                        'image_main_medium': images['image_medium'],
+                        'image_main_small': images['image_small'],
+                    }
+                except:
+                    pass
+                if values:
+                    product.update(values)
 
 class ProductProductOld(orm.Model):
     """It is needed to use v7 api here because core model fields use the
