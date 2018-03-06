@@ -106,7 +106,7 @@ class ProductTemplateOld(orm.Model):
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
-    image_main_id = fields.Many2one(
+    v_image_main_id = fields.Many2one(
         comodel_name='ir.attachment',
         string="Main image",
         compute='_get_image_main_id',
@@ -121,9 +121,9 @@ class ProductProduct(models.Model):
     def _get_image_main_id(self):
         _logger.warn('%s._get_image_main_id: %s' % (self, self.image_attachment_ids))
         if self.image_attachment_ids:
-            self.image_main_id = self.image_attachment_ids[0]
+            self.v_image_main_id = self.image_attachment_ids[0]
         else:
-            self.image_main_id = self.product_tmpl_id.image_attachment_ids and self.product_tmpl_id.image_attachment_ids[0]
+            self.v_image_main_id = self.product_tmpl_id.image_attachment_ids and self.product_tmpl_id.image_attachment_ids[0]
 
     @api.one
     def get_image_attachment_ids(self):
@@ -134,9 +134,9 @@ class ProductProduct(models.Model):
         """Get the main image for this object.
         """
         # Workaround to avoid recomputing our stored image_main_id
-        self.env.cr.execute('SELECT image_main_id FROM %s WHERE id=%%s;' % self._table, [self.id])
+        self.env.cr.execute('SELECT v_image_main_id FROM %s WHERE id=%%s;' % self._table, [self.id])
         res = self.env.cr.dictfetchone()
-        image = res and self.env['ir.attachment'].with_context(bin_size=False).search_read([('id', '=', res['image_main_id'])], ['datas'])
+        image = res and self.env['ir.attachment'].with_context(bin_size=False).search_read([('id', '=', res['v_image_main_id'])], ['datas'])
         if image:
             image = image[0]['datas']
             values = None
