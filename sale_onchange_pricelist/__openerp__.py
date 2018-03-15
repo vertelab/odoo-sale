@@ -28,6 +28,7 @@ Update price in sale order line when pricelist of sale order changed
 ====================================================================
 """,
 'author': 'Vertel AB',
+    'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
 'depends': ['sale'],
 'data': [

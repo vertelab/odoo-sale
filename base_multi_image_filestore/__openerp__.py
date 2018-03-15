@@ -25,6 +25,7 @@
     'category': 'Hidden',
     'description': """Adds ability to store multi images in filestore.""",
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['base_multi_image'],
     'data': ['image_view.xml',],
