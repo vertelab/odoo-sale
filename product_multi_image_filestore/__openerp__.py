@@ -25,6 +25,7 @@
     'category': 'Hidden',
     'description': """Stores product multi images in filestore.""",
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['product_multi_image', 'base_multi_image_filestore'],
     'data': [],

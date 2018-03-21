@@ -29,6 +29,7 @@ This year, last year and the year before that
 
 """,
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['sale',],
     'data': [

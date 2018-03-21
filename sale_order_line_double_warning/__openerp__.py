@@ -28,6 +28,7 @@ Warning for double sale order lines have same product
 =====================================================
 """,
 'author': 'Vertel AB',
+    'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
 'depends': ['sale'],
 'data': [

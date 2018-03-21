@@ -26,6 +26,7 @@
     'description': """Show the contact type in the partner name on sale orders and other documents.
 Which types that should show in the name can be configured through the parameter partner_show_contact_type.types. It's a space separated list of partner type values (i.e. 'invoice delivery').""",
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['sale'],
     'data': ['sale_view.xml'

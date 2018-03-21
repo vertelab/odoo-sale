@@ -25,6 +25,7 @@
 'category': 'Hidden',
 'description': """Show customer number on customers and sale orders.""",
 'author': 'Vertel AB',
+    'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
 'depends': ['sale'],
 'data': [

@@ -25,6 +25,7 @@
 'category': 'Hidden',
 'description': """Adds new rule types to sales commission.""",
 'author': 'Vertel AB',
+    'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
 'depends': ['sale_commission'],
 'data': [
