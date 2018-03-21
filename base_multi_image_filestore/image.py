@@ -23,6 +23,8 @@ from openerp import api, models, fields, _
 import logging
 _logger = logging.getLogger(__name__)
 
+from timeit import default_timer as timer
+
 class Image(models.Model):
     _inherit = "base_multi_image.image"
 
@@ -31,4 +33,7 @@ class Image(models.Model):
 
     @api.multi
     def _get_image_from_filestore(self):
-        return self.image_attachment_id and self.image_attachment_id.datas or None
+        start = timer()
+        res = self.image_attachment_id and self.image_attachment_id.datas or None
+        _logger.warn('_get_image_from_filestore: %s' % (timer() - start))
+        return res

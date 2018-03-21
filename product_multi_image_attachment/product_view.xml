@@ -11,6 +11,7 @@
                 <page string="Images">
                     <field name="image_attachment_ids" nolabel="1" widget="many2many" context="{'default_name': name, 'search_default_name': name}">
                         <tree>
+                            <field name="sequence" widget="handle"/>
                             <field name="datas" widget="image"/>
                             <field name="name"/>
                         </tree>
