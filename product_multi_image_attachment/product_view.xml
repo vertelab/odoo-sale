@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
 <data>
-    
+
     <record id="view_product_template_form_img_filestore" model="ir.ui.view">
         <field name="name">Product Multi Images</field>
         <field name="model">product.template</field>
@@ -20,6 +20,6 @@
             </xpath>
         </field>
     </record>
-    
+
 </data>
 </openerp>
