@@ -142,8 +142,8 @@ class ProductProduct(models.Model):
         if self.image_attachment_ids:
             self.v_image_main_id = self.image_attachment_ids[0]
         else:
-            self.v_image_main_id = self.product_tmpl_id.image_attachment_ids and self.product_tmpl_id.image_attachment_ids[0]
-        images = tools.image_get_resized_images(self.image_main_id)
+            self.v_image_main_id = self.product_tmpl_id.image_attachment_ids and self.product_tmpl_id.image_attachment_ids.sorted(lambda r: r.sequence)[0]
+        images = tools.image_get_resized_images(self.image_main_id.datas)
         if not self.v_image_main_medium_id:
             self.v_image_main_medium_id = self.env['ir.attachment'].create({
                         'name': '%s_medium' % self.name,
