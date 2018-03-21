@@ -65,7 +65,7 @@ class ProductTemplate(models.Model):
                         'res_model': self._name,
                         'res_id': self.id,
                         #~ 'datas': base64.encodestring(images['image_medium']),
-                        'datas': base64.encodestring(self.image_main_id.datas),
+                        'datas': self.image_main_id.datas,
                         'datas_fname': '%s_medium' % self.name ,
                     }).id
         else:
@@ -78,7 +78,7 @@ class ProductTemplate(models.Model):
                         'res_model': self._name,
                         'res_id': self.id,
                         #~ 'datas': base64.encodestring(images['image_small']),
-                        'datas': base64.encodestring(self.image_main_id.datas),
+                        'datas': self.image_main_id.datas,
                         'datas_fname': '%s_small' % self.name ,
                     }).id
         else:
