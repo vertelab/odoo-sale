@@ -118,6 +118,14 @@ class ProductTemplate(models.Model):
         res = self.sudo().image_attachment_ids.sorted(lambda r: r.sequence).mapped('id')
         return res + [id for id in self.env['product.product'].search([('id', '=', self.id)]).sudo().sorted(lambda r: r.sequence).mapped('id') if id not in res]
 
+    @api.model
+    def update_image_attachments(self):
+        limit = int(self.env['ir.config_parameter'].get_param('product_multi_image_attachment.template_limit', '50'))
+        offset = int(self.env['ir.config_parameter'].get_param('product_multi_image_attachment.template_offset', '0'))
+        products = self.with_context(active_test=False).search([], limit=limit, offset=offset)
+        products and products._get_image_main_id()
+        self.env['ir.config_parameter'].set_param('product_multi_image_attachment.template_offset', str(offset + limit))
+
 class ProductTemplateOld(orm.Model):
     """Reference core image old_fields to multi-image variants.
 
@@ -227,6 +235,14 @@ class ProductProduct(models.Model):
             product.image_main = p[0]['image_main_id'] and filter(lambda x: x.get('id') == p[0]['image_main_id'], attachments)[0]['datas']
             product.image_main_medium = p[0]['image_main_medium_id'] and filter(lambda x: x.get('id') == p[0]['image_main_medium_id'], attachments)[0]['datas']
             product.image_main_small = p[0]['image_main_small_id'] and filter(lambda x: x.get('id') == p[0]['image_main_small_id'], attachments)[0]['datas']
+
+    @api.model
+    def update_image_attachments(self):
+        limit = int(self.env['ir.config_parameter'].get_param('product_multi_image_attachment.product_limit', '50'))
+        offset = int(self.env['ir.config_parameter'].get_param('product_multi_image_attachment.product_offset', '0'))
+        products = self.with_context(active_test=False).search([], limit=limit, offset=offset)
+        products and products._get_v_image_main_id()
+        self.env['ir.config_parameter'].set_param('product_multi_image_attachment.product_offset', str(offset + limit))
 
 class ProductProductOld(orm.Model):
     """It is needed to use v7 api here because core model fields use the
