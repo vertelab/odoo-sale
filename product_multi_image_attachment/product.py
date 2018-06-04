@@ -108,9 +108,9 @@ class ProductTemplate(models.Model):
         #~ _logger.warn('attachments: %s' % attachments)
         for product in self:
             p = filter(lambda x: x.get('id') == product.id, res)
-            product.image_main = p[0]['image_main_id'] and filter(lambda x: x.get('id') == p[0]['image_main_id'], attachments)[0]['datas']
-            product.image_main_medium = p[0]['image_main_medium_id'] and filter(lambda x: x.get('id') == p[0]['image_main_medium_id'], attachments)[0]['datas']
-            product.image_main_small = p[0]['image_main_small_id'] and filter(lambda x: x.get('id') == p[0]['image_main_small_id'], attachments)[0]['datas']
+            product.image_main = p[0]['image_main_id'] and (filter(lambda x: x.get('id') == p[0]['image_main_id'], attachments) or [{}])[0].get('datas')
+            product.image_main_medium = p[0]['image_main_medium_id'] and (filter(lambda x: x.get('id') == p[0]['image_main_medium_id'], attachments) or [{}])[0].get('datas')
+            product.image_main_small = p[0]['image_main_small_id'] and (filter(lambda x: x.get('id') == p[0]['image_main_small_id'], attachments) or [{}])[0].get('datas')
 
     @api.multi
     def get_image_attachment_ids(self):
