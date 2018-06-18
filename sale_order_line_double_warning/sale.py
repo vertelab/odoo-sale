@@ -31,7 +31,7 @@ class sale_order_warning_wizard(models.TransientModel):
     def confirm(self):
         order = self.env['sale.order'].browse(self._context.get('active_id'))
         if order:
-            order.action_button_confirm()
+            return order.action_button_confirm()
 
 class sale_order(models.Model):
     _inherit ='sale.order'
