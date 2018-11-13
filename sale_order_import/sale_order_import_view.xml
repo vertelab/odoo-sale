@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <record id="view_order_import_form" model="ir.ui.view">
+      <field name="name">sale.order.import.wizard.form</field>
+      <field name="model">sale.order.import.wizard</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+        <form string="Sale Order Import">
+          <sheet>
+            <group>
+              <field name="order_file" filename="file_name" />
+              <field name="file_name" invisible="1" />
+              <field name="info" readonly="1" />
+              <field name="mime" invisible="1" />
+              <field name="import_customer" invisible="1" />
+              <field name="tmp_file" invisible="1" />
+            </group>
+            <group>
+              <span>Mallfil för order</span>
+              <br />
+              <span />
+              <span>http://adsds</span>
+            </group>
+          </sheet>
+          <footer attrs="{'invisible': ['|', ('mime', '=', False), ('import_customer', '=', False)]}">
+            <button name="import_files" type="object" string="Import" class="oe_highlight" />
+            or
+            <button string="Cancel" class="oe_link" special="cancel" />
+          </footer>
+        </form>
+      </field>
+    </record>
+    <record id="action_order_import_order" model="ir.actions.act_window">
+      <field name="name">Standard Order Import</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">sale.order.import.wizard</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">form</field>
+      <field name="target">new</field>
+      <field name="context">{}</field>
+      <field name="domain" />
+    </record>
+    <menuitem action="action_order_import_order" id="menu_sale_order_import" parent="base.menu_sales" sequence="99" groups="base.group_sale_salesman,base.group_sale_manager" />
+  </data>
+</openerp>
