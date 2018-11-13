@@ -27,7 +27,7 @@ from subprocess import Popen, PIPE
 import os
 import tempfile
 try:
-    from xlrd import open_workbook, XLRDError
+    from xlrd import open_workbook, XLRDError, XL_CELL_EMPTY,XL_CELL_TEXT,XL_CELL_NUMBER,XL_CELL_DATE,XL_CELL_BOOLEAN,XL_CELL_ERROR,XL_CELL_BLANK    
     from xlrd.book import Book
     from xlrd.sheet import Sheet
 except:
@@ -46,10 +46,14 @@ class SaleOrderImport(models.TransientModel):
     _name = 'sale.order.import.wizard'
     order_file = fields.Binary(string='Order file')
     mime = fields.Selection([('url','url'),('text','text/plain'),('pdf','application/pdf'),('xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),('xls','application/vnd.ms-excel'),('xlm','application/vnd.ms-office')])
-    import_customer = fields.Many2one(string='Customer',comodel_name='res.partner')
+    partner_id = fields.Many2one(string='Customer',comodel_name='res.partner')
     info = fields.Text(string='Info')
     tmp_file = fields.Char(string='Tmp File')
     file_name = fields.Char(string='File Name')
+
+
+
+
 
     @api.one
     @api.onchange('order_file')
@@ -58,6 +62,13 @@ class SaleOrderImport(models.TransientModel):
         self.import_customer = None
         self.info = None
         self.tmp_file = None
+
+        def get_value(wb,x,y):
+            if wb.cell_type(x, y) == XL_CELL_NUMBER:
+                return '%s' % int(wb.cell_value(x, y))
+            if wb.cell_type(x, y) == XL_CELL_TEXT:
+                return '%s' % wb.cell_value(x, y)
+            
 
         if self.order_file:
             fd, self.tmp_file = tempfile.mkstemp()
@@ -82,37 +93,10 @@ class SaleOrderImport(models.TransientModel):
                     raise Warning(e)
 
                 
+                if '%s'.lower() % wb.cell_value(0,0) in ('kundnummer','kund','nummer','kundid','customer number','customer'):
+                    self.partner_id = self.env['res.partner'].search([('ref','=',get_value(wb,0,1))])
 
-                if '%s'.lc() % wb.cell_value(0,1) in ('kundnummer','kund','nummer','kundid','customer number','customer'):
-                    raise Warning('Hurray')
-                    self.import_customer = 'lyko'
-
-            self.info = '%s\n%s' % (self.import_customer,self.get_selection_value('mime',self.mime))
-
-
-    @api.one
-    @api.onchange('order_url')
-    def check_url(self):
-        self.mime = None
-        self.import_customer = None
-        self.info = None
-        self.tmp_file = None
-
-        if self.order_url:
-            self.mime = 'url'
-            try:
-                page = requests.get(self.order_url.strip())
-            except requests.exceptions.RequestException as e:
-                raise Warning(e)
-            tree = html.fromstring(page.content)
-            specter_head = tree.xpath('//tr/td/font/text()')
-            specter_lines = tree.xpath('//tr/td/nobr/text()')
-
-            if specter_head and specter_head[6] == 'Naturligt Snygg':
-                self.import_customer = 'tailwide'
-
-            self.info = '%s\n%s' % (self.get_selection_value('import_customer',self.import_customer),self.get_selection_value('mime',self.mime))
-
+            self.info = '%s' % ('Excel formatted file' if self.mime in ['xlsx', 'xls', 'xlm'] else _('Unknown format'))
 
     @api.multi
     def import_files(self):
@@ -121,6 +105,12 @@ class SaleOrderImport(models.TransientModel):
         ordernummer = ''
         orderdatum = ''
         prodnr = re.compile('(\d{4}-\d{5})')
+
+        def get_value(wb,x,y):
+            if wb.cell_type(x, y) == XL_CELL_NUMBER:
+                return '%s' % int(wb.cell_value(x, y))
+            if wb.cell_type(x, y) == XL_CELL_TEXT:
+                return '%s' % wb.cell_value(x, y)
 
 ##
 ##  Excel
@@ -131,29 +121,33 @@ class SaleOrderImport(models.TransientModel):
             except XLRDError, e:
                 raise ValueError(e)
 
-#
-# Lyko
-#
-            if self[0].import_customer == 'lyko':
-                customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_customer',self.import_customer))])
-                order = self.env['sale.order'].create({
-                    'partner_id': customer.id,
-                    'client_order_ref': wb.cell_value(1,0),
-                })
-                l = 1
-                for line in range(l,wb.nrows):
-                    if wb.cell_value(line,4) not in [u'Ert artikelnr', 'Art no', '']:
-                        product = self.env['product.product'].search([('default_code','=',wb.cell_value(line,4))])
-                        if product:
-                            _logger.warn('Rad %s  %s' % (wb.cell_value(line,4),wb.cell_value(line,6)))
-                            self.env['sale.order.line'].create({
-                                        'order_id': order.id,
-                                        'product_id': product.id,
-                                        'product_uom_qty': int(wb.cell_value(line,6)),
-                                        #'discount': abs(float(wb.cell_value(line,8)))
-                                    })
-                        else:
-                            missing_products.append(wb.cell_value(line,4))
+            order = self.env['sale.order'].create({
+                'partner_id': self[0].partner_id.id,
+                'client_order_ref': get_value(wb,0,3),
+            })
+
+            art_col = None
+            qty_col = None
+            for col in range(0,wb.ncols):
+                if get_value(wb.cell_value(1,col)).lower() in [u'ert artikelnr','artikelnr', 'art no','artno','art nr','artnr']:
+                    art_col = col
+                if get_value(wb.cell_value(1,col)).lower() in [u'antal','qty', 'quantity','ant']:
+                    qty_col = col
+            
+            l = 2
+            for line in range(l,wb.nrows):
+                if get_value(wb,line,art_col) == '':
+                    continue
+                if get_value(wb,line,art_col) and len(prodnr.findall(get_value(wb,line,art_col))) > 0:
+                    product = self.env['product.product'].search([('default_code','=',prodnr.findall(get_value(wb,line,art_col))[0])])
+                    if product:
+                        self.env['sale.order.line'].create({
+                            'order_id': order.id,
+                            'product_id': product.id,
+                            'product_uom_qty': wb.cell_value(line,qty_col),
+                        })
+                    else:
+                        missing_products.append(wb.cell_value(line,art_col))
 
 #
 # END

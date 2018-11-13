@@ -11,9 +11,9 @@
             <group>
               <field name="order_file" filename="file_name" />
               <field name="file_name" invisible="1" />
+              <field name="partner_id" readonly="1" />
               <field name="info" readonly="1" />
               <field name="mime" invisible="1" />
-              <field name="import_customer" invisible="1" />
               <field name="tmp_file" invisible="1" />
             </group>
             <group>
@@ -23,7 +23,7 @@
               <span>http://adsds</span>
             </group>
           </sheet>
-          <footer attrs="{'invisible': ['|', ('mime', '=', False), ('import_customer', '=', False)]}">
+          <footer attrs="{'invisible': ['|', ('mime', '=', False), ('partner_id', '=', False)]}">
             <button name="import_files" type="object" string="Import" class="oe_highlight" />
             or
             <button string="Cancel" class="oe_link" special="cancel" />
