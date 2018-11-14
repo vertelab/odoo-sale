@@ -27,7 +27,7 @@ from subprocess import Popen, PIPE
 import os
 import tempfile
 try:
-    from xlrd import open_workbook, XLRDError, XL_CELL_EMPTY,XL_CELL_TEXT,XL_CELL_NUMBER,XL_CELL_DATE,XL_CELL_BOOLEAN,XL_CELL_ERROR,XL_CELL_BLANK    
+    from xlrd import open_workbook, XLRDError, XL_CELL_EMPTY,XL_CELL_TEXT,XL_CELL_NUMBER,XL_CELL_DATE,XL_CELL_BOOLEAN,XL_CELL_ERROR,XL_CELL_BLANK
     from xlrd.book import Book
     from xlrd.sheet import Sheet
 except:
@@ -44,16 +44,13 @@ _logger = logging.getLogger(__name__)
 
 class SaleOrderImport(models.TransientModel):
     _name = 'sale.order.import.wizard'
+
     order_file = fields.Binary(string='Order file')
     mime = fields.Selection([('url','url'),('text','text/plain'),('pdf','application/pdf'),('xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),('xls','application/vnd.ms-excel'),('xlm','application/vnd.ms-office')])
-    partner_id = fields.Many2one(string='Customer',comodel_name='res.partner')
+    partner_id = fields.Many2one(string='Customer', comodel_name='res.partner')
     info = fields.Text(string='Info')
     tmp_file = fields.Char(string='Tmp File')
     file_name = fields.Char(string='File Name')
-
-
-
-
 
     @api.one
     @api.onchange('order_file')
@@ -68,7 +65,6 @@ class SaleOrderImport(models.TransientModel):
                 return '%s' % int(wb.cell_value(x, y))
             if wb.cell_type(x, y) == XL_CELL_TEXT:
                 return '%s' % wb.cell_value(x, y)
-            
 
         if self.order_file:
             fd, self.tmp_file = tempfile.mkstemp()
@@ -92,7 +88,6 @@ class SaleOrderImport(models.TransientModel):
                 except XLRDError, e:
                     raise Warning(e)
 
-                
                 if '%s'.lower() % wb.cell_value(0,0) in ('kundnummer','kund','nummer','kundid','customer number','customer'):
                     self.partner_id = self.env['res.partner'].search([('ref','=',get_value(wb,0,1))])
 
@@ -115,6 +110,8 @@ class SaleOrderImport(models.TransientModel):
 ##
 ##  Excel
 ##
+        wb = open_workbook(file_contents=base64.b64decode(self.order_file)).sheet_by_index(0)
+        partner_id = self.env['res.partner'].search([('ref','=',get_value(wb,0,1))])
         if self[0].mime in ['xlsx', 'xls', 'xlm']:
             try:
                 wb = open_workbook(file_contents=base64.b64decode(self.order_file)).sheet_by_index(0)
@@ -122,18 +119,20 @@ class SaleOrderImport(models.TransientModel):
                 raise ValueError(e)
 
             order = self.env['sale.order'].create({
-                'partner_id': self[0].partner_id.id,
+                'partner_id': partner_id.id,
                 'client_order_ref': get_value(wb,0,3),
+                'message_follower_ids': [(4, partner_id.id), (3, self.env.user.partner_id.id)],
+                'partner_invoice_id': partner_id.id,
             })
 
             art_col = None
             qty_col = None
             for col in range(0,wb.ncols):
-                if get_value(wb.cell_value(1,col)).lower() in [u'ert artikelnr','artikelnr', 'art no','artno','art nr','artnr']:
+                if get_value(wb, 1, col).lower() in [u'ert artikelnr','artikelnr', 'art no','artno','art nr','artnr']:
                     art_col = col
-                if get_value(wb.cell_value(1,col)).lower() in [u'antal','qty', 'quantity','ant']:
+                if get_value(wb, 1, col).lower() in [u'antal','qty', 'quantity','ant']:
                     qty_col = col
-            
+
             l = 2
             for line in range(l,wb.nrows):
                 if get_value(wb,line,art_col) == '':
@@ -176,8 +175,6 @@ class SaleOrderImport(models.TransientModel):
                  'target': 'current',
                  'context': {},
                  }
-
-
 
     def get_selection_text(self,field,value):
         for type,text in self.fields_get([field])[field]['selection']:
