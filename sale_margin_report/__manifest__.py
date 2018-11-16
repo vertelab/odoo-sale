@@ -19,21 +19,19 @@
 ##############################################################################
 
 {
-    'name': 'Sale Revenue Report',
+    'name': 'Sale margin Report',
     'version': '0.1',
     'category': 'sale',
     'summary': '',
     'licence': 'AGPL-3',
     'description': """
-Sale revenue on BI-report
-=========================
+Sale margin on BI-report
+========================
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['sale'],
-    'data': [
-        'views/sale_view.xml',
-    ],
+    'depends': ['sale_margin'],
+    'data': [],
     'application': False,
     'installable': True,
 }
