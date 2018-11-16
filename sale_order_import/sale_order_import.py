@@ -81,7 +81,10 @@ class SaleOrderImport(models.TransientModel):
                 raise Warning(e)
 
             self.mime = self.get_selection_text('mime',read_mime)
-
+            if not self.mime:
+                # Guess mime from file name
+                self.mime = self.file_name.split('.')[-1]
+            
             if self.mime in ['xlsx', 'xls', 'xlm']:
                 try:
                     wb = open_workbook(file_contents=base64.b64decode(self.order_file)).sheet_by_index(0)
