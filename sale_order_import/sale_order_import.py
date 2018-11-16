@@ -73,7 +73,7 @@ class SaleOrderImport(models.TransientModel):
 
             try:
                 pop = Popen(['file','-b','--mime',self.tmp_file], shell=False, stdout=PIPE)
-                (result, _) = pop.communicate()
+                result = pop.communicate()[0]
                 read_mime = result.split(';')[0]
             except OSError,e:
                 _logger.warning("Failed attempt to execute file. This program is necessary to check MIME type of %s", fname)
