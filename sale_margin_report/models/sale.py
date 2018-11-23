@@ -19,47 +19,34 @@
 #
 ##############################################################################
 from odoo import models, fields, api, _
+import odoo.addons.decimal_precision as dp
 import logging
 _logger = logging.getLogger(__name__)
 
 
-class SaleReport(models.Model):
-    _inherit = 'sale.report'
+class SaleOrderLine(models.Model):
+    _inherit = "sale.order.line"
 
-    margin = fields.Float('Margin', readonly=True)
+    margin_ratio = fields.Float(compute='_product_margin_ratio', digits=dp.get_precision('Product Price'), store=True)
 
-    def _select(self):
-        super(SaleReport, self)._select()
-        select_str = """
-            WITH currency_rate as (%s)
-             SELECT min(l.id) as id,
-                    l.product_id as product_id,
-                    t.uom_id as product_uom,
-                    sum(l.product_uom_qty / u.factor * u2.factor) as product_uom_qty,
-                    sum(l.qty_delivered / u.factor * u2.factor) as qty_delivered,
-                    sum(l.qty_invoiced / u.factor * u2.factor) as qty_invoiced,
-                    sum(l.qty_to_invoice / u.factor * u2.factor) as qty_to_invoice,
-                    sum(l.price_total / COALESCE(cr.rate, 1.0)) as price_total,
-                    sum(l.price_subtotal / COALESCE(cr.rate, 1.0)) as price_subtotal,
-                    sum(l.margin / COALESCE(cr.rate, 1.0)) as margin,
-                    count(*) as nbr,
-                    s.name as name,
-                    s.date_order as date,
-                    s.state as state,
-                    s.partner_id as partner_id,
-                    s.user_id as user_id,
-                    s.company_id as company_id,
-                    extract(epoch from avg(date_trunc('day',s.date_order)-date_trunc('day',s.create_date)))/(24*60*60)::decimal(16,2) as delay,
-                    t.categ_id as categ_id,
-                    s.pricelist_id as pricelist_id,
-                    s.project_id as analytic_account_id,
-                    s.team_id as team_id,
-                    p.product_tmpl_id,
-                    partner.country_id as country_id,
-                    partner.commercial_partner_id as commercial_partner_id,
-                    sum(p.weight * l.product_uom_qty / u.factor * u2.factor) as weight,
-                    sum(p.volume * l.product_uom_qty / u.factor * u2.factor) as volume
-        """ % self.env['res.currency']._select_companies_rates()
-        return select_str
+    @api.depends('product_id', 'purchase_price', 'product_uom_qty', 'price_unit', 'price_subtotal', 'margin')
+    def _product_margin_ratio(self):
+        for line in self:
+            currency = line.order_id.pricelist_id.currency_id
+            price = line.purchase_price
+            if not price:
+                from_cur = line.env.user.company_id.currency_id.with_context(date=line.order_id.date_order)
+                price = from_cur.compute(line.product_id.standard_price, currency, round=False)
+
+            line.margin_ratio = round(line.margin / line.price_subtotal, 2) * 100
+
+
+# ~ class SaleReport(models.Model):
+    # ~ _inherit = 'sale.report'
+
+    # ~ margin_ratio = fields.Float(string='Margin Ratio', readonly=True)
+
+    # ~ def _select(self):
+        # ~ return super(SaleReport, self)._select() + ", (SUM(t.standard_price * l.product_uom_qty / u.factor * u2.factor) / SUM(l.price_subtotal / COALESCE(cr.rate, 1.0))) AS margin_ratio"
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
