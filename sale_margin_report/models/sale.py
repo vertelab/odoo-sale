@@ -37,8 +37,10 @@ class SaleOrderLine(models.Model):
             if not price:
                 from_cur = line.env.user.company_id.currency_id.with_context(date=line.order_id.date_order)
                 price = from_cur.compute(line.product_id.standard_price, currency, round=False)
-
-            line.margin_ratio = round(line.margin / line.price_subtotal, 2) * 100
+            if line.price_subtotal == 0.0:
+                line.margin_ratio = 0.0
+            else:
+                line.margin_ratio = round(line.margin / line.price_subtotal, 4) * 100
 
 
 # ~ class SaleReport(models.Model):
