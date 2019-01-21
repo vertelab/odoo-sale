@@ -1,0 +1,26 @@
+<openerp>
+<data>
+        
+    <record id="product_normal_form_view" model="ir.ui.view">
+        <field name="name">product.product.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <div name="pricelist_item" position="attributes">
+                <attribute name="groups"></attribute>
+            </div>
+            <field name="pricelist_item_ids" position="attributes">
+                <attribute name="widget"></attribute>
+                <attribute name="context">{'default_product_id': active_id, 'default_applied_on': '0_product_variant', 'default_compute_price': 'fixed'}</attribute>
+            </field>
+            <xpath expr="//field[@name='pricelist_item_ids']/tree" position="attributes">
+                <attribute name="editable">top</attribute>
+            </xpath>
+             <field name="sequence" position="replace">
+                <field name="sequence"/>
+            </field>
+        </field>
+    </record>
+    
+</data>
+</openerp>
