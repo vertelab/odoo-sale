@@ -152,13 +152,13 @@ class SaleOrderImport(models.TransientModel):
                         })
                         if product.type == 'product':
                             #determine if the product needs further check for stock availibility
-                            is_available = order_line._check_routing(product, order.warehouse_id.id)
+                            is_available = order_line._check_routing(product, order.warehouse_id.id) and product.sale_ok
                             
                             #check if product is available, and if not: raise a warning, but do this only for products that aren't processed in MTO
                             if not is_available:
                                 uom_record = order_line.product_uom
                                 compare_qty = float_compare(order_line.product_id.virtual_available, order_line.product_uom_qty, precision_rounding=uom_record.rounding)
-                                if compare_qty == -1:
+                                if compare_qty == -1 or not product.sale_ok:
                                     out_of_stock.append(wb.cell_value(line,art_col))
                     else:
                         missing_products.append(wb.cell_value(line,art_col))
@@ -171,8 +171,8 @@ class SaleOrderImport(models.TransientModel):
             order.note = _('Missing products: ') + ','.join(missing_products)
         
         if out_of_stock and order:
-            order.note = order.note + '\n' or ''
-            order.note += _('Out of stock: ') + ','.join(out_of_stock)
+            order.note = order.note or ''
+            order.note += _('\nOut of stock: ') + ','.join(out_of_stock)
             
                 
         if order:
