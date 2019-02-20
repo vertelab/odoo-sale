@@ -158,7 +158,7 @@ class SaleOrderImport(models.TransientModel):
                             if not is_available:
                                 uom_record = order_line.product_uom
                                 compare_qty = float_compare(order_line.product_id.virtual_available, order_line.product_uom_qty, precision_rounding=uom_record.rounding)
-                                if compare_qty == -1 or not product.sale_ok:
+                                if compare_qty == -1 or not product.sale_ok or not product.active or not product.website_published: 
                                     out_of_stock.append(wb.cell_value(line,art_col))
                     else:
                         missing_products.append(wb.cell_value(line,art_col))
