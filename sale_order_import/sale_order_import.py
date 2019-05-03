@@ -155,9 +155,10 @@ class SaleOrderImport(models.TransientModel):
                             is_available = order_line._check_routing(product, order.warehouse_id.id) and product.sale_ok
                             
                             #check if product is available, and if not: raise a warning, but do this only for products that aren't processed in MTO
-                            if not is_available:
-                                uom_record = order_line.product_uom
-                                compare_qty = float_compare(order_line.product_id.virtual_available, order_line.product_uom_qty, precision_rounding=uom_record.rounding)
+                            if not is_available and order_line.product_id.virtual_available_days < 5:
+                                _logger.warn('sale_order_import product %s days %s ' % (order_line.product_id.name,order_line.product_id.virtual_available_days))
+                                compare_qty = float_compare(order_line.product_id.virtual_available, order_line.product_uom_qty, precision_rounding=order_line.product_uom.rounding)
+                                _logger.warn('sale_order_import product %s compare %s sale_ok %s ' % (order_line.product_id.name,compare_qty,order_line.product_id.sale_ok))
                                 if compare_qty == -1 or not product.sale_ok or not product.active or not product.website_published: 
                                     out_of_stock.append(wb.cell_value(line,art_col))
                     else:
