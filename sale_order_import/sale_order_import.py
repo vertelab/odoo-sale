@@ -20,6 +20,7 @@
 ##############################################################################
 from openerp import models, fields, api, _
 from openerp.exceptions import except_orm, Warning, RedirectWarning
+from openerp.tools import float_compare
 import base64
 from cStringIO import StringIO
 
@@ -100,6 +101,7 @@ class SaleOrderImport(models.TransientModel):
     def import_files(self):
         order = None
         missing_products = []
+        out_of_stock = []
         ordernummer = ''
         orderdatum = ''
         prodnr = re.compile('(\d{4}-\d{5})')
@@ -145,11 +147,22 @@ class SaleOrderImport(models.TransientModel):
                 if get_value(wb,line,art_col) and len(prodnr.findall(get_value(wb,line,art_col))) > 0:
                     product = self.env['product.product'].search([('default_code','=',prodnr.findall(get_value(wb,line,art_col))[0])])
                     if product:
-                        self.env['sale.order.line'].create({
+                        order_line = self.env['sale.order.line'].create({
                             'order_id': order.id,
                             'product_id': product.id,
                             'product_uom_qty': wb.cell_value(line,qty_col),
                         })
+                        if product.type == 'product':
+                            #determine if the product needs further check for stock availibility
+                            is_available = order_line._check_routing(product, order.warehouse_id.id) and product.sale_ok
+                            
+                            #check if product is available, and if not: raise a warning, but do this only for products that aren't processed in MTO
+                            if not is_available and order_line.product_id.virtual_available_days < 5:
+                                _logger.warn('sale_order_import product %s days %s ' % (order_line.product_id.name,order_line.product_id.virtual_available_days))
+                                compare_qty = float_compare(order_line.product_id.virtual_available, order_line.product_uom_qty, precision_rounding=order_line.product_uom.rounding)
+                                _logger.warn('sale_order_import product %s compare %s sale_ok %s ' % (order_line.product_id.name,compare_qty,order_line.product_id.sale_ok))
+                                if compare_qty == -1 or not product.sale_ok or not product.active or not product.website_published: 
+                                    out_of_stock.append(wb.cell_value(line,art_col))
                     else:
                         missing_products.append(wb.cell_value(line,art_col))
 
@@ -159,6 +172,12 @@ class SaleOrderImport(models.TransientModel):
 
         if missing_products and order:
             order.note = _('Missing products: ') + ','.join(missing_products)
+        
+        if out_of_stock and order:
+            order.note = order.note or ''
+            order.note += _('\nOut of stock: ') + ','.join(out_of_stock)
+            
+                
         if order:
             attachment = self.env['ir.attachment'].create({
                     'name': order.client_order_ref or 'Order'  + '.' + self.mime,
