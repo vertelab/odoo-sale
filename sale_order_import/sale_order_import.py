@@ -125,8 +125,10 @@ class SaleOrderImport(models.TransientModel):
                 'partner_id': partner_id.id,
                 'client_order_ref': get_value(wb,0,3),
                 'message_follower_ids': [(4, partner_id.id), (3, self.env.user.partner_id.id)],
-                'partner_invoice_id': partner_id.id,
             })
+            res = order.onchange(order.read()[0], 'partner_id', order._onchange_spec())
+            if res.get('value'):
+                order.write(res['value'])
 
             art_col = None
             qty_col = None
