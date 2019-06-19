@@ -8,8 +8,19 @@
             <field name="arch" type="xml">
                 <form string="Double Sale Order Line">
                     <sheet>
-                        <h1 class="text-center">Warning: There're sale order line contain same product.</h1>
+                        <h1 class="text-center">Warning: There are sale order lines that contain the same product.</h1>
                         <h2 class="text-center">Do you want to continue?</h2>
+                        <field name="order_id" invisible="1"/>
+                        <field name="line_ids">
+                            <tree string="Double Lines">
+                                <field name="product_id"/>
+                                <field name="name"/>
+                                <field name="product_uom_qty"/>
+                                <field name="price_unit"/>
+                                <field name="discount"/>
+                                <field name="state" invisible="1"/>
+                            </tree>
+                        </field>
                         <div class="text-center">
                             <button name="confirm" type="object" string="Continue Anyway" class="oe_highlight"/>
                             or
