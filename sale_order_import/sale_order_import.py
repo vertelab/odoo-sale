@@ -135,22 +135,28 @@ class SaleOrderImport(models.TransientModel):
             art_col = None
             qty_col = None
             for col in range(0,wb.ncols):
-                if get_value(wb, 1, col).lower() in [u'ert artikelnr','artikelnr', 'art no','artno','art nr','artnr']:
-                    art_col = col
-                if get_value(wb, 1, col).lower() in [u'antal','qty', 'quantity','ant']:
-                    qty_col = col
-
+                if not art_col:
+					val = get_value(wb, 1, col)
+					if val and val.lower() in [u'ert artikelnr','artikelnr', 'art no','artno','art nr','artnr']:
+						art_col = col
+                if not qty_col:
+					val = get_value(wb, 1, col)
+					if val and val.lower() in [u'antal','qty', 'quantity','ant']:
+						qty_col = col
             l = 2
             for line in range(l,wb.nrows):
-                if get_value(wb,line,art_col) == '':
+                art = get_value(wb, line, art_col)
+                if art == '':
                     continue
-                if get_value(wb,line,art_col) and len(prodnr.findall(get_value(wb,line,art_col))) > 0:
-                    product = self.env['product.product'].search([('default_code','=',prodnr.findall(get_value(wb,line,art_col))[0])])
+                qty = wb.cell_value(line, qty_col)
+                product = None
+                if art and len(prodnr.findall(art)) > 0:
+                    product = self.env['product.product'].search([('default_code','=',prodnr.findall(art)[0])])
                     if product:
                         order_line = self.env['sale.order.line'].create({
                             'order_id': order.id,
                             'product_id': product.id,
-                            'product_uom_qty': wb.cell_value(line,qty_col),
+                            'product_uom_qty': qty,
                         })
                         if product.type == 'product':
                             #determine if the product needs further check for stock availibility
@@ -162,19 +168,19 @@ class SaleOrderImport(models.TransientModel):
                                 compare_qty = float_compare(order_line.product_id.virtual_available, order_line.product_uom_qty, precision_rounding=order_line.product_uom.rounding)
                                 _logger.warn('sale_order_import product %s compare %s sale_ok %s ' % (order_line.product_id.name,compare_qty,order_line.product_id.sale_ok))
                                 if compare_qty == -1 or not product.sale_ok or not product.active or not product.website_published: 
-                                    out_of_stock.append(wb.cell_value(line,art_col))
-                    else:
-                        missing_products.append(wb.cell_value(line,art_col))
+                                    out_of_stock.append(art)
+                if not product:
+                    missing_products.append(art)
 
 #
 # END
 #
-
+		order.note = _('Imported with Standard Order Import')
+		
         if missing_products and order:
-            order.note = _('Missing products: ') + ','.join(missing_products)
+            order.note += _('\nMissing products: ') + ','.join(missing_products)
         
         if out_of_stock and order:
-            order.note = order.note or ''
             order.note += _('\nOut of stock: ') + ','.join(out_of_stock)
             
                 
