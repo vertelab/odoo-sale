@@ -248,7 +248,7 @@ class Pricelist(models.Model):
                             price = min(price, price_limit + price_max_margin)
                     suitable_rule = rule
                 break
-            if suitable_rule:
+            # ~ if suitable_rule:
                 # ~ _logger.warn('\n\nsuitable_rule id: %s\nname: %s\n' % (suitable_rule.id, suitable_rule.name))
             # Final price conversion into pricelist currency
             ### CHANGED ###
