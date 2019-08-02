@@ -19,19 +19,20 @@
 #
 ##############################################################################
 
-{
-    'name': 'Pricelist Exchange Rate',
-    'version': '0.1',
-    'category': '',
-    'description': """Implement exchange rate calculation on pricelist items.""",
-    'author': 'Vertel AB',
-    'license': 'AGPL-3',
-    'website': 'http://www.vertel.se',
-    'depends': ['product'],
-    'data': [
-        'views/pricelist_view.xml',
-    ],
-    'application': False,
-    'installable': True,
-}
-# vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:
+from odoo import models, fields, api, _
+import odoo.addons.decimal_precision as dp
+
+import logging
+_logger = logging.getLogger(__name__)
+
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
+    
+    base_currency_id = fields.Many2one(comodel_name='res.currency', string='Base Currency')
+    base_price = fields.Float(string='Base Price', digits=dp.get_precision('Product Price'), help="Base price in the base currency. Used to calculate prices in other currencies.")
+
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
+    
+    base_currency_id = fields.Many2one(comodel_name='res.currency', string='Base Currency')
+    base_price = fields.Float(string='Base Price', digits=dp.get_precision('Product Price'), help="Base price in the base currency. Used to calculate prices in other currencies.")

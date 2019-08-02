@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record id="pricelist_item_currency_exchange_form" model="ir.ui.view">
+        <field name="name">product.pricelist.item.currency.exchange.form</field>
+        <field name="model">product.pricelist.item</field>
+        <field name="inherit_id" ref="product.product_pricelist_item_form_view"/>
+        <field name="arch" type="xml">
+            <form position="inside">
+				<div attrs="{'invisible': [('compute_price', '=', 'formula'), ('base', '=', 'base_price')]}">
+					<separator string="Currency Exchange"/>
+					<group>
+						<field name="from_currency_id"/>
+						<field name="currency_exchange_rate"/>
+					</group>
+                </div>
+            </form>
+        </field>
+    </record>
+    
+    <record id="product_template_form_view" model="ir.ui.view">
+        <field name="name">product.template.common.currency_exchange.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <field name="list_price" position="before">
+				<field name="base_price"  widget="monetary" options="{'currency_field': 'base_currency_id'}"/>
+				<field name="base_currency_id"/>
+            </field>
+        </field>
+    </record>
+    
+</odoo>
