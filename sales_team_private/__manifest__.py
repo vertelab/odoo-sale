@@ -28,7 +28,7 @@
     'description': """""",
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['sale', 'crm',],
+    'depends': ['sale', 'crm', 'sales_team'],
     'data': ['sale_view.xml', 'security/sale_security.xml'],
     'installable': True,
 }

@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  
-<!--
-  <record id="view_partners_form_se1" model="ir.ui.view">
-    <field name="name">res.partner.copy</field>
-    <field name="model">res.partner</field>
-    <field name="inherit_id" ref="l10n_se.view_partners_form_se1" />
-    <field name="arch" type="xml">
-      <field name="company_registry" position="replace">
-          <label for="company_registry"/>
-          <div>            <field name="company_registry" attrs="{'invisible': [('is_company','=',False)]}" class="oe_inline" />
-          <button type="object" icon="gtk-revert-to-saved" groups="base.group_sale_salesman" name="get_company_info" help="Get Company Info" attrs="{'invisible': [('is_company','=', False)]}" class="oe_inline" />
-          </div>
-      </field>
-    </field>
-  </record>
--->
+    
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">res.partner.team_id.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <page name="sales_purchases" position="inside">
+                <label for="sales_team_ids" attrs="{'invisible': [('is_company','=',False),('parent_id','!=',False)]}"/>
+                <field name="sales_team_ids" attrs="{'invisible': [('is_company','=',False),('parent_id','!=',False)]}"/>
+            </page>
+            <notebook position="inside">
+                <page string="CV">
+                    <field name="cv_text"/>
+                </page>
+            </notebook>
+        </field>
+      </record>
   
 </odoo>
