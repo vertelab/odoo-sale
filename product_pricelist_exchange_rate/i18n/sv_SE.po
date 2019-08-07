@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.e-20190124\n"
+"Project-Id-Version: Odoo Server 10.0-20190523\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-20 11:38+0000\n"
-"PO-Revision-Date: 2019-06-20 11:38+0000\n"
+"POT-Creation-Date: 2019-08-05 04:57+0000\n"
+"PO-Revision-Date: 2019-08-05 04:57+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,9 +16,44 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: product_pricelist_exchange_rate
+#: code:addons/product_pricelist_exchange_rate/models/pricelist.py:55
+#, python-format
+msgid " (converted from %s)"
+msgstr " (konverterat från %s)"
+
+#. module: product_pricelist_exchange_rate
+#: code:addons/product_pricelist_exchange_rate/models/pricelist.py:53
+#, python-format
+msgid " (converted from Base Currency)"
+msgstr " (konverterat från Basvaluta)"
+
+#. module: product_pricelist_exchange_rate
 #: model:ir.model.fields,help:product_pricelist_exchange_rate.field_product_pricelist_item_from_currency_id
 msgid "Apply currency conversion from this currency to the pricelist currency."
 msgstr "Applicera valutakonvertering från denna valuta till prislistans valuta"
+
+#. module: product_pricelist_exchange_rate
+#: model:ir.model.fields,field_description:product_pricelist_exchange_rate.field_product_product_base_currency_id
+#: model:ir.model.fields,field_description:product_pricelist_exchange_rate.field_product_template_base_currency_id
+msgid "Base Currency"
+msgstr "Basvaluta"
+
+#. module: product_pricelist_exchange_rate
+#: model:ir.model.fields,field_description:product_pricelist_exchange_rate.field_product_product_base_price
+#: model:ir.model.fields,field_description:product_pricelist_exchange_rate.field_product_template_base_price
+msgid "Base Price"
+msgstr "Baspris"
+
+#. module: product_pricelist_exchange_rate
+#: model:ir.model.fields,field_description:product_pricelist_exchange_rate.field_product_pricelist_item_base_price_order
+msgid "Base Price Order"
+msgstr "Basprisordning"
+
+#. module: product_pricelist_exchange_rate
+#: model:ir.model.fields,help:product_pricelist_exchange_rate.field_product_product_base_price
+#: model:ir.model.fields,help:product_pricelist_exchange_rate.field_product_template_base_price
+msgid "Base price in the base currency. Used to calculate prices in other currencies."
+msgstr "Baspris i basvalutan. Används för att beräkna pris i andra valutor."
 
 #. module: product_pricelist_exchange_rate
 #: model:ir.model.fields,field_description:product_pricelist_exchange_rate.field_product_pricelist_item_from_currency_id
@@ -36,6 +71,11 @@ msgid "Current Exchange Rate"
 msgstr "Nuvarande växelkurs"
 
 #. module: product_pricelist_exchange_rate
+#: model:ir.model.fields,help:product_pricelist_exchange_rate.field_product_pricelist_item_base_price_order
+msgid "Help field to check currency conversion rules before other rules."
+msgstr "Hjälpfält för att kunna utvärdera valutaregler innan andra regler."
+
+#. module: product_pricelist_exchange_rate
 #: model:ir.model,name:product_pricelist_exchange_rate.model_product_pricelist
 msgid "Pricelist"
 msgstr "Prislista"
@@ -44,6 +84,24 @@ msgstr "Prislista"
 #: model:ir.model,name:product_pricelist_exchange_rate.model_product_pricelist_item
 msgid "Pricelist item"
 msgstr "Element i prislistan"
+
+#. module: product_pricelist_exchange_rate
+#: model:ir.model,name:product_pricelist_exchange_rate.model_product_product
+msgid "Product"
+msgstr "Produkt"
+
+#. module: product_pricelist_exchange_rate
+#: model:ir.model,name:product_pricelist_exchange_rate.model_product_template
+msgid "Product Template"
+msgstr "Produktmall"
+
+#. module: product_pricelist_exchange_rate
+#: code:addons/product_pricelist_exchange_rate/models/pricelist.py:69
+#, python-format
+msgid "Rule %s:\n"
+"You can not use Base Price and Convert From Currency together."
+msgstr "Regel %s:\n"
+"Du kan inte använda Baspris och Valuta att konvertera från i samma regel."
 
 #. module: product_pricelist_exchange_rate
 #: model:ir.model.fields,help:product_pricelist_exchange_rate.field_product_pricelist_item_currency_exchange_rate

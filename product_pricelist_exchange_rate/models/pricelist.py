@@ -43,7 +43,7 @@ class PricelistItem(models.Model):
         'Convert From Currency',
         help="Apply currency conversion from this currency to the pricelist currency.")
     currency_exchange_rate = fields.Float('Current Exchange Rate', compute='compute_exchange_rate', help="This is the current exchange rate. This will change with the exchange rates of the currencies involved.")
-
+    
     @api.one
     @api.depends('categ_id', 'product_tmpl_id', 'product_id', 'compute_price', 'fixed_price', \
         'pricelist_id', 'percent_price', 'price_discount', 'price_surcharge', 'base')

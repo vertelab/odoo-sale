@@ -18,15 +18,27 @@
         </field>
     </record>
     
-    <record id="product_template_form_view" model="ir.ui.view">
-        <field name="name">product.template.common.currency_exchange.form</field>
-        <field name="model">product.template</field>
-        <field name="inherit_id" ref="product.product_template_form_view"/>
+    <record id="product_normal_form_view" model="ir.ui.view">
+        <field name="name">product.product.currency_exchange.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
         <field name="arch" type="xml">
-            <field name="list_price" position="before">
-				<field name="base_price"  widget="monetary" options="{'currency_field': 'base_currency_id'}"/>
-				<field name="base_currency_id"/>
-            </field>
+            <notebook position="inside">
+                <page string="Base Price">
+                    <group>
+                        <field name="base_price"  widget="monetary" options="{'currency_field': 'base_currency_id'}"/>
+                        <field name="base_currency_id"/>
+                    </group>
+                    <field name="base_price_ids">
+                        <tree editable="bottom">
+                            <field name="price" widget="monetary" options="{'currency_field': 'base_currency_id'}"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="currency_id"/>
+                        </tree>
+                    </field>
+                </page>
+            </notebook>
         </field>
     </record>
     
