@@ -1,5 +1,10 @@
 <odoo>
     
+    <record id="group_sale_all_salesteams" model="res.groups">
+        <field name="name">All Sales Teams</field>
+        <field name="category_id" ref="base.module_category_usability"/>
+    </record> 
+    
     <record id="rule_sales_team_res_partner" model="ir.rule">
         <field name="name">Private Sales Team - res.partner</field>
         <field name="model_id" ref="base.model_res_partner"/>
@@ -23,8 +28,6 @@
         <field name="model_id" ref="crm.model_crm_lead"/>
         <field name="domain_force">[('sales_team_restrict', '=', False)]</field>
     </record>
-    
-    
     
 <!--
     Groups
