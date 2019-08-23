@@ -1,21 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     
-    <record id="view_partner_form" model="ir.ui.view">
-        <field name="name">res.partner.team_id.form</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form" />
-        <field name="arch" type="xml">
-            <page name="sales_purchases" position="inside">
-                <label for="sales_team_ids" attrs="{'invisible': [('is_company','=',False),('parent_id','!=',False)]}"/>
-                <field name="sales_team_ids" attrs="{'invisible': [('is_company','=',False),('parent_id','!=',False)]}"/>
-            </page>
-            <notebook position="inside">
-                <page string="CV">
-                    <field name="cv_text"/>
-                </page>
-            </notebook>
-        </field>
-      </record>
+  <record id="view_partner_form" model="ir.ui.view">
+    <field name="name">res.partner.team_id.form</field>
+    <field name="model">res.partner</field>
+    <field name="inherit_id" ref="base.view_partner_form" />
+    <field name="arch" type="xml">
+      <xpath expr="//group[@name='sale']/field[@name='user_id']" position="after">
+        <field name="sales_team_id" attrs="{'invisible': [('is_company','=',False),('parent_id','!=',False)]}"/>
+      </xpath>
+    </field>
+  </record>
+  
+  <record id="view_res_partner_filter" model="ir.ui.view">
+    <field name="name">res.partner.search.sales_team_private</field>
+    <field name="model">res.partner</field>
+    <field name="inherit_id" ref="base.view_res_partner_filter" />
+    <field name="arch" type="xml">
+      <field name="user_id" position="after">
+        <field name="sales_team_id" />
+      </field>
+      <filter name="salesperson" position="after">
+        <filter name="sales_team" string="Sales Team" domain="[]" context="{'group_by' : 'sales_team_id'}"/>
+      </filter>
+    </field>
+  </record>
+  
+  <record id="view_sales_order_filter" model="ir.ui.view">
+    <field name="name">sale.order.list.select.sales_team_private</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_sales_order_filter" />
+    <field name="arch" type="xml">
+      <filter name="salesperson" position="after">
+        <filter name="sales_team" string="Sales Team" domain="[]" context="{'group_by' : 'team_id'}"/>
+      </filter>
+    </field>
+  </record>
   
 </odoo>

@@ -27,14 +27,12 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = "res.partner"
     
-    def _default_sales_team_ids(self):
-        # ~ _logger.warn('\n\n_default_sales_team_ids\n%s\n' % self.env.context)
+    def _default_sales_team_id(self):
+        # ~ _logger.warn('\n\n_default_sales_team_id\n%s\n' % self.env.context)
         return self.env.user.sale_team_id
     
-    sales_team_ids = fields.Many2many(comodel_name='crm.team', string='Sales Teams', default=_default_sales_team_ids)
+    sales_team_id = fields.Many2one(comodel_name='crm.team', string='Sales Team', default=_default_sales_team_id)
     sales_team_restrict = fields.Boolean(string='Sales Team Restrict', compute='_sales_team_restrict', search='_search_sales_team_restrict', help="Dummy field to restrict resources depending on user sales team.")
-    # TODO: Move CV field to some other module
-    cv_text = fields.Text(string='CV')
     
     def _sales_team_restrict(self):
         # ~ _logger.warn('%s._sales_team_restrict()' % self)
@@ -43,7 +41,7 @@ class ResPartner(models.Model):
     @api.model
     def _search_sales_team_restrict(self, op, value):
         # ~ _logger.warn('%s._search_sales_team_restrict()' % self)
-        domain = self.get_sales_team_restrict_domain(('sales_team_ids', 'commercial_partner_id.sales_team_ids'))
+        domain = self.get_sales_team_restrict_domain(('sales_team_id', 'commercial_partner_id.sales_team_id'))
         if domain:
             domain.insert(1, '&')
             domain.insert(2, ('commercial_partner_id', '=', False))
@@ -54,15 +52,15 @@ class ResPartner(models.Model):
         #        '&',
         #            ('commercial_partner_id', '=', False),
         #            '|',
-        #                ('sales_team_ids', '=', False),
-        #                ('sales_team_ids', 'in', [1, 2, 3]),
+        #                ('sales_team_id', '=', False),
+        #                ('sales_team_id', 'in', [1, 2, 3]),
         #        '|',
-        #            ('commercial_partner_id.sales_team_ids', '=', False),
-        #            ('commercial_partner_id.sales_team_ids', 'in', [1, 2, 3])]
+        #            ('commercial_partner_id.sales_team_id', '=', False),
+        #            ('commercial_partner_id.sales_team_id', 'in', [1, 2, 3])]
         return domain
     
     @api.model
-    def get_sales_team_restrict_domain(self, field_name=('sales_team_ids',), join_op='|'):
+    def get_sales_team_restrict_domain(self, field_name=('sales_team_id',), join_op='|'):
         """Calculate which resources should be allowed depending on user groups and sales team.
         
         [
@@ -131,10 +129,10 @@ class SaleOrder(models.Model):
             # ~ if record in allowed:
                 # ~ record.sales_team_restrict = True
         pass
-        
+    
     @api.model
     def _search_sales_team_restrict(self, op, value):
-        return self.env['res.partner'].get_sales_team_restrict_domain('partner_id.sales_team_ids')
+        return self.env['res.partner'].get_sales_team_restrict_domain(('team_id', 'partner_id.sales_team_id'), '&')
 
 class CrmLead(models.Model):
     _inherit = "crm.lead"
