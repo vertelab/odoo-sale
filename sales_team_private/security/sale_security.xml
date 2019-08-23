@@ -2,7 +2,6 @@
     
     <record id="group_sale_all_salesteams" model="res.groups">
         <field name="name">All Sales Teams</field>
-        <field name="category_id" ref="base.module_category_usability"/>
     </record> 
     
     <record id="rule_sales_team_res_partner" model="ir.rule">
