@@ -37,7 +37,7 @@ class ResPartner(models.Model):
     cv_text = fields.Text(string='CV')
     
     def _sales_team_restrict(self):
-        _logger.warn('%s._sales_team_restrict()' % self)
+        # ~ _logger.warn('%s._sales_team_restrict()' % self)
         pass
     
     @api.model
@@ -115,7 +115,7 @@ class ResPartner(models.Model):
     
     @api.model
     def create(self, vals):
-        _logger.warn('%s.create(%s)' % (self, vals))
+        # ~ _logger.warn('%s.create(%s)' % (self, vals))
         return super().create(vals)
     
 class SaleOrder(models.Model):
@@ -125,11 +125,12 @@ class SaleOrder(models.Model):
     
     @api.multi
     def _sales_team_restrict(self):
-        _logger.warn('%s._sales_team_restrict()' % self)
+        # ~ _logger.warn('%s._sales_team_restrict()' % self)
         # ~ allowed = self.search([('id', 'in', self.ids), ('sales_team_restrict', '=', True)])
         # ~ for record in self:
             # ~ if record in allowed:
                 # ~ record.sales_team_restrict = True
+        pass
         
     @api.model
     def _search_sales_team_restrict(self, op, value):
