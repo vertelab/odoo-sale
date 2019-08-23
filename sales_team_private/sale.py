@@ -37,18 +37,48 @@ class ResPartner(models.Model):
     cv_text = fields.Text(string='CV')
     
     def _sales_team_restrict(self):
+        _logger.warn('%s._sales_team_restrict()' % self)
         pass
     
+    @api.model
     def _search_sales_team_restrict(self, op, value):
-        return self.get_sales_team_restrict_domain()
+        # ~ _logger.warn('%s._search_sales_team_restrict()' % self)
+        domain = self.get_sales_team_restrict_domain(('sales_team_ids', 'commercial_partner_id.sales_team_ids'))
+        if domain:
+            domain.insert(1, '&')
+            domain.insert(2, ('commercial_partner_id', '=', False))
+        # ~ _logger.warn(domain)
+        # ~ _logger.warn(self.search(domain))
+        #[
+        #    '|',
+        #        '&',
+        #            ('commercial_partner_id', '=', False),
+        #            '|',
+        #                ('sales_team_ids', '=', False),
+        #                ('sales_team_ids', 'in', [1, 2, 3]),
+        #        '|',
+        #            ('commercial_partner_id.sales_team_ids', '=', False),
+        #            ('commercial_partner_id.sales_team_ids', 'in', [1, 2, 3])]
+        return domain
     
-    def get_sales_team_restrict_domain(self, field_name='commercial_partner_id.sales_team_ids'):
+    @api.model
+    def get_sales_team_restrict_domain(self, field_name=('sales_team_ids',), join_op='|'):
         """Calculate which resources should be allowed depending on user groups and sales team.
         
-        :param field_name: The name of the sales team field for the given model.
+        [
+            join_op,
+                '|',
+                    (field_name_1, '=', False),
+                    (field_name_1, 'in', [1, 2, 3]),
+                '|',
+                    (field_name_2, '=', False),
+                    (field_name_2, 'in', [1, 2, 3])]
+        
+        :param field_name: The name of the sales team field for the given model. Can be a list or tuple if several fields are to be used.
         :returns: A search domain expressing the users security restrictions.
         """
         # Seems like this is run as admin. Fetch user from uid.
+        assert join_op in ('|', '&'), "get_sales_team_restrict_domain: '%s' is not a valid operator!" % join_op
         user = self.env['res.users'].browse(self.env.context.get('uid'))
         if not user:
             return []
@@ -70,18 +100,38 @@ class ResPartner(models.Model):
         # ~ if user.sale_team_id:
             # ~ team_ids.append(user.sale_team_id.id)
         # ~ _logger.warn('\n\nteam_ids: %s\n' % team_ids)
-        if team_ids:
-            return ['|', (field_name, '=', False), (field_name, 'in', team_ids)]
-        return [(field_name, '=', False)]
-
+        domain = []
+        if type(field_name) not in (list, tuple):
+            field_name = (field_name,)
+        for field in field_name:
+            if domain:
+                domain.insert(0, '|')
+            if team_ids:
+                domain.extend(('|', (field, '=', False), (field, 'in', team_ids)))
+            else:
+                domain.append((field, '=', False))
+        # ~ _logger.warn('domain: %s' % domain)
+        return domain
+    
+    @api.model
+    def create(self, vals):
+        _logger.warn('%s.create(%s)' % (self, vals))
+        return super().create(vals)
+    
 class SaleOrder(models.Model):
     _inherit = "sale.order"
     
     sales_team_restrict = fields.Boolean(string='Sales Team Restrict', compute='_sales_team_restrict', search='_search_sales_team_restrict', help="Dummy field to restrict resources depending on user sales team.")
     
+    @api.multi
     def _sales_team_restrict(self):
-        pass
-    
+        _logger.warn('%s._sales_team_restrict()' % self)
+        # ~ allowed = self.search([('id', 'in', self.ids), ('sales_team_restrict', '=', True)])
+        # ~ for record in self:
+            # ~ if record in allowed:
+                # ~ record.sales_team_restrict = True
+        
+    @api.model
     def _search_sales_team_restrict(self, op, value):
         return self.env['res.partner'].get_sales_team_restrict_domain('partner_id.sales_team_ids')
 
@@ -93,5 +143,6 @@ class CrmLead(models.Model):
     def _sales_team_restrict(self):
         pass
     
+    @api.model
     def _search_sales_team_restrict(self, op, value):
         return self.env['res.partner'].get_sales_team_restrict_domain('team_id')
