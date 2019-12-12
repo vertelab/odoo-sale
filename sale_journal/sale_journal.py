@@ -44,7 +44,7 @@ class res_partner(models.Model):
     invoice_type_id = fields.Many2one(string="Invoicing Type", comodel_name='sale_journal.invoice.type',help = "This invoicing type will be used, by default, to invoice the current partner.")
 
     @api.one
-    def _commercial_fields(self):
+    def x_commercial_fields(self):
         return super(res_partner, self)._commercial_fields() + ['invoice_type']
 
 class picking(models.Model):
@@ -77,7 +77,7 @@ class sale(models.Model):
     invoice_type_id = fields.Many2one(comodel_name='sale_journal.invoice.type', string='Invoice Type',help="Generate invoice based on the selected option.")
 
     @api.one
-    @api.depends('partner_id')
+    @api.onchange('partner_id') # depends
     def _set_invoice_type(self):
         self.invoice_type_id = self.partner_id.invoice_type_id.id if self.partner_id.invoice_type_id else None
 
