@@ -76,9 +76,10 @@ class sale(models.Model):
     _inherit = "sale.order"
     invoice_type_id = fields.Many2one(comodel_name='sale_journal.invoice.type', string='Invoice Type',help="Generate invoice based on the selected option.")
 
-    @api.one
+    # ~ @api.one
     @api.onchange('partner_id') # depends
     def _set_invoice_type(self):
+        # ~ _logger.warn('*******************************')
         self.invoice_type_id = self.partner_id.invoice_type_id.id if self.partner_id.invoice_type_id else None
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
