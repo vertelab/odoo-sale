@@ -1,0 +1,26 @@
+<openerp>
+    <data>
+        <record id="view_res_partner_filter" model="ir.ui.view">
+            <field name="name">res.partner.select</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter" />
+            <field name="arch" type="xml">
+                <field name="name" position="replace">
+                    <!--
+                         <field name="name" filter_domain="['|','|', ('display_name','ilike', self), ('customer_no','=',self), ('email','ilike', self)]" />
+                    -->
+                     <field name="name" filter_domain="['|','|','|','|',('display_name','ilike',self),('ref','=',self),('email','ilike',self), ('phone','ilike',self), ('mobile','ilike',self)]" />
+                </field>
+                <field name="parent_id" position="after">
+                    <field name="ref" />
+                    <field name="phone" />
+                    <field name="mobile" />
+                    <field name="city" />
+                </field>
+                <group name="group_by" position="inside">
+                    <filter string="Stad" context="{'group_by': 'city'}" />
+                </group>
+            </field>
+        </record>
+    </data>
+</openerp>
