@@ -29,7 +29,10 @@ class ResPartner(models.Model):
     
     def _default_sales_team_id(self):
         # ~ _logger.warn('\n\n_default_sales_team_id\n%s\n' % self.env.context)
-        return self.env.user.sale_team_id
+        res = self.env.user.sale_team_id
+        if not res:
+            res = selv.env['crm.team'].search([('user_id','=',self.env.user.id)], limit=1)
+        return res
     
     sales_team_id = fields.Many2one(comodel_name='crm.team', string='Sales Team', default=_default_sales_team_id)
     sales_team_restrict = fields.Boolean(string='Sales Team Restrict', compute='_sales_team_restrict', search='_search_sales_team_restrict', help="Dummy field to restrict resources depending on user sales team.")
