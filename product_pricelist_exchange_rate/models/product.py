@@ -37,10 +37,10 @@ class ProductProduct(models.Model):
     @api.depends('base_price_ids.price', 'base_price_ids.currency_id')
     def compute_base_price(self):
         # TODO: prices for a specific date. date in context?
-        _logger.warn('\n\ncompute_base_price\n%s\n' % self.env.context)
+        # _logger.warn('\n\ncompute_base_price\n%s\n' % self.env.context)
         date = (self.env.context.get('date', '') or fields.Date.today()).split(' ')[0]
         domain = [('product_id', '=', self.id), ('date_start', '<=', date), '|', ('date_end', '>', date), ('date_end', '=', False)]
-        _logger.warn(domain)
+        # _logger.warn(domain)
         base_price = self.env['product.base.price'].search(domain, limit=1, order='date_start asc')
         if base_price:
             self.base_currency_id = base_price.currency_id
@@ -69,7 +69,7 @@ class ProductBasePrice(models.Model):
     @api.one
     @api.depends('product_id.base_price_ids.price', 'product_id.base_price_ids.date_start', 'date_end_fixed')
     def compute_date_end(self):
-        _logger.warn('\n\ncompute_date_end\n%s %s\n' % (self.date_end, self.date_end_fixed))
+        # _logger.warn('\n\ncompute_date_end\n%s %s\n' % (self.date_end, self.date_end_fixed))
         next_bp = self.search([('product_id', '=', self.product_id.id), ('date_start', '>', self.date_start)], limit=1, order='date_start')
         if next_bp:
             date_end = next_bp.date_start
@@ -98,7 +98,7 @@ class ProductBasePrice(models.Model):
         """ Verifies that the operation given by ``operation`` is allowed for
             the current user according to the access rights.
         """
-        _logger.warn('\n\ncheck_access_rights: %s\n' % operation)
+        # _logger.warn('\n\ncheck_access_rights: %s\n' % operation)
         if operation in ('create', 'unlink'):
             operation = 'write'
         return self.env['ir.model.access'].check('product.product', operation, raise_exception)
@@ -112,7 +112,7 @@ class ProductBasePrice(models.Model):
            :raise UserError: * if current ir.rules do not permit this operation.
            :return: None if the operation is allowed
         """
-        _logger.warn('\n\n%s.check_access_rule: %s\n' % (self, operation))
+        # _logger.warn('\n\n%s.check_access_rule: %s\n' % (self, operation))
         if operation in ('create', 'unlink'):
             operation = 'write'
         return self.mapped('product_id').check_access_rule(operation)
