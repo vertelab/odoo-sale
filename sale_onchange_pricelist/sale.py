@@ -21,6 +21,8 @@
 
 from openerp import api, models, fields, _
 from openerp.exceptions import Warning
+from datetime import datetime, timedelta
+
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -28,10 +30,11 @@ class sale_order(models.Model):
     _inherit ='sale.order'
 
     @api.multi
-    @api.onchange('pricelist_id', 'order_line')
+    @api.onchange('pricelist_id')
     def onchange_pricelist_2_product(self):
         if self.pricelist_id:
             self.currency_id = self.pricelist_id.currency_id
+            order_line = []
             for line in self.order_line:
                 vals = line.product_id_change(
                     self.pricelist_id.id,
@@ -49,5 +52,39 @@ class sale_order(models.Model):
                     fiscal_position=self.fiscal_position.id,
                     flag=False
                 ).get('value', {})
-                for key in vals:
-                    setattr(line, key, vals[key])
+                order_line.append((1, line.id, vals))
+            self.write({'order_line': order_line})
+    
+    @api.model
+    def cron_update_sale_date(self):
+        today = fields.Date.today() 
+        limit = datetime.now() + timedelta(minutes=float(self.env['ir.config_parameter'].get_param('sale_onchange_pricelist.time_limit', '4')))
+        order_names = []
+        for pricelist in self.env['product.pricelist'].search([]):
+            if datetime.now() > limit:
+                break
+            # Hitta datum för senaste ändring
+            current_version = self.env['product.pricelist.version'].search([
+                ('pricelist_id', '=', pricelist.id),
+                ('active', '=', True),
+                ('date_start', '<=', today),
+                '|',
+                    ('date_end', '>=', today),
+                    ('date_end', '=', False)],
+                limit=1, order='date_start')
+            if not current_version or not current_version.date_start:
+                continue
+            # Sök fram en order som har ett tidigare datum
+            domain = [
+                ('date_order', '<', current_version.date_start),
+                ('state', '=', 'draft'),
+                ('pricelist_id', '=', pricelist.id)]
+            order = self.env['sale.order'].search(domain, limit=1)
+            while (datetime.now() < limit) and order:
+                # Uppdatera datum osv
+                order.date_order = fields.Datetime.now()
+                order.onchange_pricelist_2_product()
+                self.env.cr.commit()
+                order_names.append(order.name)
+                order = self.env['sale.order'].search(domain, limit=1)
+        _logger.warn("Finished sale date update for %s orders: %s" % (len(order_names), ', '.join(order_names)))
