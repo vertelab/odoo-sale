@@ -56,35 +56,105 @@ class sale_order(models.Model):
             self.write({'order_line': order_line})
     
     @api.model
+    # ~ def cron_update_sale_date(self):
+        # ~ today = fields.Date.today() 
+        # ~ time_limit = datetime.now() + timedelta(minutes=float(self.env['ir.config_parameter'].get_param('sale_onchange_pricelist.time_limit', '4')))
+        # ~ order_names = []
+        # ~ for pricelist in self.env['product.pricelist'].search([]):
+            # ~ if datetime.now() > time_limit:
+                # ~ break
+            # ~ # Hitta datum för senaste ändring
+            # ~ current_version = self.env['product.pricelist.version'].search([
+                # ~ ('pricelist_id', '=', pricelist.id),
+                # ~ ('active', '=', True),
+                # ~ ('date_start', '=', today)]
+    
+                # ~ limit=1, order='date_start')
+            # ~ if not current_version:
+                # ~ continue
+            # ~ # Sök fram en order som har ett tidigare datum
+            # ~ domain = [
+                # ~ ('date_order', '<', current_version.date_start),
+                # ~ ('state', '=', 'draft'),
+                # ~ ('pricelist_id', '=', pricelist.id)]
+            # ~ order = self.env['sale.order'].search(domain, limit=1)
+            # ~ while (datetime.now() < time_limit) and order:
+                # ~ # Uppdatera datum osv
+                # ~ order.date_order = fields.Datetime.now()
+                # ~ order.onchange_pricelist_2_product()
+                # ~ self.env.cr.commit()
+                # ~ order_names.append(order.name)
+                # ~ order = self.env['sale.order'].search(domain, limit=1)
+        # ~ _logger.warn("Finished sale date update for %s orders: %s" % (len(order_names), ', '.join(order_names)))
+        
     def cron_update_sale_date(self):
         today = fields.Date.today() 
-        limit = datetime.now() + timedelta(minutes=float(self.env['ir.config_parameter'].get_param('sale_onchange_pricelist.time_limit', '4')))
         order_names = []
         for pricelist in self.env['product.pricelist'].search([]):
-            if datetime.now() > limit:
-                break
             # Hitta datum för senaste ändring
             current_version = self.env['product.pricelist.version'].search([
                 ('pricelist_id', '=', pricelist.id),
                 ('active', '=', True),
-                ('date_start', '<=', today),
-                '|',
-                    ('date_end', '>=', today),
-                    ('date_end', '=', False)],
+                ('date_start', '=', today)],
+    
                 limit=1, order='date_start')
-            if not current_version or not current_version.date_start:
+            if not current_version:
                 continue
+                
+            for pl in self.env['product.pricelist_chart'].search([('pricelist_id', '=', pricelist.id)]):
+                pl.unlink()
+                
             # Sök fram en order som har ett tidigare datum
             domain = [
                 ('date_order', '<', current_version.date_start),
                 ('state', '=', 'draft'),
                 ('pricelist_id', '=', pricelist.id)]
-            order = self.env['sale.order'].search(domain, limit=1)
-            while (datetime.now() < limit) and order:
+           
+            for order in self.env['sale.order'].search(domain):
                 # Uppdatera datum osv
                 order.date_order = fields.Datetime.now()
                 order.onchange_pricelist_2_product()
                 self.env.cr.commit()
                 order_names.append(order.name)
-                order = self.env['sale.order'].search(domain, limit=1)
+            
+                # ~ get_product_detail()
+                
+                # ~ key_raw = 'product_detail %s %s %s %s %s %s %s' % (
+                    # ~ self.env.cr.dbname, 
+                    # ~ product.id, 
+                    # ~ variant_id,
+                    # ~ pricelist.id, 
+                    # ~ self.env.lang, 
+                    # ~ memcached_time,
+                    # ~ self.env.user in self.sudo().env.ref('base.group_website_publisher').users)
+                    
+                    # ~ get_thumbnail_default_variant()
+                    
+                    # ~ key_raw = 'thumbnail_default_variant %s %s %s %s' % (
+                        # ~ self.env.cr.dbname, 
+                        # ~ product['id'], 
+                        # ~ pricelist.id, 
+                        # ~ self.env.lang)   # db produkt prislista språk
+                        
+                    # ~ get_thumbnail_variant()
+                    # ~ key_raw = 'thumbnail_variant %s %s %s %s' % (
+                        # ~ self.env.cr.dbname, 
+                        # ~ variant['id'], 
+                        # ~ pricelist.id, 
+                        # ~ self.env.lang)
+                        
+                    # ~ get_list_row()
+                    # ~ key_raw = 'list_row %s %s %s %s %s %s %s Groups: %s' % (self.env.cr.dbname, flush_type, product['id'], pricelist.id, self.env.lang, request.session.get('device_type', 'md'), product['memcached_time'], request.website.get_dn_groups())  # db flush_type produkt prislista språk användargrupp
+                    
+                    #TODO: add pricelist to website.put_page_dict(index_key = "pricelist %s" %pricelist) and build index_key of the pricelist 
+                    #TODO: website.remove_page_index(index_key)
+                
+                    
         _logger.warn("Finished sale date update for %s orders: %s" % (len(order_names), ', '.join(order_names)))
+        
+        
+    @api.model
+    def remove_page_dict(self, key_raw):
+        key = self.env['website'].remove_page_dict()
+        # ~ MEMCACHED.mc_save(key, page_dict,24 * 60 * 60 * 7)  # One week
+        memcached.mc_delete(key)  # One week
