@@ -13,7 +13,7 @@
         </record>
         
         
-        <record model="ir.cron" id="cron_update_sale_date">
+        <record model="ir.cron" id="cron_update_sale_date_auto">
             <field name="name">Update Sale Date</field>
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">1</field>
