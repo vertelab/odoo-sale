@@ -55,7 +55,7 @@ class sale_order(models.Model):
                 order_line.append((1, line.id, vals))
             self.write({'order_line': order_line})
     
-    @api.model
+     
     # ~ def cron_update_sale_date(self):
         # ~ today = fields.Date.today() 
         # ~ time_limit = datetime.now() + timedelta(minutes=float(self.env['ir.config_parameter'].get_param('sale_onchange_pricelist.time_limit', '4')))
@@ -86,7 +86,7 @@ class sale_order(models.Model):
                 # ~ order_names.append(order.name)
                 # ~ order = self.env['sale.order'].search(domain, limit=1)
         # ~ _logger.warn("Finished sale date update for %s orders: %s" % (len(order_names), ', '.join(order_names)))
-        
+    @api.model    
     def cron_update_sale_date(self):
         today = fields.Date.today() 
         order_names = []
