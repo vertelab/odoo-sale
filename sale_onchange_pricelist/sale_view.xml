@@ -23,6 +23,17 @@
             <field name="model">sale.order</field>
             <field name="function">cron_update_sale_date</field>
         </record>
+        
+        <record model="ir.cron" id="cron_update_currency_rate_auto">
+            <field name="name">Update Currency Rate</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="doall" eval="True"/>
+            <field name="numbercall">-1</field>
+            <field name="model">res.currency</field>
+            <field name="function">cron_update_currency_rate</field>
+        </record>
 
     </data>
 </openerp>

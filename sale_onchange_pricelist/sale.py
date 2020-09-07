@@ -28,14 +28,24 @@ _logger = logging.getLogger(__name__)
 
 class sale_order(models.Model):
     _inherit ='sale.order'
-
+    
+    def product_id_change(self, cr, uid, ids, pricelist, product, qty=0,
+            uom=False, qty_uos=0, uos=False, name='', partner_id=False,
+            lang=False, update_tax=True, date_order=False, packaging=False, fiscal_position=False, flag=False, context=None):
+        product.get_pricelist_chart_line(pricelist)
+        return super(sale_order.self).product_id_change(cr, uid, ids, pricelist, product, qty,
+            uom, qty_uos, uos, name, partner_id,
+            lang, update_tax, date_order, packaging, fiscal_position, flag, context)
+    
     @api.multi
     @api.onchange('pricelist_id')
     def onchange_pricelist_2_product(self):
+        # ~ raise Warning('yeah!we r here')
         if self.pricelist_id:
             self.currency_id = self.pricelist_id.currency_id
             order_line = []
             for line in self.order_line:
+                line.product_id.get_pricelist_chart_line(self.pricelist_id)
                 vals = line.product_id_change(
                     self.pricelist_id.id,
                     line.product_id.id,
@@ -90,25 +100,24 @@ class sale_order(models.Model):
     def cron_update_sale_date(self):
         today = fields.Date.today() 
         order_names = []
-        for pricelist in self.env['product.pricelist'].search([]):
+        # ~ for pricelist in self.env['product.pricelist'].search([]):
             # Hitta datum för senaste ändring
-            current_version = self.env['product.pricelist.version'].search([
-                ('pricelist_id', '=', pricelist.id),
+        for current_version in self.env['product.pricelist.version'].search([
                 ('active', '=', True),
-                ('date_start', '=', today)],
-    
-                limit=1, order='date_start')
-            if not current_version:
-                continue
-                
-            for pl in self.env['product.pricelist_chart'].search([('pricelist_id', '=', pricelist.id)]):
+                ('date_start', '=', today)]):
+            
+                    
+            for pl in self.env['product.pricelist_chart'].search([('pricelist_id', '=', current_version.pricelist_id.id)]):
                 pl.unlink()
+               
                 
-            # Sök fram en order som har ett tidigare datum
+                
+
+        # Sök fram en order som har ett tidigare datum
             domain = [
-                ('date_order', '<', current_version.date_start),
+                # ~ ('date_order', '<=', current_version.date_start),
                 ('state', '=', 'draft'),
-                ('pricelist_id', '=', pricelist.id)]
+                ('pricelist_id', '=', current_version.pricelist_id.id)]
            
             for order in self.env['sale.order'].search(domain):
                 # Uppdatera datum osv
@@ -156,5 +165,48 @@ class sale_order(models.Model):
     @api.model
     def remove_page_dict(self, key_raw):
         key = self.env['website'].remove_page_dict()
-        # ~ MEMCACHED.mc_save(key, page_dict,24 * 60 * 60 * 7)  # One week
+        MEMCACHED.mc_save(key, page_dict,24 * 60 * 60 * 7)  # One week
         memcached.mc_delete(key)  # One week
+        
+# ~ class res_currency(models.Model):
+    # ~ _inherit = 'res.currency'
+    
+    
+        
+    @api.model    
+    def cron_update_currency_rate(self):
+        today = fields.Date.today() 
+        order_names = []
+        # ~ for rate in self.env['res.currency'].search([]):
+            # Hitta datum för senaste ändring
+        for current_version in self.env['product.pricelist.version'].search([
+                ('active', '=', True),
+                ('date_start', '=', today)],order='date_start'):
+            for current_rate in self.env['res.currency.rate'].search([('active', '=', True),('name', '=', today)],order='name'):
+                for pricelist in self.env['product.pricelist'].search(['currency_id','=', current_rate.currency_id.id]):
+                    for pl in self.env['product.pricelist_chart'].search([('pricelist_id', '=', current_version.pricelist_id.id)]):
+                        pl.link()
+            
+
+        # Sök fram en order som har ett tidigare datum
+                    domain = [
+                        ('date_order', '<', current_rate.name),
+                        ('state', '=', 'draft'),
+                        ('pricelist_id', '!=', current_version.pricelist_id.id)]
+                   
+                    for order in self.env['sale.order'].search(domain):
+                        # Uppdatera datum osv
+                        order.date_order = fields.Datetime.now()
+                        order.onchange_pricelist_2_product()
+                        self.env.cr.commit()
+                        order_names.append(order.name)
+                        
+        _logger.warn("Finished sale date update for %s orders: %s" % (len(order_names), ', '.join(order_names)))
+        
+    @api.model
+    def remove_page_dict(self, key_raw):
+        key = self.env['website'].remove_page_dict()
+        MEMCACHED.mc_save(key, page_dict,24 * 60 * 60 * 7)  # One week
+        memcached.mc_delete(key)  # One week
+                
+        
