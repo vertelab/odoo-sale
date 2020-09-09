@@ -106,16 +106,18 @@ class sale_order(models.Model):
                 ('active', '=', True),
                 ('date_start', '=', today)]):
             
-                    
-            for pl in self.env['product.pricelist_chart'].search([('pricelist_id', '=', current_version.pricelist_id.id)]):
-                pl.unlink()
-               
-                
-                
+            pricelist_type_ids = self.env['pricelist_chart.type'].search([
+                 '|', ('pricelist', '=', current_version.pricelist_id.id),
+                      ('rec_pricelist', '=', current_version.pricelist_id.id)
+            ]).mapped('id')
+
+            for pl in self.env['product.pricelist_chart'].search([('pricelist_chart_id', 'in', pricelist_type_ids)]):
+               pl.unlink()
 
         # Sök fram en order som har ett tidigare datum
             domain = [
                 # ~ ('date_order', '<=', current_version.date_start),
+                # ('customer_no', '=', '9071'), # Testing on La casa mia orders, for Skogsro use '1213'
                 ('state', '=', 'draft'),
                 ('pricelist_id', '=', current_version.pricelist_id.id)]
            
