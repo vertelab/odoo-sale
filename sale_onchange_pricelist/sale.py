@@ -21,7 +21,7 @@
 
 from openerp import api, models, fields, _
 from openerp.exceptions import Warning
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date, time 
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -40,7 +40,6 @@ class sale_order(models.Model):
     @api.multi
     @api.onchange('pricelist_id')
     def onchange_pricelist_2_product(self):
-        # ~ raise Warning('yeah!we r here')
         if self.pricelist_id:
             self.currency_id = self.pricelist_id.currency_id
             order_line = []
@@ -179,32 +178,29 @@ class sale_order(models.Model):
     def cron_update_currency_rate(self):
         today = fields.Date.today() 
         order_names = []
-        # ~ for rate in self.env['res.currency'].search([]):
-            # Hitta datum för senaste ändring
-        for current_version in self.env['product.pricelist.version'].search([
-                ('active', '=', True),
-                ('date_start', '=', today)],order='date_start'):
-            for current_rate in self.env['res.currency.rate'].search([('active', '=', True),('name', '=', today)],order='name'):
-                for pricelist in self.env['product.pricelist'].search(['currency_id','=', current_rate.currency_id.id]):
-                    for pl in self.env['product.pricelist_chart'].search([('pricelist_id', '=', current_version.pricelist_id.id)]):
-                        pl.link()
-            
 
-        # Sök fram en order som har ett tidigare datum
-                    domain = [
-                        ('date_order', '<', current_rate.name),
-                        ('state', '=', 'draft'),
-                        ('pricelist_id', '!=', current_version.pricelist_id.id)]
-                   
-                    for order in self.env['sale.order'].search(domain):
-                        # Uppdatera datum osv
-                        order.date_order = fields.Datetime.now()
-                        order.onchange_pricelist_2_product()
-                        self.env.cr.commit()
-                        order_names.append(order.name)
-                        
-        _logger.warn("Finished sale date update for %s orders: %s" % (len(order_names), ', '.join(order_names)))
-        
+        for current_rate in self.env['res.currency.rate'].search([
+            ('name', '>', fields.Date.to_string( (fields.Datetime.from_string(today) + timedelta(days=-1)) )),
+            ('name', '<', fields.Date.to_string( (fields.Datetime.from_string(today) + timedelta(days=1)) ))
+            ]):
+
+            for pricelist in self.env['product.pricelist'].search([('currency_id','=', current_rate.currency_id.id)]):
+
+                domain = [
+                    ('state', '=', 'draft'),
+                    ('pricelist_id', '=', pricelist.id)
+                ]
+
+                order_names = []
+                for order in self.env['sale.order'].search(domain):
+                    # Uppdatera datum osv
+                    order.date_order = fields.Datetime.now()
+                    order.onchange_pricelist_2_product()
+                    self.env.cr.commit()
+                    order_names.append(order.name)
+
+        _logger.warn("Finished currency rate update for %s orders: %s" % (len(order_names), ', '.join(order_names)))
+ 
     @api.model
     def remove_page_dict(self, key_raw):
         key = self.env['website'].remove_page_dict()
