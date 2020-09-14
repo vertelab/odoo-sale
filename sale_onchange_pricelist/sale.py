@@ -169,11 +169,6 @@ class sale_order(models.Model):
         MEMCACHED.mc_save(key, page_dict,24 * 60 * 60 * 7)  # One week
         memcached.mc_delete(key)  # One week
         
-# ~ class res_currency(models.Model):
-    # ~ _inherit = 'res.currency'
-    
-    
-        
     @api.model    
     def cron_update_currency_rate(self):
         today = fields.Date.today() 
@@ -200,11 +195,3 @@ class sale_order(models.Model):
                     order_names.append(order.name)
 
         _logger.warn("Finished currency rate update for %s orders: %s" % (len(order_names), ', '.join(order_names)))
- 
-    @api.model
-    def remove_page_dict(self, key_raw):
-        key = self.env['website'].remove_page_dict()
-        MEMCACHED.mc_save(key, page_dict,24 * 60 * 60 * 7)  # One week
-        memcached.mc_delete(key)  # One week
-                
-        
