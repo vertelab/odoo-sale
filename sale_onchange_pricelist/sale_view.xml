@@ -31,7 +31,7 @@
             <field name="interval_type">days</field>
             <field name="doall" eval="True"/>
             <field name="numbercall">-1</field>
-            <field name="model">res.currency</field>
+            <field name="model">sale.order</field>
             <field name="function">cron_update_currency_rate</field>
         </record>
 
