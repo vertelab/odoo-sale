@@ -174,24 +174,37 @@ class sale_order(models.Model):
         today = fields.Date.today() 
         order_names = []
 
+        # Here we search one day back and forward, a more narrow interval does not work. 
         for current_rate in self.env['res.currency.rate'].search([
             ('name', '>', fields.Date.to_string( (fields.Datetime.from_string(today) + timedelta(days=-1)) )),
             ('name', '<', fields.Date.to_string( (fields.Datetime.from_string(today) + timedelta(days=1)) ))
             ]):
 
-            for pricelist in self.env['product.pricelist'].search([('currency_id','=', current_rate.currency_id.id)]):
+            current_rate_date = str(fields.Date.from_string(current_rate.name))
+            if(current_rate_date == today): 
 
-                domain = [
-                    ('state', '=', 'draft'),
-                    ('pricelist_id', '=', pricelist.id)
-                ]
+                for pricelist in self.env['product.pricelist'].search([('currency_id','=', current_rate.currency_id.id)]):
 
-                order_names = []
-                for order in self.env['sale.order'].search(domain):
-                    # Uppdatera datum osv
-                    order.date_order = fields.Datetime.now()
-                    order.onchange_pricelist_2_product()
-                    self.env.cr.commit()
-                    order_names.append(order.name)
+                    pricelist_type_ids = self.env['pricelist_chart.type'].search([
+                        '|', 
+                        ('pricelist', '=', pricelist.id),
+                        ('rec_pricelist', '=', pricelist.id)]).mapped('id')
 
-        _logger.warn("Finished currency rate update for %s orders: %s" % (len(order_names), ', '.join(order_names)))
+                    for pl in self.env['product.pricelist_chart'].search([('pricelist_chart_id', 'in', pricelist_type_ids)]):
+                        pl.unlink()
+
+                    # Searches up all orders in draft
+                    domain = [
+                        ('state', '=', 'draft'),
+                        ('pricelist_id', '=', pricelist.id)
+                    ]
+
+                    order_names = []
+                    for order in self.env['sale.order'].search(domain):
+                        # Uppdatera datum osv
+                        order.date_order = fields.Datetime.now()
+                        order.onchange_pricelist_2_product()
+                        self.env.cr.commit()
+                        order_names.append(order.name)
+
+        _logger.warn("Finished currency rate update for %s orders: %s" % (len(order_names), ', '.join(order_names)) )
