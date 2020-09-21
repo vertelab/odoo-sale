@@ -22,6 +22,7 @@
 from openerp import api, models, fields, _
 from openerp.exceptions import Warning
 from datetime import datetime, timedelta, date, time 
+import os
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -159,7 +160,9 @@ class sale_order(models.Model):
                     #TODO: add pricelist to website.put_page_dict(index_key = "pricelist %s" %pricelist) and build index_key of the pricelist 
                     #TODO: website.remove_page_index(index_key)
                 
-                    
+        MEMCACHED_SERVER = eval(self.env['ir.config_parameter'].get_param('website_memcached.memcached_db') or '("localhost",11211)')
+        os.system("echo 'flush_all' | nc %s %s " % MEMCACHED_SERVER)
+
         _logger.warn("Finished sale date update for %s orders: %s" % (len(order_names), ', '.join(order_names)))
         
         
@@ -206,5 +209,8 @@ class sale_order(models.Model):
                         order.onchange_pricelist_2_product()
                         self.env.cr.commit()
                         order_names.append(order.name)
+
+        MEMCACHED_SERVER = eval(self.env['ir.config_parameter'].get_param('website_memcached.memcached_db') or '("localhost",11211)')
+        os.system("echo 'flush_all' | nc %s %s " % MEMCACHED_SERVER)
 
         _logger.warn("Finished currency rate update for %s orders: %s" % (len(order_names), ', '.join(order_names)) )
