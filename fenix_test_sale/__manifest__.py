@@ -10,6 +10,7 @@
     "depends": [
         "base",
         "sale",
+        "contacts",
         "sale_management",
     ],
     "external_dependencies": [],
