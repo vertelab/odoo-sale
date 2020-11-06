@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="kvd_01" model="product.product">
+        <field name="name">Carreer advice</field>
+        <field name="list_price">10</field>
+        <field name="currency_id" ref="base.SEK"/>
+    </record>
+
+    <record id="kvd_tlk_01" model="product.product">
+        <field name="name">Interpretor - Arabic</field>
+        <field name="list_price">10</field>
+        <field name="currency_id" ref="base.SEK"/>
+    </record>
+
+    <record id="kvd_tlk_02" model="product.product">
+        <field name="name">Interpretor - Finnish</field>
+        <field name="list_price">10</field>
+        <field name="currency_id" ref="base.SEK"/>
+    </record>
+</odoo>
