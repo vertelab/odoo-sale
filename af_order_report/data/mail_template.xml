@@ -1,0 +1,63 @@
+<odoo>
+    <data>
+        <record id="email_template_assigned_coach" model="mail.template">
+            <field name="name">Assigned Coach</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="subject">Assigned Coach</field>
+            <field name="email_to">${object.partner_id.email | safe}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi ${object.partner_id.name},
+                        <br/><br/>
+                        <strong>${object.hr_employee.name}</strong> is your coach and we will send you an invitation to a first meeting
+                        at <strong>${object.hr_employee.location}</strong>.
+                        <br/><br/>
+                        Welcome to <strong>${object.company_id.name}</strong>.
+                        <br/>
+                    </p>
+                </div>
+            </field>
+            <field name="user_signature" eval="False"/>
+            <field name="report_template" ref="af_order_report.assigned_coach_report"/>
+            <field name="report_name">Assigned Coach</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="email_template_first_meeting" model="mail.template">
+            <field name="name">First Meeting</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="subject">First Meeting</field>
+            <field name="email_to">${object.partner_id.email | safe}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi ${object.partner_id.name},
+                        <br/><br/>
+                        I am <strong>${object.hr_employee.name}</strong> and will be your coach during the 40 day programme with us at
+                        ${object.company_id.name}.<br/>
+                        I invite you to a first meeting on <strong>${object.confirmation_date.date()}</strong> at
+                        <strong>${object.confirmation_date.strftime('%H:%M')}</strong> in our
+                        facilities at <strong>${object.hr_employee.location}</strong>.
+                        <br/><br/>
+                        Bring a copy of your reference-documents and a photo-identity.
+                        <br/><br/>
+                        We will provide you with documentation and notes-papers.
+                        <br/><br/>
+                        Welcome again!<br/><br/>
+                        <strong>${object.hr_employee.name}<br/>
+                        ${object.company_id.name}</strong>
+                        <br/>
+                    </p>
+                </div>
+            </field>
+            <field name="user_signature" eval="False"/>
+            <field name="report_template" ref="af_order_report.first_meeting_report"/>
+            <field name="report_name">First Meeting</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+    </data>
+</odoo>
