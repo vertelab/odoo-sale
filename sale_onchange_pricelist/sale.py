@@ -64,8 +64,11 @@ class sale_order(models.Model):
                 ).get('value', {})
                 order_line.append((1, line.id, vals))
             self.write({'order_line': order_line})
-    
-     
+        
+    @api.multi
+    def button_dummy(self):
+        self.onchange_pricelist_2_product()
+        return True
     # ~ def cron_update_sale_date(self):
         # ~ today = fields.Date.today() 
         # ~ time_limit = datetime.now() + timedelta(minutes=float(self.env['ir.config_parameter'].get_param('sale_onchange_pricelist.time_limit', '4')))
