@@ -63,7 +63,11 @@ class sale_order(models.Model):
                     flag=False
                 ).get('value', {})
                 order_line.append((1, line.id, vals))
+                # ~ request.session.update({
+                    # ~ 'pricelist_id': True,
+                # ~ })
             self.write({'order_line': order_line})
+            self.update({'order_line': order_line})
         
     @api.multi
     def button_dummy(self):
