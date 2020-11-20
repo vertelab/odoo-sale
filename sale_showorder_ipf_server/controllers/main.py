@@ -37,7 +37,6 @@ class IpfServer(http.Controller):
     @http.route("/v1/order", methods=["GET"],
                 type="http", auth="none", csrf=False)
     def get_order(self, *args, **kwargs):
-        print('GET >>>>>')
         wrong_values = []
         try:
             if kwargs.get('pageNo'):
@@ -98,7 +97,6 @@ class IpfServer(http.Controller):
                 "totalbelopp": "90"
             }
         ]
-        print('data >>>>>', data)
         return valid_response(data)
 
     @validate_token
