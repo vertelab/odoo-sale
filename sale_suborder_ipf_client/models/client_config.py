@@ -60,9 +60,6 @@ class ClientConfig(models.Model):
                                     data=payload,
                                     headers=headers,
                                     params=params)
-        # print(' >>>>>', dir(response))
-        print('response >>>>>', response)
-        print('response.status_code >>>>>', response.status_code)
         self.create_request_history(method=method,
                                     url=url,
                                     response=response,
