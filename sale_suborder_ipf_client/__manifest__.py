@@ -21,7 +21,7 @@
 ################################################################################
 
 {
-    'name': 'CIAM Client',
+    'name': 'IPF Suborder Client',
     'version': '12.0.0.0.1',
     'category': 'hr',
     'description': """
@@ -37,7 +37,7 @@
     'data': [
         "security/ir.model.access.csv",
 
-        'views/ciam_client_config_views.xml',
+        'views/client_config_views.xml',
     ],
     'installable': True,
     'qweb': [

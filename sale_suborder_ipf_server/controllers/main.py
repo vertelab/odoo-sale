@@ -58,7 +58,6 @@ class IpfServer(http.Controller):
         missing_values = []
 
         for required_key in required_keys:
-            print('values_dict.get(required_key) >>>>>', values_dict.get(required_key))
             if not values_dict.get(required_key):
                 missing_values.append(required_key)
         if missing_values:
