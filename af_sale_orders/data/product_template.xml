@@ -17,4 +17,10 @@
         <field name="list_price">10</field>
         <field name="currency_id" ref="base.SEK"/>
     </record>
+
+     <record id="project_optional_stage" model="project.task.type">
+        <field name="name">Optional</field>
+        <field name="sequence">0</field>
+    </record>
+
 </odoo>
