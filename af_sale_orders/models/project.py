@@ -12,7 +12,7 @@ class ProjectTask(models.Model):
 
     _inherit = 'project.task'
     _rec_name = 'task_name_number'
-    _order = "task_number, priority desc, sequence, id desc"
+    _order = "sequence, priority desc, id desc"
 
     task_number = fields.Char("Main Task number")
     start_date = fields.Date("Start Date")
@@ -60,6 +60,21 @@ class ProjectTask(models.Model):
             sub_tasks = self.search([('parent_task_id', '=', parent_task.id), ('id', '!=', res.id)])
             sub_tasks_len = len(sub_tasks)
             if parent_task.task_number:
+                if not sub_tasks and res.project_id:
+                    other_tasks = self.env['project.task'].search([('sequence', '>', parent_task.sequence),
+                                                ('project_id', '=', parent_task.project_id.id),
+                                                                   ('id', '!=', res.id)], order='sequence')
+                    for o_task in other_tasks:
+                        o_task.sequence = o_task.sequence + 1
+                    res.sequence = parent_task.sequence + 1
+                elif sub_tasks and res.project_id:
+                    other_tasks = self.env['project.task'].search([('sequence', '>', parent_task.sequence),
+                                                        ('project_id', '=', parent_task.project_id.id),
+                                                        ('id', '!=', res.id), '|', ('parent_task_id', '=', False),
+                                                        ('parent_task_id', '!=', parent_task.id)], order='sequence')
+                    for o_task in other_tasks:
+                        o_task.sequence = o_task.sequence + 1
+                    res.sequence = parent_task.sequence + sub_tasks_len + 1
                 res.task_name_number = parent_task.task_number + '.' + str(sub_tasks_len + 1) + ' ' + res.name
             else:
                 res.task_name_number = res.name
@@ -85,6 +100,24 @@ class ProjectTask(models.Model):
                 sub_tasks = self.search([('parent_task_id', '=', parent_task.id), ('id', '!=', task.id)])
                 sub_tasks_len = len(sub_tasks)
                 if parent_task.task_number:
+                    if not sub_tasks and task.project_id:
+                        other_tasks = self.env['project.task'].search([('sequence', '>', parent_task.sequence),
+                                                ('id', '!=', task.id),('project_id', '=', parent_task.project_id.id)],
+                                                                       order='sequence')
+                        for o_task in other_tasks:
+                            o_task.sequence = o_task.sequence + 1
+                        task.sequence = parent_task.sequence + 1
+                    elif sub_tasks and task.project_id:
+                        other_tasks = self.env['project.task'].search([('sequence', '>', parent_task.sequence),
+                                                                       ('id', '!=', task.id),
+                                                                       ('project_id', '=', parent_task.project_id.id),
+                                                                       '|', ('parent_task_id', '=', False),
+                                                                       ('parent_task_id', '!=', parent_task.id)],
+                                                                      order='sequence')
+                        for o_task in other_tasks:
+                            o_task.sequence = o_task.sequence + 1
+                        task.sequence = parent_task.sequence + sub_tasks_len + 1
+
                     task.task_name_number = parent_task.task_number + '.' + str(sub_tasks_len + 1) + ' ' + task.name
                 else:
                     task.task_name_number = task.name

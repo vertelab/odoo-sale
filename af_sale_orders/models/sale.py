@@ -28,7 +28,8 @@ class SaleOrder(models.Model):
                 'stage_id': to_do_stage_id,
                 'required_task': True,
                 'color': 1,
-                'instruction': 'Instruction 1'
+                'instruction': 'Instruction 1',
+                'sequence': 1
             })
             task_obj.create({
                 'name': "Task2",
@@ -37,7 +38,8 @@ class SaleOrder(models.Model):
                 'stage_id': to_do_stage_id,
                 'required_task': True,
                 'color': 1,
-                'instruction': 'Instruction 2'
+                'instruction': 'Instruction 2',
+                'sequence': 2
             })
             task_obj.create({
                 'name': "Task3",
@@ -46,7 +48,8 @@ class SaleOrder(models.Model):
                 'stage_id': to_do_stage_id,
                 'required_task': True,
                 'color': 1,
-                'instruction': 'Instruction 3'
+                'instruction': 'Instruction 3',
+                'sequence': 3
             })
             task_obj.create({
                 'name': "Task4",
@@ -55,7 +58,8 @@ class SaleOrder(models.Model):
                 'stage_id': to_do_stage_id,
                 'required_task': True,
                 'color': 1,
-                'instruction': 'Instruction 4'
+                'instruction': 'Instruction 4',
+                'sequence': 4
             })
             task_obj.create({
                 'name': "Task5",
@@ -64,7 +68,8 @@ class SaleOrder(models.Model):
                 'stage_id': to_do_stage_id,
                 'required_task': True,
                 'color': 1,
-                'instruction': 'Instruction 5'
+                'instruction': 'Instruction 5',
+                'sequence': 5
             })
             task_obj.create({
                 'name': "Task6",
@@ -73,7 +78,8 @@ class SaleOrder(models.Model):
                 'stage_id': to_do_stage_id,
                 'required_task': True,
                 'color': 1,
-                'instruction': 'Instruction 6'
+                'instruction': 'Instruction 6',
+                'sequence': 6
             })
             task_obj.create({
                 'name': "Task7",
@@ -82,7 +88,8 @@ class SaleOrder(models.Model):
                 'stage_id': to_do_stage_id,
                 'required_task': True,
                 'color': 1,
-                'instruction': 'Instruction 7'
+                'instruction': 'Instruction 7',
+                'sequence': 7
             })
             task_obj.create({
                 'name': "Task8",
@@ -91,7 +98,8 @@ class SaleOrder(models.Model):
                 'stage_id': to_do_stage_id,
                 'required_task': True,
                 'color': 1,
-                'instruction': 'Instruction 8'
+                'instruction': 'Instruction 8',
+                'sequence': 8
             })
             task_obj.create({
                 'name': "Optional-Task1",
@@ -100,7 +108,8 @@ class SaleOrder(models.Model):
                 'stage_id': optional_stage_id,
                 'optional_task': True,
                 'color': 11,
-                'instruction': 'Instruction 1'
+                'instruction': 'Instruction 1',
+                'sequence': 9
             })
             task_obj.create({
                 'name': "Optional-Task2",
@@ -109,7 +118,8 @@ class SaleOrder(models.Model):
                 'stage_id': optional_stage_id,
                 'optional_task': True,
                 'color': 11,
-                'instruction': 'Instruction 3'
+                'instruction': 'Instruction 3',
+                'sequence': 10
             })
             task_obj.create({
                 'name': "Optional-Task3",
@@ -118,7 +128,8 @@ class SaleOrder(models.Model):
                 'stage_id': optional_stage_id,
                 'optional_task': True,
                 'color': 11,
-                'instruction': 'Instruction 3'
+                'instruction': 'Instruction 3',
+                'sequence': 11
             })
             task_obj.create({
                 'name': "Optional-Task4",
@@ -127,6 +138,7 @@ class SaleOrder(models.Model):
                 'stage_id': optional_stage_id,
                 'optional_task': True,
                 'color': 11,
-                'instruction': 'Instruction 4'
+                'instruction': 'Instruction 4',
+                'sequence': 12
             })
         return super(SaleOrder, self).action_confirm()
