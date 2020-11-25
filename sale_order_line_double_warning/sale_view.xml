@@ -33,6 +33,28 @@
             </field>
         </record>
 
+        <record id="view_sale_order_warning_credit_wizard_form" model="ir.ui.view">
+            <field name="name">sale.order.warning.wizard.form</field>
+            <field name="model">sale.order.warning.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Credit Score Exceeded">
+                    <sheet>
+                        <h1 class="text-center">Warning: Order total exceeds the customers credit score.</h1>
+                        <field name="order_id" invisible="1"/>
+                        <h2 class="text-center">Do you want to continue?</h2>
+                        <div class="text-center">
+                            <button name="confirm" type="object" string="Continue Anyway" class="oe_highlight"/>
+                            or
+                            <button special="cancel" string="Regret" class=""/>
+                        </div>
+                    </sheet>
+                    <footer>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
         <record id="view_order_form" model="ir.ui.view">
             <field name="name">sale.order.form</field>
             <field name="model">sale.order</field>

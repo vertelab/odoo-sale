@@ -20,7 +20,7 @@
 ##############################################################################
 
 from openerp import api, models, fields, _
-from openerp.exceptions import Warning
+from openerp.http import request
 import traceback
 
 import logging
@@ -59,21 +59,26 @@ class sale_order_warning_wizard(models.TransientModel):
 class sale_order(models.Model):
     _inherit ='sale.order'
 
-    @api.multi
-    def action_button_confirm_check(self):
-        if len(self.order_line.mapped('product_id')) < len(self.order_line):
-            #~ raise myRedirectWarning(_("There're sale order lines contain same product"), self.env.ref('sale_order_line_double_warning.action_orders_check').id, _('Continue anyway'))
-            return {
+    def get_action_window_dict(self, view):
+        return {
                 'type': 'ir.actions.act_window',
                 'res_model': 'sale.order.warning.wizard',
                 'view_type': 'form',
                 'view_mode': 'form',
-                'view_id': self.env.ref('sale_order_line_double_warning.view_sale_order_warning_wizard_form').id,
+                'view_id': self.env.ref(view).id,
                 'target': 'new',
                 'context': {'active_id': self.id},
             }
-        else:
-            return self.action_button_confirm()
+
+    @api.multi
+    def action_button_confirm_check(self):
+        if len(self.order_line.mapped('product_id')) < len(self.order_line):
+            return self.get_action_window_dict('sale_order_line_double_warning.view_sale_order_warning_wizard_form')
+
+        if self.partner_id.credit_limit and self.partner_id.credit_limit - self.partner_id.credit - self.amount_total < 0:
+            return self.get_action_window_dict('sale_order_line_double_warning.view_sale_order_warning_credit_wizard_form')
+
+        return self.action_button_confirm()
 
 class SaleOrderLine(models.Model):
     _inherit ='sale.order.line'
