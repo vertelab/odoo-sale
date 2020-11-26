@@ -19,11 +19,8 @@
         <field name="arch" type="xml">
             <form>
                 <div class="oe_button_box" name="button_box">
-
                     <button class="oe_stat_button" type="object"
                             string="TEST POST" name="post_data"/>
-
-
                 </div>
                 <group>
                     <group>
