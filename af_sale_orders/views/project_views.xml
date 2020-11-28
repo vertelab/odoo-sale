@@ -140,8 +140,20 @@
                     </strong>
                 </t>
             </xpath>
+            <xpath expr="//div[hasclass('oe_kanban_bottom_left')]/field[@name='priority']" position="replace"/>
         </field>
     </record>
+
+     <record id="view_project_task_quick_create_form_inherit_af" model="ir.ui.view">
+        <field name="name">view.project.task.create.form.inherit.af</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.quick_create_task_form"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="parent_task_id"/>
+            </field>
+        </field>
+     </record>
 
     <record id="view_project_task_form_inherit_af" model="ir.ui.view">
         <field name="name">view.project.task.form.inherit.af</field>
