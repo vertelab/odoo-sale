@@ -18,10 +18,11 @@ class SaleOrder(models.Model):
             project = self.env['project.project'].create({
                 'name': self.partner_id.name
             })
+            project.sale_order_id = self.id
             for stage in stage_ids:
                 stage.project_ids = [(4, project.id)]
             task_obj = self.env['project.task']
-            task_obj.create({
+            task_obj.with_context(from_sale_order=True).create({
                 'name': "Task1",
                 'project_id': project.id,
                 'task_number': 1,
@@ -31,77 +32,77 @@ class SaleOrder(models.Model):
                 'instruction': 'Instruction 1',
                 'sequence': 1
             })
-            task_obj.create({
+            task_obj.with_context(from_sale_order=True).create({
                 'name': "Task2",
                 'project_id': project.id,
                 'task_number': 2,
                 'stage_id': to_do_stage_id,
                 'required_task': True,
-                'color': 1,
+                'color': 2,
                 'instruction': 'Instruction 2',
                 'sequence': 2
             })
-            task_obj.create({
+            task_obj.with_context(from_sale_order=True).create({
                 'name': "Task3",
                 'project_id': project.id,
                 'task_number': 3,
                 'stage_id': to_do_stage_id,
                 'required_task': True,
-                'color': 1,
+                'color': 3,
                 'instruction': 'Instruction 3',
                 'sequence': 3
             })
-            task_obj.create({
+            task_obj.with_context(from_sale_order=True).create({
                 'name': "Task4",
                 'project_id': project.id,
                 'task_number': 4,
                 'stage_id': to_do_stage_id,
                 'required_task': True,
-                'color': 1,
+                'color': 4,
                 'instruction': 'Instruction 4',
                 'sequence': 4
             })
-            task_obj.create({
+            task_obj.with_context(from_sale_order=True).create({
                 'name': "Task5",
                 'project_id': project.id,
                 'task_number': 5,
                 'stage_id': to_do_stage_id,
                 'required_task': True,
-                'color': 1,
+                'color': 5,
                 'instruction': 'Instruction 5',
                 'sequence': 5
             })
-            task_obj.create({
+            task_obj.with_context(from_sale_order=True).create({
                 'name': "Task6",
                 'project_id': project.id,
                 'task_number': 6,
                 'stage_id': to_do_stage_id,
                 'required_task': True,
-                'color': 1,
+                'color': 6,
                 'instruction': 'Instruction 6',
                 'sequence': 6
             })
-            task_obj.create({
+            task_obj.with_context(from_sale_order=True).create({
                 'name': "Task7",
                 'project_id': project.id,
                 'task_number': 7,
                 'stage_id': to_do_stage_id,
                 'required_task': True,
-                'color': 1,
+                'color': 7,
                 'instruction': 'Instruction 7',
                 'sequence': 7
             })
-            task_obj.create({
+            task_obj.with_context(from_sale_order=True).create({
                 'name': "Task8",
                 'project_id': project.id,
                 'task_number': 8,
                 'stage_id': to_do_stage_id,
                 'required_task': True,
-                'color': 1,
+                'color': 8,
                 'instruction': 'Instruction 8',
                 'sequence': 8
             })
-            task_obj.create({
+            task_obj.with_context(from_sale_order=True).create({
                 'name': "Optional-Task1",
                 'project_id': project.id,
                 'task_number': 1,
@@ -111,7 +112,7 @@ class SaleOrder(models.Model):
                 'instruction': 'Instruction 1',
                 'sequence': 9
             })
-            task_obj.create({
+            task_obj.with_context(from_sale_order=True).create({
                 'name': "Optional-Task2",
                 'project_id': project.id,
                 'task_number': 2,
@@ -121,7 +122,7 @@ class SaleOrder(models.Model):
                 'instruction': 'Instruction 3',
                 'sequence': 10
             })
-            task_obj.create({
+            task_obj.with_context(from_sale_order=True).create({
                 'name': "Optional-Task3",
                 'project_id': project.id,
                 'task_number': 3,
@@ -131,7 +132,7 @@ class SaleOrder(models.Model):
                 'instruction': 'Instruction 3',
                 'sequence': 11
             })
-            task_obj.create({
+            task_obj.with_context(from_sale_order=True).create({
                 'name': "Optional-Task4",
                 'project_id': project.id,
                 'task_number': 4,
