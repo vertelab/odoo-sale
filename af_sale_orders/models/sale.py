@@ -38,7 +38,7 @@ class SaleOrder(models.Model):
                 'task_number': 2,
                 'stage_id': to_do_stage_id,
                 'required_task': True,
-                'color': 2,
+                'color': 4,
                 'instruction': 'Instruction 2',
                 'sequence': 2
             })
@@ -58,7 +58,7 @@ class SaleOrder(models.Model):
                 'task_number': 4,
                 'stage_id': to_do_stage_id,
                 'required_task': True,
-                'color': 4,
+                'color': 5,
                 'instruction': 'Instruction 4',
                 'sequence': 4
             })
@@ -68,7 +68,7 @@ class SaleOrder(models.Model):
                 'task_number': 5,
                 'stage_id': to_do_stage_id,
                 'required_task': True,
-                'color': 5,
+                'color': 2,
                 'instruction': 'Instruction 5',
                 'sequence': 5
             })
@@ -78,7 +78,7 @@ class SaleOrder(models.Model):
                 'task_number': 6,
                 'stage_id': to_do_stage_id,
                 'required_task': True,
-                'color': 6,
+                'color': 7,
                 'instruction': 'Instruction 6',
                 'sequence': 6
             })
@@ -88,7 +88,7 @@ class SaleOrder(models.Model):
                 'task_number': 7,
                 'stage_id': to_do_stage_id,
                 'required_task': True,
-                'color': 7,
+                'color': 6,
                 'instruction': 'Instruction 7',
                 'sequence': 7
             })
@@ -105,7 +105,7 @@ class SaleOrder(models.Model):
             task_obj.with_context(from_sale_order=True).create({
                 'name': "Optional-Task1",
                 'project_id': project.id,
-                'task_number': 1,
+                'task_number': 9,
                 'stage_id': optional_stage_id,
                 'optional_task': True,
                 'color': 11,
@@ -115,7 +115,7 @@ class SaleOrder(models.Model):
             task_obj.with_context(from_sale_order=True).create({
                 'name': "Optional-Task2",
                 'project_id': project.id,
-                'task_number': 2,
+                'task_number': 10,
                 'stage_id': optional_stage_id,
                 'optional_task': True,
                 'color': 11,
@@ -125,7 +125,7 @@ class SaleOrder(models.Model):
             task_obj.with_context(from_sale_order=True).create({
                 'name': "Optional-Task3",
                 'project_id': project.id,
-                'task_number': 3,
+                'task_number': 11,
                 'stage_id': optional_stage_id,
                 'optional_task': True,
                 'color': 11,
@@ -135,7 +135,7 @@ class SaleOrder(models.Model):
             task_obj.with_context(from_sale_order=True).create({
                 'name': "Optional-Task4",
                 'project_id': project.id,
-                'task_number': 4,
+                'task_number': 12,
                 'stage_id': optional_stage_id,
                 'optional_task': True,
                 'color': 11,

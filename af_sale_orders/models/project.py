@@ -100,17 +100,19 @@ class ProjectTask(models.Model):
         optional_task_id = self.env.ref('af_sale_orders.project_optional_stage')
         for task in self:
             if task.optional_task and task.stage_id and task.stage_id.id == todo_stage.id:
-                raise Warning(_("Can not move Optional task to Todo stage!"))
+                subtasks = self.search([('parent_task_id', '=', task.id)])
+                if not subtasks:
+                    raise Warning(_("Can not move Optional task to Todo stage if it has not subtask!"))
             if vals.get('stage_id'):
-                if task.optional_task and task.stage_id.id == optional_task_id.id:
-                    subtasks = task_obj.search([('parent_task_id', '=', task.id)])
+                if task.optional_task and (task.stage_id.id == optional_task_id.id \
+                        or task.stage_id.id == done_stage.id):
+                    subtasks = task_obj.search([('parent_task_id', '=', task.id),
+                                                ('stage_id', '=', todo_stage.id)])
                     if subtasks:
-                        raise Warning(_("You can't move stage to Optional again as it has subtasks!"))
-                if task.stage_id and task.stage_id.name == 'Done':
+                        raise Warning(_("You can't move task to Optional or Done as it has subtask in Todo!"))
+                if task.stage_id and task.stage_id.id == done_stage.id:
                     subtasks = self.search([('parent_task_id', '=', task.id)])
                     for sub_task in subtasks:
-                        if not sub_task.stage_id.id == done_stage.id:
-                            raise Warning(_("You can't move this task to Done as its subtask %s is not Done" % sub_task.name))
                         sub_task.stage_id = done_stage.id
             if vals.get('name') and task.parent_task_id and not vals.get('parent_task_id'):
                 number = task.task_name_number.split(' ')

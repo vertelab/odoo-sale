@@ -119,26 +119,9 @@
                 </span>
             </xpath>
             <xpath expr="//div[hasclass('o_kanban_record_headings')]/strong" position="replace">
-                <t t-if="record.parent_task_id.value">
-                    <strong class="o_kanban_record_title" style="color:green">
-                        <field name="task_name_number"/>
-                    </strong>
-                </t>
-                <t t-elif="record.optional_task.raw_value">
-                    <strong class="o_kanban_record_title" style="color:#8b48e5">
-                        <field name="task_name_number"/>
-                    </strong>
-                </t>
-                <t t-elif="record.required_task.raw_value">
-                    <strong class="o_kanban_record_title" style="color:red">
-                        <field name="task_name_number"/>
-                    </strong>
-                </t>
-                <t t-else="else">
-                    <strong class="o_kanban_record_title">
-                        <field name="task_name_number"/>
-                    </strong>
-                </t>
+                <strong class="o_kanban_record_title">
+                    <field name="task_name_number"/>
+                </strong>
             </xpath>
             <xpath expr="//div[hasclass('oe_kanban_bottom_left')]/field[@name='priority']" position="replace"/>
         </field>
