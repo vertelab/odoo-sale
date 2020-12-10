@@ -20,15 +20,15 @@
 #
 ################################################################################
 
+import re
 import logging
 import json
 from odoo.exceptions import ValidationError, UserError
-from odoo import http
+from odoo import http, api
 from datetime import datetime
 from odoo.addons.sale_suborder_ipf_server.controllers.token import \
     validate_token, valid_response, invalid_response
-import re
-from odoo.http import request
+
 _logger = logging.getLogger(__name__)
 
 
@@ -117,4 +117,11 @@ class IpfServer(http.Controller):
         if wrong_values:
             message = ',\n'.join(wrong_value for wrong_value in wrong_values)
             return invalid_response("Datafel", message, 400)
+        if not self.process_data(values_dict):
+            return invalid_response("Datafel", "Internal server error", 500)
         return valid_response([])
+
+    @api.model
+    def process_data(self, data):
+        """For overriding and processing data"""
+        return True

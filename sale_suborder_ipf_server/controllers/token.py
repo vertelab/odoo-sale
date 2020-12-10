@@ -77,12 +77,15 @@ def get_headers():
     return headers
 
 
-def valid_response(data='', status=200, **kwargs):
+def valid_response(data='', status=201, **kwargs):
     """Valid Response
     This will be return when the http request was successfully processed."""
-    data = {"count": len(data) if not isinstance(data, str) else 1,
-            "data": data}
-    data.update(kwargs)
+    if not data:
+        data = 'Successful execution of request.'
+    else:
+        data = {"count": len(data) if not isinstance(data, str) else 1,
+                "data": data}
+        data.update(kwargs)
 
     response = werkzeug.wrappers.Response(
         status=status,
