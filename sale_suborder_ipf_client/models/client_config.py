@@ -52,8 +52,8 @@ class ClientConfig(models.Model):
                                           'config_id',
                                           string='Requests')
 
-    def request_call(self, method, url, payload=False,
-                     headers=False, params=False):
+    def request_call(self, method, url, payload=None,
+                     headers=None, params=None):
 
         response = requests.request(method=method,
                                     url=url,
@@ -69,8 +69,8 @@ class ClientConfig(models.Model):
 
         return response
 
-    def create_request_history(self, method, url, response, payload=False,
-                               headers=False, params=False):
+    def create_request_history(self, method, url, response, payload=None,
+                               headers=None, params=None):
         values = {'config_id': self.id,
                   'method': method,
                   'url': url,
@@ -79,14 +79,16 @@ class ClientConfig(models.Model):
                   'response_headers': response.headers,
                   'params': params,
                   'response_code': response.status_code}
-        values.update(message=json.loads(response.content))
+        try:
+            values.update(message=json.loads(response.content))
+        except Exception:
+            pass
         self.env['ipf.request.history'].create(values)
 
     def get_headers(self):
         tracking_id = pycompat.text_type(uuid.uuid1())
         headers = {
             'x-amf-mediaType': "application/json",
-            # 'Content-Type': "application/json",
             'AF-TrackingId': tracking_id,
             'AF-SystemId': "AF-SystemId",
             'AF-EndUserId': "AF-EndUserId",
@@ -132,4 +134,4 @@ class ClientConfig(models.Model):
                                      headers=self.get_headers(),
                                      params=querystring)
 
-        print(response.text)
+        return response
