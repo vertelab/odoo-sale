@@ -25,7 +25,7 @@
     'version': '12.0.0.0.1',
     'category': 'hr',
     'description': """
-
+    AFC-1343: IPF-9164 Get list of invoices and one invoice
 """,
 
     'author': "N-development",
