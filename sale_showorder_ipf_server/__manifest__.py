@@ -25,7 +25,7 @@
     'version': '12.0.0.0.1',
     'category': 'sale',
     'description': """
-
+     AFC-1343: IPF-9164 Mockingservice for sale_showorder_ipf_client
             """,
     'author': "N-development",
     'license': 'AGPL-3',
