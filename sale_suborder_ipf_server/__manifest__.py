@@ -21,7 +21,7 @@
 ################################################################################
 
 {
-    'name': 'IPF Server',
+    'name': 'IPF Suborder Server',
     'version': '12.0.0.0.1',
     'category': 'sale',
     'description': """
