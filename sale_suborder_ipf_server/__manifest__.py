@@ -22,10 +22,10 @@
 
 {
     'name': 'IPF Suborder Server',
-    'version': '12.0.0.0.1',
+    'version': '12.0.0.2',
     'category': 'sale',
     'description': """
-
+               v 12.0.0.2 AFC-1323 Implementation of Suborder message server to respond when BÄR sends a suborder (SV: avrop) for KVL
             """,
     'author': "N-development",
     'license': 'AGPL-3',
