@@ -20,17 +20,19 @@
 #
 ################################################################################
 
-import re
-import logging
-import json
-from odoo.exceptions import ValidationError, UserError
-from odoo import http, api
 from datetime import datetime
+import json
+import logging
+import re
+
+from odoo.exceptions import ValidationError, UserError
+from odoo import http
 from odoo.addons.sale_suborder_ipf_server.controllers.token import \
     validate_token, valid_response, invalid_response
+from odoo import models, fields, api, _
+from odoo.http import request
 
 _logger = logging.getLogger(__name__)
-
 
 class IpfServer(http.Controller):
 
@@ -117,11 +119,20 @@ class IpfServer(http.Controller):
         if wrong_values:
             message = ',\n'.join(wrong_value for wrong_value in wrong_values)
             return invalid_response("Datafel", message, 400)
-        if not self.process_data(values_dict):
+        # ~ _logger.warn('Nisse: before suborder_process... %s' % values_dict)
+        res = request.env['outplacement'].sudo().suborder_process_data(values_dict)
+        if not res:
+            _logger.warn('Nisse: before II suborder_process...')
             return invalid_response("Datafel", "Internal server error", 500)
+        _logger.warn('Nisse: before III suborder_process...')
         return valid_response([])
 
+
+class Outplacement(models.Model):
+    _inherit = 'outplacement'
+
     @api.model
-    def process_data(self, data):
+    def suborder_process_data(self, data):
         """For overriding and processing data"""
-        return True
+        _logger.warn('Nisse: first suborder_process...')
+        return data
