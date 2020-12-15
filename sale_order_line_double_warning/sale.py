@@ -70,12 +70,25 @@ class sale_order(models.Model):
                 'context': {'active_id': self.id},
             }
 
+    def partner_exceedes_credit_limit(self, partner_id):
+        # if partner has parent company: check parent company's credit limit instead
+        if self.partner_id.commercial_partner_id:
+            partner_id = self.partner_id.commercial_partner_id
+        else:
+            partner_id = self.partner_id
+
+        # if partner has a limit (else it is trusted with unlimited creadit score)
+        if partner_id.credit_limit != 0:
+            if partner_id.credit_limit - partner_id.credit - self.amount_total < 0:
+                return True
+        return False
+
     @api.multi
     def action_button_confirm_check(self):
         if len(self.order_line.mapped('product_id')) < len(self.order_line):
             return self.get_action_window_dict('sale_order_line_double_warning.view_sale_order_warning_wizard_form')
 
-        if self.partner_id.credit_limit and self.partner_id.credit_limit - self.partner_id.credit - self.amount_total < 0:
+        if partner_exceedes_credit_limit(self.partner_id):
             return self.get_action_window_dict('sale_order_line_double_warning.view_sale_order_warning_credit_wizard_form')
 
         return self.action_button_confirm()
