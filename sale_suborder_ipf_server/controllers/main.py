@@ -38,7 +38,7 @@ class IpfServer(http.Controller):
 
     @validate_token
     @http.route("/v1/leverantorsavrop", methods=["POST"],
-                type="http", auth="none", csrf=False)
+                type="json", auth="public", csrf=False)
     def leverantorsavrop(self, *args, **kwargs):
         required_keys = ["genomforande_referens",
                          "utforande_verksamhet_id",
