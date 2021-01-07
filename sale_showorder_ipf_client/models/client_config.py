@@ -174,15 +174,16 @@ class ClientConfig(models.Model):
                                      params=querystring)
         print(response.text)
 
-    def get_order_id(self):
+    def get_order_id(self,order_id):
+        # ~ 'preleminär','definitiv','avbruten','avbruten levererad',BÄR_status
         querystring = {"client_secret": self.client_secret,
                        "client_id": self.client_id}
-        url = self.get_url('v1/order/%s' % ('order_id_1'))
+        url = self.get_url('v1/orders/%s' % (order_id))
         response = self.request_call(method="GET",
                                      url=url,
                                      headers=self.get_headers(),
                                      params=querystring)
-        print(response.text)
+        return response.json()
 
     def patch_order(self):
         querystring = {"client_secret": self.client_secret,
