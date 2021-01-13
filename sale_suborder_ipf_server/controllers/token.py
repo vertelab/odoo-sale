@@ -45,7 +45,8 @@ def validate_token(func):
         """."""
         try:
             client_secret = request.httprequest.args['client_secret']
-            if not client_secret:
+            client_secret_parameter = self.env['ir.config_parameter'].search([('key', '=', 'client_secret')])
+            if not client_secret or client_secret != client_secret_parameter.value:
                 raise
         except:
             return invalid_response("missing_client_secret",
@@ -53,7 +54,8 @@ def validate_token(func):
                                     401)
         try:
             client_id = request.httprequest.args['client_id']
-            if not client_id:
+            client_id_parameter = self.env['ir.config_parameter'].search([('key', '=', 'client_id')])
+            if not client_id or client_id == client_id_parameter.value:
                 raise
         except:
             return invalid_response("ACCESS ERROR",
