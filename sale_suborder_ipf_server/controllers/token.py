@@ -43,24 +43,57 @@ def validate_token(func):
     @functools.wraps(func)
     def wrap(self, *args, **kwargs):
         """."""
+        client_secret = False
         try:
             client_secret = request.httprequest.args['client_secret']
-            client_secret_parameter = self.env['ir.config_parameter'].search([('key', '=', 'client_secret')])
-            if not client_secret or client_secret != client_secret_parameter.value:
+            if not client_secret:
                 raise
         except:
             return invalid_response("missing_client_secret",
                                     "client_secret is missing",
-                                    401)
+                                    403)
+        client_secret_parameter = False
+        try:
+            client_secret_parameter = self.env['ir.config_parameter'].search([('key', '=', 'client_secret')])
+            if not client_secret_parameter:
+                raise
+        except:
+            return invalid_response("client_secret_not_configured",
+                                    "server has no client_secret set",
+                                    503)
+        try:
+            if client_secret != client_secret_parameter.value:
+                raise
+        except:
+            return invalid_response("wrong_client_secret", 
+                                    "client_secret is incorrect.", 
+                                    403)
+
+        client_id = False
         try:
             client_id = request.httprequest.args['client_id']
-            client_id_parameter = self.env['ir.config_parameter'].search([('key', '=', 'client_id')])
-            if not client_id or client_id == client_id_parameter.value:
+            if not client_id:
                 raise
         except:
             return invalid_response("ACCESS ERROR",
                                     "Missing access token in request header.",
-                                    401)
+                                    403)
+        client_id_parameter = False
+        try:
+            client_id_parameter = self.env['ir.config_parameter'].search([('key', '=', 'client_id')])
+            if not client_id_parameter:
+                raise
+        except:
+            return invalid_response("client_id_not_configured",
+                                    "server has no client_id set",
+                                    503)
+        try:
+            if client_id != client_id_parameter.value:
+                raise
+        except:
+            return invalid_response("ACCESS ERROR",
+                                    "Missing access token in request header.",
+                                    403)
         return func(self, *args, **kwargs)
 
     return wrap
