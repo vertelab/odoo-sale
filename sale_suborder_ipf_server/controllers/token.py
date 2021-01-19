@@ -54,7 +54,9 @@ def validate_token(func):
                                     403)
         client_secret_parameter = False
         try:
-            client_secret_parameter = self.env['ir.config_parameter'].search([('key', '=', 'client_secret')])
+            client_secret_parameter = (
+                request.env['ir.config_parameter'].sudo().get_param('dafa.client_secret')
+            )
             if not client_secret_parameter:
                 raise
         except:
@@ -62,7 +64,7 @@ def validate_token(func):
                                     "server has no client_secret set",
                                     503)
         try:
-            if client_secret != client_secret_parameter.value:
+            if client_secret != client_secret_parameter:
                 raise
         except:
             return invalid_response("wrong_client_secret", 
@@ -80,7 +82,9 @@ def validate_token(func):
                                     403)
         client_id_parameter = False
         try:
-            client_id_parameter = self.env['ir.config_parameter'].search([('key', '=', 'client_id')])
+            client_id_parameter = (
+                request.env["ir.config_parameter"].sudo().get_param("dafa.client_id")
+            )
             if not client_id_parameter:
                 raise
         except:
@@ -88,7 +92,7 @@ def validate_token(func):
                                     "server has no client_id set",
                                     503)
         try:
-            if client_id != client_id_parameter.value:
+            if client_id != client_id_parameter:
                 raise
         except:
             return invalid_response("ACCESS ERROR",
