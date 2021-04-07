@@ -119,12 +119,11 @@ class IpfServer(http.Controller):
         if wrong_values:
             message = ',\n'.join(wrong_value for wrong_value in wrong_values)
             return invalid_response("Datafel", message, 400)
-        # ~ _logger.warn('Nisse: before suborder_process... %s' % values_dict)
         res = request.env['outplacement'].sudo().suborder_process_data(values_dict)
         if not res:
-            _logger.warn('Nisse: before II suborder_process...')
             return invalid_response("Datafel", "Internal server error", 500)
-        _logger.warn('Nisse: before III suborder_process...')
+        elif res == 400:
+            return invalid_response("Duplicate", "Bad Request", 400)
         return valid_response([])
 
 
@@ -134,5 +133,4 @@ class Outplacement(models.Model):
     @api.model
     def suborder_process_data(self, data):
         """For overriding and processing data"""
-        _logger.warn('Nisse: first suborder_process...')
         return data
