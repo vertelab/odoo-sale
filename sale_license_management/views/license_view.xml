@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_license_overview_tree" model="ir.ui.view">
+        <field name="name">sale.license.overview.tree</field>
+        <field name="model">sale.order.line</field>
+<!--
+        <field name="priority">4</field>
+-->
+        <field name="arch" type="xml">
+            <tree string="Quotation" multi_edit="0" sample="1">
+                <field name="name"/>
+                <field name="order_id"/>
+                <field name="price_unit"/>
+                <field name="product_uom_qty"/>
+                <field name="qty_delivered"/>
+                <field name="product_uom_category_id"/>
+                <field name="create_date"/>
+                <field name="state"/>
+                <field name="license_start"/>
+                <field name="license_stop"/>
+                <field name="order_partner_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_license_overview" model="ir.actions.act_window">
+        <field name="name">License overview</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_mode">tree</field>
+<!--
+        <field name="search_view_id" ref="sale_order_view_search_inherit_quotation"/>
+-->
+<!--
+        <field name="context">{'search_default_my_quotation': 1}</field>
+-->
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new quotation, the first step of a new sale!
+          </p><p>
+            Once the quotation is confirmed by the customer, it becomes a sales order.<br/> You will be able to create an invoice and collect the payment.
+          </p>
+        </field>
+    </record>
+
+    <record id="action_view_license_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_license_overview_tree"/>
+        <field name="act_window_id" ref="action_license_overview"/>
+    </record>
+
+    <menuitem id="menu_sale_license_overview"
+                action="action_license_overview"
+                parent="sale.sale_menu_root"
+                sequence="20" groups="base.group_user"/>
+</odoo>
