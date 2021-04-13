@@ -10,6 +10,8 @@ class SaleOrderLine(models.Model):
     license_start = fields.Datetime(string="License start")
     license_stop = fields.Datetime(string="License end", compute="_compute_license_stop", store=True)
     phone = fields.Char(related='order_partner_id.phone')
+    contact_address = fields.Char(related='order_partner_id.contact_address')
+    form_of_agreement = fields.Char(related='product_template_id.form_of_agreement')
 
     @api.depends('license_start')
     def _compute_license_stop(self):

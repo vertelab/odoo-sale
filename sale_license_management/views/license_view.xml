@@ -12,13 +12,13 @@
                 <field name="order_id"/>
                 <field name="price_unit"/>
                 <field name="product_uom_qty"/>
-                <field name="qty_delivered"/>
-                <field name="product_uom_category_id"/>
+                <field name="form_of_agreement"/>
                 <field name="create_date"/>
-                <field name="state"/>
                 <field name="license_start"/>
                 <field name="license_stop"/>
                 <field name="order_partner_id"/>
+                <field name="phone"/>
+                <field name="contact_address"/>
             </tree>
         </field>
     </record>
