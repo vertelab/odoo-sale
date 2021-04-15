@@ -6,6 +6,13 @@ from odoo.exceptions import ValidationError
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-    license_duration = fields.Integer(string="Duration", help="The duration in days")
-    form_of_agreement = fields.Char(
-        string="Form of agreement", help="Form of agreement")
+    license_duration = fields.Integer(
+        string="Duration",
+        help="The duration in days",
+    )
+    form_of_agreement = fields.Selection(
+        selection=[('ea','EA'),('vip','VIP'), ('select','SELECT')],
+        default="ea",
+        string="Form of agreement",
+        help="Form of agreement",
+    )

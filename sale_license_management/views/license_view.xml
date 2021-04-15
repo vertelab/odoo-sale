@@ -27,7 +27,7 @@
         <field name="name">License overview</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">sale.order.line</field>
-        <field name="view_mode">tree</field>
+        <field name="view_mode">tree,form</field>
 <!--
         <field name="search_view_id" ref="sale_order_view_search_inherit_quotation"/>
 -->
@@ -47,6 +47,13 @@
         <field name="sequence" eval="1"/>
         <field name="view_mode">tree</field>
         <field name="view_id" ref="view_license_overview_tree"/>
+        <field name="act_window_id" ref="action_license_overview"/>
+    </record>
+
+    <record id="action_view_license_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sale.sale_order_line_view_form_readonly"/>
         <field name="act_window_id" ref="action_license_overview"/>
     </record>
 
