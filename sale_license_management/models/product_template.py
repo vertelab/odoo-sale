@@ -16,3 +16,8 @@ class ProductTemplate(models.Model):
         string="Form of agreement",
         help="Form of agreement",
     )
+    # Adding a alternative to object 'type' in product.template
+    type = fields.Selection(
+        selection_add=[('license','License')],
+        ondelete={'license':'cascade'},
+    )

@@ -16,6 +16,10 @@ class SaleOrderLine(models.Model):
     phone = fields.Char(related='order_partner_id.phone')
     contact_address = fields.Char(related='order_partner_id.contact_address')
     form_of_agreement = fields.Selection(related='product_template_id.form_of_agreement')
+    agreement = fields.One2many(
+        comodel_name='agreement',
+        inverse_name='sale_order_line_ids',
+    )
 
     @api.depends('license_start')
     def _compute_license_stop(self):

@@ -10,6 +10,7 @@
     "depends": ["sale"],
     "data": [
         "views/license_view.xml",
+        "views/agreement_view.xml",
     ],
     "demo": [
     ],
