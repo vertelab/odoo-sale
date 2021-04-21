@@ -7,20 +7,22 @@ from datetime import timedelta
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
+    manufacturer = fields.Char(related='product_id.manufacturer')
+    phone = fields.Char(related='order_partner_id.phone')
+    contact_address = fields.Char(related='order_partner_id.contact_address')
+    form_of_agreement = fields.Selection(related='agreement.form_of_agreement')
     license_start = fields.Datetime(string="License start")
     license_stop = fields.Datetime(
         string="License end",
         compute="_compute_license_stop",
         store=True,
     )
-    phone = fields.Char(related='order_partner_id.phone')
-    contact_address = fields.Char(related='order_partner_id.contact_address')
-    form_of_agreement = fields.Selection(related='product_template_id.form_of_agreement')
     agreement = fields.One2many(
         comodel_name='agreement',
         inverse_name='sale_order_line_ids',
     )
 
+    # Function to calulate when a license has its end-date
     @api.depends('license_start')
     def _compute_license_stop(self):
         for record in self:

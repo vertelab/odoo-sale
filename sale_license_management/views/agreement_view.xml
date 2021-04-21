@@ -8,17 +8,23 @@
         <field name="model">agreement</field>
         <field name="inherit_id" ref="agreement.agreement_form"/>
         <field name="arch" type="xml">
-            <field name="domain" position="after">
+            <field name="domain" position="replace">
                 <field name="sale_order_id"/>
                 <field name="is_license"/>
             </field>
+            <field name="company_id" position="after">
+                <field name="form_of_agreement"/>
+            </field>
             <notebook position="inside">
-                <page string="Sale Order Lines">
+                <page string="Licenses">
                     <field name="sale_order_line_ids">
                         <tree string="tree">
                             <field name="name"/>
                             <field name="license_start"/>
                             <field name="license_stop"/>
+                            <field name="product_uom_qty"/>
+                            <field name="price_total"/>
+                            <field name="manufacturer"/>
                         </tree>
                     </field>
                 </page>
@@ -34,6 +40,7 @@
             <field name="name" position="after">
                 <field name="is_license"/>
             </field>
+            <field name="domain" position="replace"/>
         </field>
     </record>
 </odoo>

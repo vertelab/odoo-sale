@@ -6,10 +6,12 @@ from odoo.exceptions import ValidationError
 class Agreement(models.Model):
     _inherit = 'agreement'
 
+    # Connecting a sale order to agreement
     sale_order_id = fields.Many2one(
         comodel_name='sale.order',
         string="Sale Order",
     )
+    # Connecting sale order lines to agreement via sale order
     sale_order_line_ids = fields.One2many(
         comodel_name='sale.order.line',
         string="Sale Order Line",
@@ -19,9 +21,16 @@ class Agreement(models.Model):
         string='License Agreement',
         default=False,
     )
+    form_of_agreement = fields.Selection(
+        selection=[('ea','EA'),('vip','VIP'), ('select','SELECT')],
+        default="ea",
+        string="Form of agreement",
+        help="Form of agreement",
+    )
     license_start = fields.Datetime(related="sale_order_line_ids.license_start")
     license_stop = fields.Datetime(related="sale_order_line_ids.license_stop")
     name = fields.Text(related="sale_order_line_ids.name")
+
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -32,4 +41,3 @@ class SaleOrder(models.Model):
         string='Agreement check',
         help='Looking for agreement check',
     )
-    
