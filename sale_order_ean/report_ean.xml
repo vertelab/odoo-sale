@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+   <data>
+      <template id="report_saleorder_document" inherit_id="sale.report_saleorder_document">
+         <xpath expr="//table[@class='table table-condensed']/thead/tr/th" position="before">
+            <th>EAN</th>
+         </xpath>
+         <xpath expr="//tbody[@class='sale_tbody']/tr/td" position="before">
+            <td>
+               <t t-if="l.product_id.ean13">
+                  <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN13', l.product_id.ean13, 300, 50)" style="width:150px;height:25px" />
+                  <br />
+                  <span t-field="l.product_id.ean13" />
+               </t>
+            </td>
+         </xpath>
+      </template>
+      <template id="report_stock_delivery_slip_document" inherit_id="stock_delivery_slip.stock_delivery_slip_document">
+         <xpath expr="//table[@class='table table-condensed']/thead/tr/th" position="before">
+            <th>EAN</th>
+         </xpath>
+         <xpath expr="//td[@t-att-style=&quot;'padding-left:30px;' if offer_line else ''&quot;]" position="before">
+            <td>
+               <t t-if="ml.sudo().product_id.ean13">
+                  <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN13', ml.sudo().product_id.ean13, 300, 50)" style="width:150px;height:25px" />
+                  <br />
+                  <span t-field="ml.sudo().product_id.ean13" />
+               </t>
+            </td>
+         </xpath>
+         <xpath expr="(//tr/td)[2]" position="before">
+            <td>
+            </td>
+         </xpath>
+      </template>
+   </data>
+</openerp>
