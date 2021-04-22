@@ -21,13 +21,17 @@ class SaleOrderLine(models.Model):
         comodel_name='agreement',
         inverse_name='sale_order_line_ids',
     )
+    license_duration = fields.Integer(
+        string="Duration",
+        help="The duration in days",
+    )
 
     # Function to calulate when a license has its end-date
     @api.depends('license_start')
     def _compute_license_stop(self):
         for record in self:
-            if record.license_start and record.product_id:
+            if record.license_start:
                 record.license_stop = record.license_start + timedelta(
-                    days=record.product_id.license_duration)
+                    days=record.license_duration)
             else:
                 record.license_stop = False

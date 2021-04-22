@@ -27,6 +27,7 @@
             <field name="price_total" position="after">
                 <field name="license_start"/>
                 <field name="license_stop"/>
+                <field name="license_duration"/>
             </field>
         </field>
     </record>
