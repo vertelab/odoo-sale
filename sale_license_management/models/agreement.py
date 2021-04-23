@@ -27,12 +27,10 @@ class Agreement(models.Model):
         string="Form of agreement",
         help="Form of agreement",
     )
-    license_start = fields.Datetime(related="sale_order_line_ids.license_start")
-    license_stop = fields.Datetime(related="sale_order_line_ids.license_stop")
     # Partner information
-    phone = fields.Char(related='sale_order_id.partner_id.phone', string="Kund - Telefon")
-    contact_address = fields.Char(related='sale_order_id.partner_id.contact_address', string="Kund - Adress")
-    email = fields.Char(related='sale_order_id.partner_id.email', string="Kund - Email")
+    phone = fields.Char(related='partner_id.phone', string="Kund - Telefon")
+    contact_address = fields.Char(related='partner_id.contact_address', string="Kund - Adress")
+    email = fields.Char(related='partner_id.email', string="Kund - Email")
 
 
 

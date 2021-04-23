@@ -21,6 +21,10 @@ class SaleOrderLine(models.Model):
         comodel_name='agreement',
         inverse_name='sale_order_line_ids',
     )
+    code = fields.Char(
+        related='order_id.agreement.code',
+        string='Agreement Code',
+    )
     license_duration = fields.Integer(
         string="Duration",
         help="The duration in days",

@@ -32,17 +32,23 @@
                     </field>
                 </page>
             </notebook>
+            <notebook position="inside">
+                <page string="Visual overview">
+                </page>
+            </notebook>
         </field>
     </record>
 
+<!--
+    Following record is for the agreements in tree view
+-->
     <record id="agreement_tree_view" model="ir.ui.view">
         <field name="name">agreement.tree.view</field>
         <field name="model">agreement</field>
         <field name="inherit_id" ref="agreement.agreement_tree"/>
         <field name="arch" type="xml">
-            <field name="code" position="after">
-                <field name="is_license"/>
-            </field>
+            <field name="signature_date" position="replace"/>
+            <field name="company_id" position="replace"/>
             <field name="domain" position="replace"/>
         </field>
     </record>
