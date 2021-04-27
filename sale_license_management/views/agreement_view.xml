@@ -8,24 +8,29 @@
         <field name="model">agreement</field>
         <field name="inherit_id" ref="agreement.agreement_form"/>
         <field name="arch" type="xml">
-            <field name="domain" position="replace">
+            <field name="code" position="after">
                 <field name="sale_order_id"/>
-                <field name="is_license"/>
+            </field>
+            <field name="domain" position="replace">
+                <field name="is_license" class="oe_edit_only"/>
                 <field name="phone"/>
                 <field name="contact_address"/>
                 <field name="email"/>
             </field>
             <field name="company_id" position="replace"> <!-- Replacing field company_id -->
+                <field name="notification_date"/>
+                <field name="notification_days" class="oe_edit_only"/>
                 <field name="form_of_agreement"/>
             </field>
             <notebook position="inside">
-                <page string="Licenses">
+                <page string="Licenser">
                     <field name="sale_order_line_ids">
                         <tree string="tree">
                             <field name="name"/>
                             <field name="license_start"/>
                             <field name="license_stop"/>
                             <field name="product_uom_qty"/>
+                            <field name="price_unit"/>
                             <field name="price_total"/>
                             <field name="manufacturer"/>
                         </tree>
@@ -33,7 +38,7 @@
                 </page>
             </notebook>
             <notebook position="inside">
-                <page string="Visual overview">
+                <page string="Visuell översikt">
                 </page>
             </notebook>
         </field>
@@ -52,4 +57,9 @@
             <field name="domain" position="replace"/>
         </field>
     </record>
+
+    <menuitem id="menu_agreement_license_overview"
+                action="action_license_overview"
+                parent="agreement.agreement_menu_root"
+                sequence="10" groups="base.group_user"/>
 </odoo>

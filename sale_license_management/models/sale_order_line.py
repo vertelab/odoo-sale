@@ -23,7 +23,8 @@ class SaleOrderLine(models.Model):
     )
     code = fields.Char(
         related='order_id.agreement.code',
-        string='Agreement Code',
+        # ~ string='Agreement Code',
+        string='Avtalsnummer',
     )
     license_duration = fields.Integer(
         string="Duration",
