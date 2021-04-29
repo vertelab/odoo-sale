@@ -4,7 +4,7 @@
         <field name="name">sale.license.overview.tree</field>
         <field name="model">sale.order.line</field>
         <field name="arch" type="xml">
-            <tree string="Quotation" multi_edit="0" sample="1">
+            <tree string="Quotation" multi_edit="0" sample="1" create="false">
                 <field name="name"/>
                 <field name="code"/>
                 <field name="order_id"/>
@@ -27,7 +27,8 @@
             <field name="price_total" position="after">
                 <field name="license_start"/>
                 <field name="license_stop"/>
-                <field name="license_duration"/>
+                <field name="stand_alone_end_date_check" class="oe_edit_only"/>
+                <field name="stand_alone_end_date" attrs="{'invisible':[('stand_alone_end_date_check','=', False)]}" class="oe_edit_only"/>
             </field>
         </field>
     </record>
@@ -61,8 +62,10 @@
         <field name="act_window_id" ref="action_license_overview"/>
     </record>
 
+<!--
     <menuitem id="menu_sale_license_overview"
                 action="action_license_overview"
                 parent="sale.sale_menu_root"
                 sequence="20" groups="base.group_user"/>
+-->
 </odoo>

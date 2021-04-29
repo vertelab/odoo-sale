@@ -2,16 +2,15 @@
 
 from odoo import api, fields, models, modules, _
 from odoo.exceptions import ValidationError
-from datetime import timedelta
-import datetime
+from datetime import timedelta, date
 
 class Agreement(models.Model):
     _inherit = 'agreement'
 
+    now = date.today()
     # Connecting a sale order to agreement
     sale_order_id = fields.Many2one(
         comodel_name='sale.order',
-        # ~ string="Sale Order",
         string="Säljorder",
     )
     # Connecting sale order lines to agreement via sale order
@@ -21,40 +20,47 @@ class Agreement(models.Model):
         related="sale_order_id.order_line",
     )
     is_license = fields.Boolean(
-        # ~ string='License Agreement',
         string='Licensavtal',
         default=False,
     )
     form_of_agreement = fields.Selection(
         selection=[('ea','EA'),('vip','VIP'), ('select','SELECT')],
         default="ea",
-        # ~ string="Form of agreement",
         string='Avtalsform',
         help="Form of agreement",
     )
     notification_days = fields.Integer(
-        # ~ string='Notification Days',
         string='Notifikationsdagar',
         help='The amount of days that a notification i sent out before the agreement end date',
         required=True,
     )
     notification_date = fields.Date(
-        # ~ string='Notification Date',
         string='Notifikationsdatum',
         help=('The date when a notification is sent about the agreement \n\n'
             'If the implemented days are out of the scope, the notification date will be on the end date'),
-        compute='_compute_notification'
+        compute='_compute_notification',
     )
 
-    """ ÖVERSÄTTNINGAR """
     code = fields.Char(string='Avtalsnummer')
-    signature_date = fields.Date(string='Signatursdatum')
-    start_date = fields.Date(string='Startdatum')
-    end_date = fields.Date(string='Slutdatum')
     name = fields.Char(string='Namn')
+    signature_date = fields.Date(
+        string='Signatursdatum',
+        default=now,
+    )
+    start_date = fields.Date(
+        string='Startdatum',
+        default=now,
+    )
+    end_date = fields.Date(
+        string='Slutdatum',
+        default=now+timedelta(days=365),
+    )
 
     # Partner information
-    partner_id = fields.Many2one(string='Kund') # Endast skapad för att ändra sträng
+    partner_id = fields.Many2one(
+        string='Kund',
+        # ~ compute=
+    )
     phone = fields.Char(
         related='partner_id.phone',
         string="Kund - Telefon",
@@ -82,15 +88,31 @@ class Agreement(models.Model):
                 record.notification_date = record.end_date
             else:
                 pass
-
-    # Function to send the notification on correct date
-    def _send_notification(self):
-        now = datetime.now()
-        for record in self:
-            if record.notification_date == datetime.date.today():
-                raise Warning('Today we send a notification')
+            if record.end_date < record.start_date:
+                record.end_date = record.start_date
+                raise ValidationError(_('The end date cannot be before the start date'))
             else:
-                raise Warning('Today we will not send a notification')
+                pass
+
+    @api.onchange('partner_id')
+    def _partner_id_check(self):
+        for record in self:
+            if record.partner_id != record.sale_order_id.partner_id:
+                raise ValidationError(_(
+                    'Agreement partner and Sale order partner are not the same'
+                    '\nYour current sale order partner is %s'
+                    %record.sale_order_id.partner_id.name
+                ))
+            else:
+                pass
+
+    @api.onchange('sale_order_id')
+    def _partner_id_sale_partner(self):
+        for record in self:
+            record.partner_id = record.sale_order_id.partner_id
+            record.sale_order_line_ids.license_start = record.start_date
+            record.sale_order_line_ids.license_stop = record.end_date
+            record.sale_order_line_ids.stand_alone_end_date = record.end_date
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
