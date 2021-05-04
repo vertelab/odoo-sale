@@ -32,13 +32,10 @@
                             <field name="product_uom_qty"/>
                             <field name="price_unit"/>
                             <field name="price_total"/>
+                            <field name="product_type"/>
                             <field name="manufacturer"/>
                         </tree>
                     </field>
-                </page>
-            </notebook>
-            <notebook position="inside">
-                <page string="Visuell översikt">
                 </page>
             </notebook>
         </field>
@@ -57,6 +54,7 @@
             <field name="domain" position="replace"/>
             <field name="partner_id" position="after">
                 <field name="sale_order_id"/>
+                <field name="form_of_agreement"/>
             </field>
         </field>
     </record>

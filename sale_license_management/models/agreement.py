@@ -4,6 +4,19 @@ from odoo import api, fields, models, modules, _
 from odoo.exceptions import ValidationError
 from datetime import timedelta, date
 
+# Form of Agreements
+FOA = [
+    ('select_plus', 'Select plus'),
+    ('eas', 'EAS'),
+    ('ea', 'EA'),
+    ('ees', 'EES'),
+    ('sce', 'SCE'),
+    ('vip_c', 'VIP-C'),
+    ('vip_g', 'VIP-G'),
+    ('vip_e', 'VIP-E'),
+    ('etla', 'ETLA'),
+]
+
 class Agreement(models.Model):
     _inherit = 'agreement'
 
@@ -24,8 +37,8 @@ class Agreement(models.Model):
         default=False,
     )
     form_of_agreement = fields.Selection(
-        selection=[('ea','EA'),('vip','VIP'), ('select','SELECT')],
-        default="ea",
+        FOA,
+        default="select_plus",
         string='Avtalsform',
         help="Form of agreement",
     )
@@ -59,7 +72,6 @@ class Agreement(models.Model):
     # Partner information
     partner_id = fields.Many2one(
         string='Kund',
-        # ~ compute=
     )
     phone = fields.Char(
         related='partner_id.phone',

@@ -5,9 +5,11 @@ from odoo.exceptions import ValidationError
 from datetime import timedelta, date
 
 class SaleOrderLine(models.Model):
-    _inherit = 'sale.order.line'
+    _name = 'sale.order.line'
+    _inherit = ['sale.order.line','mail.thread']
 
     now = date.today()
+    product_type = fields.Selection(related='product_template_id.type')
     manufacturer = fields.Char(related='product_id.manufacturer')
     phone = fields.Char(related='order_partner_id.phone')
     contact_address = fields.Char(related='order_partner_id.contact_address')
@@ -19,6 +21,7 @@ class SaleOrderLine(models.Model):
     code = fields.Char(
         related='order_id.agreement.code',
         string='Avtalsnummer',
+        store=True,
     )
     license_start = fields.Date(
         string="License start",
@@ -46,8 +49,3 @@ class SaleOrderLine(models.Model):
                 record.license_stop = record.stand_alone_end_date
             else:
                 record.license_stop = record.agreement_end_date
-            if record.stand_alone_end_date and (record.stand_alone_end_date < record.license_stop):
-                record.license_stop = record.license_start
-                record.stand_alone_end_date = record.license_start
-            else:
-                pass

@@ -8,8 +8,9 @@
                 <field name="name"/>
                 <field name="code"/>
                 <field name="order_id"/>
-                <field name="price_unit"/>
                 <field name="product_uom_qty"/>
+                <field name="price_unit"/>
+                <field name="price_subtotal"/>
                 <field name="license_start"/>
                 <field name="license_stop"/>
                 <field name="order_partner_id"/>
@@ -24,12 +25,24 @@
         <field name="model">sale.order.line</field>
         <field name="inherit_id" ref="sale.sale_order_line_view_form_readonly"/>
         <field name="arch" type="xml">
+            <form position="inside">
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
             <field name="price_total" position="after">
                 <field name="license_start"/>
                 <field name="license_stop"/>
                 <field name="stand_alone_end_date_check" class="oe_edit_only"/>
                 <field name="stand_alone_end_date" attrs="{'invisible':[('stand_alone_end_date_check','=', False)]}" class="oe_edit_only"/>
             </field>
+            <field name="qty_delivered" position="replace"/>
+            <field name="qty_invoiced" position="replace"/>
+            <field name="product_uom" position="replace"/>
+            <field name="tax_id" position="replace"/>
+            <field name="price_tax" position="replace"/>
+            <field name="price_total" position="replace"/>
         </field>
     </record>
 
@@ -38,7 +51,8 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">sale.order.line</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('product_id.type','=','license')]</field>
+        <field name="domain">[('product_id.type','=','license'),('code','!=',None)]</field> <!-- Visar endast licensrader och ifall raderna har en koppling till avtal-->
+        <field name="context">{'group_by':''}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create a new quotation, the first step of a new sale!
@@ -61,11 +75,4 @@
         <field name="view_id" ref="sale.sale_order_line_view_form_readonly"/>
         <field name="act_window_id" ref="action_license_overview"/>
     </record>
-
-<!--
-    <menuitem id="menu_sale_license_overview"
-                action="action_license_overview"
-                parent="sale.sale_menu_root"
-                sequence="20" groups="base.group_user"/>
--->
 </odoo>
