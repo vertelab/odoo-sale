@@ -126,8 +126,11 @@ class Agreement(models.Model):
             record.sale_order_line_ids.license_stop = record.end_date
             record.sale_order_line_ids.stand_alone_end_date = record.end_date
 
+    def _notification(self):
+        
+
 class SaleOrder(models.Model):
-    _inherit = 'sale.order'
+    _inherit = "sale.order"
 
     agreement = fields.One2many(
         comodel_name='agreement',
