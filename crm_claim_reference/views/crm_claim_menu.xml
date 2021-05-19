@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="crm_claim_ref_form" model="ir.ui.view">
+        <field name="name">res.request.link.form</field>
+        <field name="model">res.request.link</field>
+        <field name="arch" type="xml">
+            <form string="Referenceable models">
+                <group>
+                    <field name="name"/>
+                    <field name="obj"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="crm_claim_ref_tree" model="ir.ui.view">
+        <field name="name">res.request.link.ref.tree</field>
+        <field name="model">res.request.link</field>
+        <field name="arch" type="xml">
+            <tree string="Referenceable models">
+                <field name="name"/>
+                <field name="obj"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="crm_claim_ref_action" model="ir.actions.act_window">
+        <field name="name">Referenceable model</field>
+        <field name="res_model">res.request.link</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="crm_claim_ref_tree"/>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Click to create a claim category.
+          </p><p>
+            Create claim categories to better manage and classify your
+            claims. Some example of claims can be: preventive action,
+            corrective action.
+          </p>
+        </field>
+    </record>
+        
+    <menuitem action="crm_claim_ref_action" name="Referenceable models"
+            id="menu_crm_ref_claim-act" parent="sale.menu_sale_config"/>
+</odoo>
