@@ -12,6 +12,7 @@
         "views/license_view.xml",
         "views/agreement_view.xml",
         "views/product_template_view.xml",
+        "data/cron_demo.xml",
     ],
     "demo": [
     ],

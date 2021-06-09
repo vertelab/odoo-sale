@@ -25,6 +25,9 @@
         <field name="model">sale.order.line</field>
         <field name="inherit_id" ref="sale.sale_order_line_view_form_readonly"/>
         <field name="arch" type="xml">
+            <xpath expr="/form" position="attributes">
+                <attribute name="create">false</attribute>
+            </xpath>
             <form position="inside">
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>

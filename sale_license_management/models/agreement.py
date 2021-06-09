@@ -3,6 +3,9 @@
 from odoo import api, fields, models, modules, _
 from odoo.exceptions import ValidationError
 from datetime import timedelta, date
+import logging
+
+_logger = logging.getLogger(__name__)
 
 # Form of Agreements
 FOA = [
@@ -21,6 +24,7 @@ class Agreement(models.Model):
     _inherit = 'agreement'
 
     now = date.today()
+    # ~ today = now.strftime("%Y-%m-%d")
     # Connecting a sale order to agreement
     sale_order_id = fields.Many2one(
         comodel_name='sale.order',
@@ -126,8 +130,17 @@ class Agreement(models.Model):
             record.sale_order_line_ids.license_stop = record.end_date
             record.sale_order_line_ids.stand_alone_end_date = record.end_date
 
-    def _notification(self):
-        
+    def _notifier(self):
+        lista = self.env['agreement'].search([])
+        for rec in lista:
+            if rec.notification_date == date.today():
+                _logger.info('idag')
+                rec.message_post(
+                    body="Nu är det bara %s dagar kvar tills avtalet löper ut." % (rec.notification_days),
+                    subject="Notification",
+                )
+            else:
+                pass
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
