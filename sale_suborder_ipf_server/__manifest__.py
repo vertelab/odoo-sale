@@ -24,11 +24,6 @@
     'name': 'IPF Suborder Server',
     'version': '12.0.0.3',
     'category': 'sale',
-    'description': """Receives a suborder and automatically create sale.order 
-and outplacement.outplacement objects.\n
-v12.0.0.2 AFC-1323 Implementation of Suborder message server to respond when BÄR sends a suborder (SV: avrop) for KVL\n
-v12.0.0.3 AFC-2000 added support for duplicate check.\n
-""",
     'author': "N-development",
     'license': 'AGPL-3',
     'website': 'https://www.n-development.com',
@@ -42,7 +37,6 @@ v12.0.0.3 AFC-2000 added support for duplicate check.\n
     'qweb': [
 
     ],
-
     'images': [
         'static/description/img.png'
     ],

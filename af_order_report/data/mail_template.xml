@@ -9,10 +9,13 @@
                 <div style="margin: 0px; padding: 0px;">
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
                         Hi ${object.partner_id.name},
-                        <br/><br/>
-                        <strong>${object.hr_employee.name}</strong> is your coach and we will send you an invitation to a first meeting
+                        <br/>
+                        <br/>
+                        <strong>${object.hr_employee.name}</strong>
+                        is your coach and we will send you an invitation to a first meeting
                         at <strong>${object.hr_employee.location}</strong>.
-                        <br/><br/>
+                        <br/>
+                        <br/>
                         Welcome to <strong>${object.company_id.name}</strong>.
                         <br/>
                     </p>
@@ -34,20 +37,31 @@
                 <div style="margin: 0px; padding: 0px;">
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
                         Hi ${object.partner_id.name},
-                        <br/><br/>
-                        I am <strong>${object.hr_employee.name}</strong> and will be your coach during the 40 day programme with us at
-                        ${object.company_id.name}.<br/>
+                        <br/>
+                        <br/>
+                        I am <strong>${object.hr_employee.name}</strong> and will be your coach during the 40 day
+                        programme with us at
+                        ${object.company_id.name}.
+                        <br/>
                         I invite you to a first meeting on <strong>${object.confirmation_date.date()}</strong> at
-                        <strong>${object.confirmation_date.strftime('%H:%M')}</strong> in our
+                        <strong>${object.confirmation_date.strftime('%H:%M')}</strong>
+                        in our
                         facilities at <strong>${object.hr_employee.location}</strong>.
-                        <br/><br/>
+                        <br/>
+                        <br/>
                         Bring a copy of your reference-documents and a photo-identity.
-                        <br/><br/>
+                        <br/>
+                        <br/>
                         We will provide you with documentation and notes-papers.
-                        <br/><br/>
-                        Welcome again!<br/><br/>
-                        <strong>${object.hr_employee.name}<br/>
-                        ${object.company_id.name}</strong>
+                        <br/>
+                        <br/>
+                        Welcome again!
+                        <br/>
+                        <br/>
+                        <strong>${object.hr_employee.name}
+                            <br/>
+                            ${object.company_id.name}
+                        </strong>
                         <br/>
                     </p>
                 </div>

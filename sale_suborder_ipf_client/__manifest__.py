@@ -24,10 +24,6 @@
     'name': 'IPF Suborder Client',
     'version': '12.0.0.2',
     'category': 'hr',
-    'description': """
-    v 12.0.0.2 AFC-1323 Implementation of Suborder message client to send a dummy suborder (SV: avrop) for KVL
-""",
-
     'author': "N-development",
     'license': 'AGPL-3',
     'website': 'https://www.n-development.com',
@@ -36,14 +32,12 @@
     ],
     'data': [
         "security/ir.model.access.csv",
-
         'views/client_config_views.xml',
     ],
     'installable': True,
     'qweb': [
 
     ],
-
     'images': [
         'static/description/img.png'
     ],

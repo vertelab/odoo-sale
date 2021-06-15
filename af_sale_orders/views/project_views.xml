@@ -127,7 +127,7 @@
         </field>
     </record>
 
-     <record id="view_project_task_quick_create_form_inherit_af" model="ir.ui.view">
+    <record id="view_project_task_quick_create_form_inherit_af" model="ir.ui.view">
         <field name="name">view.project.task.create.form.inherit.af</field>
         <field name="model">project.task</field>
         <field name="inherit_id" ref="project.quick_create_task_form"/>
@@ -137,7 +137,7 @@
                 <field name="parent_task_id" domain="[('project_id', '=', project_id)]"/>
             </field>
         </field>
-     </record>
+    </record>
 
     <record id="view_project_task_form_inherit_af" model="ir.ui.view">
         <field name="name">view.project.task.form.inherit.af</field>

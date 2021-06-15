@@ -20,19 +20,20 @@
 #
 ################################################################################
 
-from datetime import datetime
 import json
 import logging
 import re
-
-from odoo.exceptions import ValidationError, UserError
-from odoo import http
+from datetime import datetime
 from odoo.addons.sale_suborder_ipf_server.controllers.token import \
     validate_token, valid_response, invalid_response
-from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError, UserError
 from odoo.http import request
 
+from odoo import http
+from odoo import models, fields, api, _
+
 _logger = logging.getLogger(__name__)
+
 
 class IpfServer(http.Controller):
 
@@ -70,7 +71,6 @@ class IpfServer(http.Controller):
         wrong_values = []
         pattern = re.compile("^\\d{12}$")
         if not pattern.match(values_dict.get('personnummer')):
-
             message = 'Wrong value personnummer'
             wrong_values.append(message)
 

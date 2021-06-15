@@ -21,6 +21,7 @@
 ################################################################################
 
 import logging
+
 from odoo import api, http, models, tools, SUPERUSER_ID, fields
 
 _logger = logging.getLogger(__name__)
@@ -28,6 +29,7 @@ _logger = logging.getLogger(__name__)
 
 class IpfRequestHistory(models.Model):
     _name = 'ipf.showorder.request.history'
+    _description = "IPF Showorder Request History"
     _rec_name = 'url'
 
     config_id = fields.Many2one('ipf.showorder.client.config',

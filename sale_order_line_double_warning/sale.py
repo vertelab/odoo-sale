@@ -28,6 +28,7 @@ _logger = logging.getLogger(__name__)
 
 class sale_order_warning_wizard(models.TransientModel):
     _name = 'sale.order.warning.wizard'
+    _description = "Sale Order Warning Wizard"
     
     @api.model
     def default_order_id(self):
