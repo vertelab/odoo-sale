@@ -18,17 +18,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+import base64
+import os
+import tempfile
+from cStringIO import StringIO
 from openerp import models, fields, api, _
 from openerp.exceptions import except_orm, Warning, RedirectWarning
 from openerp.tools import float_compare
-import base64
-from cStringIO import StringIO
-
 from subprocess import Popen, PIPE
-import os
-import tempfile
+
 try:
-    from xlrd import open_workbook, XLRDError, XL_CELL_EMPTY,XL_CELL_TEXT,XL_CELL_NUMBER,XL_CELL_DATE,XL_CELL_BOOLEAN,XL_CELL_ERROR,XL_CELL_BLANK
+    from xlrd import open_workbook, XLRDError, XL_CELL_EMPTY, XL_CELL_TEXT, XL_CELL_NUMBER, XL_CELL_DATE, \
+        XL_CELL_BOOLEAN, XL_CELL_ERROR, XL_CELL_BLANK
     from xlrd.book import Book
     from xlrd.sheet import Sheet
 except:
@@ -40,14 +41,18 @@ import requests
 import re
 
 import logging
+
 _logger = logging.getLogger(__name__)
 
 
 class SaleOrderImport(models.TransientModel):
     _name = 'sale.order.import.wizard'
+    _description = "Sale Order Import Wizard"
 
     order_file = fields.Binary(string='Order file')
-    mime = fields.Selection([('url','url'),('text','text/plain'),('pdf','application/pdf'),('xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),('xls','application/vnd.ms-excel'),('xlm','application/vnd.ms-office')])
+    mime = fields.Selection([('url', 'url'), ('text', 'text/plain'), ('pdf', 'application/pdf'),
+                             ('xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
+                             ('xls', 'application/vnd.ms-excel'), ('xlm', 'application/vnd.ms-office')])
     partner_id = fields.Many2one(string='Customer', comodel_name='res.partner')
     info = fields.Text(string='Info')
     tmp_file = fields.Char(string='Tmp File')
@@ -61,7 +66,7 @@ class SaleOrderImport(models.TransientModel):
         self.info = None
         self.tmp_file = None
 
-        def get_value(wb,x,y):
+        def get_value(wb, x, y):
             if wb.cell_type(x, y) == XL_CELL_NUMBER:
                 return '%s' % int(wb.cell_value(x, y))
             if wb.cell_type(x, y) == XL_CELL_TEXT:
@@ -73,27 +78,29 @@ class SaleOrderImport(models.TransientModel):
             os.close(fd)
 
             try:
-                pop = Popen(['file','-b','--mime',self.tmp_file], shell=False, stdout=PIPE)
+                pop = Popen(['file', '-b', '--mime', self.tmp_file], shell=False, stdout=PIPE)
                 result = pop.communicate()[0]
                 read_mime = result.split(';')[0]
-            except OSError,e:
-                _logger.warning("Failed attempt to execute file. This program is necessary to check MIME type of %s", fname)
+            except OSError as e:
+                _logger.warning("Failed attempt to execute file. This program is necessary to check MIME type of %s",
+                                fname)
                 _logger.debug("Trace of the failed MIME file attempt.", exc_info=True)
                 raise Warning(e)
 
-            self.mime = self.get_selection_text('mime',read_mime)
+            self.mime = self.get_selection_text('mime', read_mime)
             if not self.mime:
                 # Guess mime from file name
                 self.mime = self.file_name.split('.')[-1]
-            
+
             if self.mime in ['xlsx', 'xls', 'xlm']:
                 try:
                     wb = open_workbook(file_contents=base64.b64decode(self.order_file)).sheet_by_index(0)
-                except XLRDError, e:
+                except XLRDError as e:
                     raise Warning(e)
 
-                if '%s'.lower() % wb.cell_value(0,0) in ('kundnummer','kund','nummer','kundid','customer number','customer'):
-                    self.partner_id = self.env['res.partner'].search([('ref','=',get_value(wb,0,1))])
+                if '%s'.lower() % wb.cell_value(0, 0) in (
+                'kundnummer', 'kund', 'nummer', 'kundid', 'customer number', 'customer'):
+                    self.partner_id = self.env['res.partner'].search([('ref', '=', get_value(wb, 0, 1))])
 
             self.info = '%s' % ('Excel formatted file' if self.mime in ['xlsx', 'xls', 'xlm'] else _('Unknown format'))
 
@@ -106,26 +113,26 @@ class SaleOrderImport(models.TransientModel):
         orderdatum = ''
         prodnr = re.compile('(\d{4}-\d{5})')
 
-        def get_value(wb,x,y):
+        def get_value(wb, x, y):
             if wb.cell_type(x, y) == XL_CELL_NUMBER:
                 return '%s' % int(wb.cell_value(x, y))
             if wb.cell_type(x, y) == XL_CELL_TEXT:
                 return '%s' % wb.cell_value(x, y)
 
-##
-##  Excel
-##
+        ##
+        ##  Excel
+        ##
         wb = open_workbook(file_contents=base64.b64decode(self.order_file)).sheet_by_index(0)
-        partner_id = self.env['res.partner'].search([('ref','=',get_value(wb,0,1))])
+        partner_id = self.env['res.partner'].search([('ref', '=', get_value(wb, 0, 1))])
         if self[0].mime in ['xlsx', 'xls', 'xlm']:
             try:
                 wb = open_workbook(file_contents=base64.b64decode(self.order_file)).sheet_by_index(0)
-            except XLRDError, e:
+            except XLRDError as e:
                 raise ValueError(e)
 
             order = self.env['sale.order'].create({
                 'partner_id': partner_id.id,
-                'client_order_ref': get_value(wb,0,3),
+                'client_order_ref': get_value(wb, 0, 3),
                 'message_follower_ids': [(4, partner_id.id), (3, self.env.user.partner_id.id)],
             })
             res = order.onchange(order.read()[0], 'partner_id', order._onchange_spec())
@@ -134,24 +141,24 @@ class SaleOrderImport(models.TransientModel):
 
             art_col = None
             qty_col = None
-            for col in range(0,wb.ncols):
+            for col in range(0, wb.ncols):
                 if not art_col:
-					val = get_value(wb, 1, col)
-					if val and val.lower() in [u'ert artikelnr','artikelnr', 'art no','artno','art nr','artnr']:
-						art_col = col
+                    val = get_value(wb, 1, col)
+                    if val and val.lower() in [u'ert artikelnr', 'artikelnr', 'art no', 'artno', 'art nr', 'artnr']:
+                        art_col = col
                 if not qty_col:
-					val = get_value(wb, 1, col)
-					if val and val.lower() in [u'antal','qty', 'quantity','ant']:
-						qty_col = col
+                    val = get_value(wb, 1, col)
+                    if val and val.lower() in [u'antal', 'qty', 'quantity', 'ant']:
+                        qty_col = col
             l = 2
-            for line in range(l,wb.nrows):
+            for line in range(l, wb.nrows):
                 art = get_value(wb, line, art_col)
                 if art == '':
                     continue
                 qty = wb.cell_value(line, qty_col)
                 product = None
                 if art and len(prodnr.findall(art)) > 0:
-                    product = self.env['product.product'].search([('default_code','=',prodnr.findall(art)[0])])
+                    product = self.env['product.product'].search([('default_code', '=', prodnr.findall(art)[0])])
                     if product:
                         order_line = self.env['sale.order.line'].create({
                             'order_id': order.id,
@@ -159,61 +166,64 @@ class SaleOrderImport(models.TransientModel):
                             'product_uom_qty': qty,
                         })
                         if product.type == 'product':
-                            #determine if the product needs further check for stock availibility
+                            # determine if the product needs further check for stock availibility
                             is_available = order_line._check_routing(product, order.warehouse_id.id) and product.sale_ok
-                            
-                            #check if product is available, and if not: raise a warning, but do this only for products that aren't processed in MTO
+
+                            # check if product is available, and if not: raise a warning, but do this only for products that aren't processed in MTO
                             if not is_available and order_line.product_id.virtual_available_days < 5:
-                                _logger.warn('sale_order_import product %s days %s ' % (order_line.product_id.name,order_line.product_id.virtual_available_days))
-                                compare_qty = float_compare(order_line.product_id.virtual_available, order_line.product_uom_qty, precision_rounding=order_line.product_uom.rounding)
-                                _logger.warn('sale_order_import product %s compare %s sale_ok %s ' % (order_line.product_id.name,compare_qty,order_line.product_id.sale_ok))
-                                if compare_qty == -1 or not product.sale_ok or not product.active or not product.website_published: 
+                                _logger.warn('sale_order_import product %s days %s ' % (
+                                order_line.product_id.name, order_line.product_id.virtual_available_days))
+                                compare_qty = float_compare(order_line.product_id.virtual_available,
+                                                            order_line.product_uom_qty,
+                                                            precision_rounding=order_line.product_uom.rounding)
+                                _logger.warn('sale_order_import product %s compare %s sale_ok %s ' % (
+                                order_line.product_id.name, compare_qty, order_line.product_id.sale_ok))
+                                if compare_qty == -1 or not product.sale_ok or not product.active or not product.website_published:
                                     out_of_stock.append(art)
                 if not product:
                     missing_products.append(art)
 
-#
-# END
-#
-		order.note = _('Imported with Standard Order Import')
-		
+                #
+                # END
+                #
+                order.note = _('Imported with Standard Order Import')
+
         if missing_products and order:
             order.note += _('\nMissing products: ') + ','.join(missing_products)
-        
+
         if out_of_stock and order:
             order.note += _('\nOut of stock: ') + ','.join(out_of_stock)
-            
-                
+
         if order:
             attachment = self.env['ir.attachment'].create({
-                    'name': order.client_order_ref or 'Order'  + '.' + self.mime,
-                    'res_name': order.name,
-                    'res_model': 'sale.order',
-                    'res_id': order.id,
-                    'datas': self.order_file,
-                    'datas_fname': order.client_order_ref,
-                })
-            #~ if attachment.mimetype == 'application/pdf':
-                #~ attachment.pdf2image(800,1200)
+                'name': order.client_order_ref or 'Order' + '.' + self.mime,
+                'res_name': order.name,
+                'res_model': 'sale.order',
+                'res_id': order.id,
+                'datas': self.order_file,
+                'datas_fname': order.client_order_ref,
+            })
+            # ~ if attachment.mimetype == 'application/pdf':
+            # ~ attachment.pdf2image(800,1200)
 
         return {'type': 'ir.actions.act_window',
                 'res_model': 'sale.order',
                 'view_type': 'form',
                 'view_mode': 'form',
-                 'view_id': self.env.ref('sale.view_order_form').id,
-                 'res_id': order.id if order else None,
-                 'target': 'current',
-                 'context': {},
-                 }
+                'view_id': self.env.ref('sale.view_order_form').id,
+                'res_id': order.id if order else None,
+                'target': 'current',
+                'context': {},
+                }
 
-    def get_selection_text(self,field,value):
-        for type,text in self.fields_get([field])[field]['selection']:
+    def get_selection_text(self, field, value):
+        for type, text in self.fields_get([field])[field]['selection']:
             if text == value:
                 return type
         return None
 
-    def get_selection_value(self,field,value):
-        for type,text in self.fields_get([field])[field]['selection']:
+    def get_selection_value(self, field, value):
+        for type, text in self.fields_get([field])[field]['selection']:
             if type == value:
                 return text
         return None

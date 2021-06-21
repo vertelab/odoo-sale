@@ -1,5 +1,7 @@
 # -*- coding: UTF-8 -*-
 
+import datetime
+import functools
 ################################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -21,11 +23,9 @@
 ################################################################################
 import json
 import logging
-import werkzeug.wrappers
-import datetime
 import time
+import werkzeug.wrappers
 from odoo.http import request
-import functools
 
 _logger = logging.getLogger(__name__)
 

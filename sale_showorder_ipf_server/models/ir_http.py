@@ -20,17 +20,16 @@
 #
 ################################################################################
 
+import datetime
+import json
+import logging
 import werkzeug
 import werkzeug.exceptions
 import werkzeug.routing
 import werkzeug.urls
 import werkzeug.utils
-
-import json
-import datetime
-import logging
-
 from odoo.http import request
+
 from odoo import api, http, models, tools, SUPERUSER_ID
 
 _logger = logging.getLogger(__name__)

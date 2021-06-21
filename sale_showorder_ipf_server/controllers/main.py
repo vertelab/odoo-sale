@@ -20,14 +20,15 @@
 #
 ################################################################################
 
-import logging
 import json
-from odoo.exceptions import ValidationError, UserError
-from odoo import http
+import logging
+import re
 from datetime import datetime
 from odoo.addons.sale_showorder_ipf_server.controllers.token import \
     validate_token, valid_response, invalid_response
-import re
+from odoo.exceptions import ValidationError, UserError
+
+from odoo import http
 
 _logger = logging.getLogger(__name__)
 

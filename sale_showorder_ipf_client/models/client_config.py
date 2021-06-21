@@ -20,11 +20,12 @@
 #
 ################################################################################
 
-from odoo.tools import pycompat
 import json
-import uuid
 import logging
 import requests
+import uuid
+from odoo.tools import pycompat
+
 from odoo import api, http, models, tools, SUPERUSER_ID, fields
 
 _logger = logging.getLogger(__name__)
@@ -32,6 +33,7 @@ _logger = logging.getLogger(__name__)
 
 class ClientConfig(models.Model):
     _name = 'ipf.showorder.client.config'
+    _description = "IPF Showorder Client Config"
     _rec_name = 'url'
 
     url = fields.Char(string='Url',
@@ -175,7 +177,7 @@ class ClientConfig(models.Model):
                                      params=querystring)
         print(response.text)
 
-    def get_order_id(self,order_id):
+    def get_order_id(self, order_id):
         # ~ 'preleminär','definitiv','avbruten','avbruten levererad',BÄR_status
         querystring = {"client_secret": self.client_secret,
                        "client_id": self.client_id}

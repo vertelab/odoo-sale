@@ -20,11 +20,12 @@
 #
 ################################################################################
 
-from odoo.tools import pycompat
 import json
-import uuid
 import logging
 import requests
+import uuid
+from odoo.tools import pycompat
+
 from odoo import api, http, models, tools, SUPERUSER_ID, fields
 
 _logger = logging.getLogger(__name__)
@@ -32,6 +33,7 @@ _logger = logging.getLogger(__name__)
 
 class ClientConfig(models.Model):
     _name = 'ipf.client.config'
+    _description = "IPF Client Config"
     _rec_name = 'url'
 
     url = fields.Char(string='Url',
@@ -140,5 +142,3 @@ class ClientConfig(models.Model):
     def process_data(self, data):
         """For overriding and processing data"""
         return True
-        
-        

@@ -8,7 +8,6 @@
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [
-        "base",
         "sale",
         "contacts",
         "sale_management",
@@ -18,7 +17,6 @@
         'data/product_product.xml',
         'data/sale_order.xml',
     ],
-    
     "application": True,
     "installable": True,
 }

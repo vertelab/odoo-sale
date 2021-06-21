@@ -1,5 +1,7 @@
 # -*- coding: UTF-8 -*-
 
+import datetime
+import functools
 ################################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -21,11 +23,9 @@
 ################################################################################
 import json
 import logging
-import werkzeug.wrappers
-import datetime
 import time
+import werkzeug.wrappers
 from odoo.http import request
-import functools
 
 _logger = logging.getLogger(__name__)
 
@@ -67,8 +67,8 @@ def validate_token(func):
             if client_secret != client_secret_parameter:
                 raise
         except:
-            return invalid_response("wrong_client_secret", 
-                                    "client_secret is incorrect.", 
+            return invalid_response("wrong_client_secret",
+                                    "client_secret is incorrect.",
                                     403)
 
         client_id = False
