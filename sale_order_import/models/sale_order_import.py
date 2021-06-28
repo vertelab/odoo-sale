@@ -161,8 +161,9 @@ class SaleOrderImport(models.TransientModel):
                         })
                         if product.type == 'product':
                             # determine if the product needs further check for stock availibility
-                            is_available = order_line._check_routing(product, order.warehouse_id.id) and product.sale_ok
-                            
+                            # is_available = order_line._check_routing(product, order.warehouse_id.id) and product.sale_ok
+                            is_available = product.sale_ok
+
                             # check if product is available, and if not: raise a warning,
                             # but do this only for products that aren't processed in MTO
                             if not is_available and order_line.product_id.virtual_available_days < 5:
