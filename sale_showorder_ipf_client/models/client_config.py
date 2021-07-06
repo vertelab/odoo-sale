@@ -98,10 +98,17 @@ class ClientConfig(models.Model):
         return headers
 
     def get_url(self, path):
-        if self.url[-1] == '/':
-            url = self.url + path
+        if not self:
+            client_config = self.env["ipf.showorder.client.config"].search([], limit=1)
+            if client_config.url[-1] == '/':
+                url = client_config.url + path
+            else:
+                url = client_config.url + '/' + path
         else:
-            url = self.url + '/' + path
+            if self.url[-1] == '/':
+                url = self.url + path
+            else:
+                url = self.url + '/' + path
         return url
 
     def get_order(self):
@@ -182,11 +189,19 @@ class ClientConfig(models.Model):
         querystring = {"client_secret": self.client_secret,
                        "client_id": self.client_id}
         url = self.get_url('v1/orders/%s' % (order_id))
-        response = self.request_call(method="GET",
-                                     url=url,
-                                     headers=self.get_headers(),
-                                     params=querystring)
-        return response.json()
+        try:
+            response = self.request_call(method="GET",
+                                         url=url,
+                                         headers=self.get_headers(),
+                                         params=querystring)
+            if response.status_code != 200:
+                _logger.error("Something went wrong when getting Order from IPF Showorder Client")
+                error_msg = str(response.status_code) + " - " + response.reason
+                _logger.error("Getting %s Response" % error_msg)
+            return response.json()
+        except Exception as e:
+            _logger.error("Something went wrong when getting Order from IPF Showorder Client")
+            _logger.error(str(e))
 
     def patch_order(self):
         querystring = {"client_secret": self.client_secret,
