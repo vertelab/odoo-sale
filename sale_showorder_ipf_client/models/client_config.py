@@ -194,14 +194,13 @@ class ClientConfig(models.Model):
                                          url=url,
                                          headers=self.get_headers(),
                                          params=querystring)
-            if response.status_code != 200:
-                _logger.error("Something went wrong when getting Order from IPF Showorder Client")
+            if response and response.status_code != 200:
                 error_msg = str(response.status_code) + " - " + response.reason
-                _logger.error("Getting %s Response" % error_msg)
+                _logger.error(
+                "Something went wrong when getting Order from IPF Showorder Client. Getting %s Response" % error_msg)
             return response.json()
         except Exception as e:
-            _logger.error("Something went wrong when getting Order from IPF Showorder Client")
-            _logger.error(str(e))
+            _logger.error("Something went wrong when getting Order from IPF Showorder Client. %s" % str(e))
 
     def patch_order(self):
         querystring = {"client_secret": self.client_secret,

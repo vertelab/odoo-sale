@@ -22,7 +22,7 @@
 
 {
     'name': 'IPF Showorder Client',
-    'version': '12.0.0.0.1',
+    'version': '12.0.0.0.2',
     'category': 'hr',
     'author': "N-development",
     'license': 'AGPL-3',
