@@ -8,9 +8,9 @@ Different version submitted
 ===========================
 
 1. AFC-1343: IPF-9164 Get list of invoices and one invoice
-2. v12.0.0.0.2: AFC-2560 Added error message in one line and Improved code to fix error when success response.
+2. v12.0.0.0.3: AFC-2560 Added error message in one line and Improved code to fix error when success response.
 
 Maintainers
 ~~~~~~~~~~~
 
-This module is maintained by Vertal.
+This module is maintained by Vertel.
