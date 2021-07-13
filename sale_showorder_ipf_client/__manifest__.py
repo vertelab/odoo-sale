@@ -22,11 +22,11 @@
 
 {
     'name': 'IPF Showorder Client',
-    'version': '12.0.0.0.1',
+    'version': '12.0.0.0.2',
     'category': 'hr',
-    'author': "N-development",
+    'author': "Vertel AB",
     'license': 'AGPL-3',
-    'website': 'https://www.n-development.com',
+    'website': 'https://www.vertel.se',
     'depends': [
         'hr'
     ],
@@ -40,6 +40,6 @@
 
     ],
     'images': [
-        'static/description/img.png'
+        'static/description/icon.png'
     ],
 }
