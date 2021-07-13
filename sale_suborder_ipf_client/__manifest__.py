@@ -22,7 +22,7 @@
 
 {
     'name': 'IPF Suborder Client',
-    'version': '12.0.0.3',
+    'version': '12.0.1.0.4',
     'category': 'hr',
     'author': "N-development",
     'license': 'AGPL-3',
