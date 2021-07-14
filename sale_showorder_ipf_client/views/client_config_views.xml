@@ -78,6 +78,7 @@
               action="ipf_client_config_action_window"
               parent="api_ipf.api_client_config_parent_menu"
               sequence="6"/>
+    
     <record model="ir.ui.view" id="ipf_showorder_report_client_config_request_history">
         <field name="name">IPF Showorder Client Config Request History View List</field>
         <field name="model">ipf.showorder.request.history</field>
@@ -100,9 +101,10 @@
         <field name="res_model">ipf.showorder.request.history</field>
         <field name="view_mode">tree</field>
     </record>
-    <menuitem id="ipf_showorder_report_client_config_request_history"
-              name="IPF Showorder Report"
+    <menuitem id="menu_ipf_showorder_report_client_config_request_history"
+              name="IPF Showorder"
               action="ipf_showorder_report_client_config_request_history_action_window"
               parent="api_ipf.client_config_request_history_parent_menu"
               sequence="6"/>
+              
 </data>
