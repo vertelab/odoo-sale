@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <data>
-    <record model="ir.ui.view" id="ipf_client_config_view_list">
+    <record model="ir.ui.view" id="ipf_showorder_client_config_view_list">
         <field name="name">IPF Showorder Client Config View List</field>
         <field name="model">ipf.showorder.client.config</field>
         <field name="arch" type="xml">
@@ -13,7 +13,7 @@
         </field>
     </record>
 
-    <record model="ir.ui.view" id="ipf_client_config_view_form">
+    <record model="ir.ui.view" id="ipf_showorder_client_config_view_form">
         <field name="name">IPF Showorder Client Config View Form</field>
         <field name="model">ipf.showorder.client.config</field>
         <field name="arch" type="xml">
@@ -67,15 +67,15 @@
         </field>
     </record>
 
-    <record model="ir.actions.act_window" id="ipf_client_config_action_window">
+    <record model="ir.actions.act_window" id="ipf_showorder_client_config_action_window">
         <field name="name">IPF Showorder Client Config</field>
         <field name="res_model">ipf.showorder.client.config</field>
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="ipf_client_config"
+    <menuitem id="menu_ipf_showorder_client_config"
               name="IPF Showorder"
-              action="ipf_client_config_action_window"
+              action="ipf_showorder_client_config_action_window"
               parent="api_ipf.api_client_config_parent_menu"
               sequence="6"/>
     

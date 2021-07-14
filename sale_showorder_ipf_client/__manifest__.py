@@ -28,11 +28,10 @@
     'license': 'AGPL-3',
     'website': 'https://www.vertel.se',
     'depends': [
-        'hr'
+        'hr', 'api_ipf'
     ],
     'data': [
         "security/ir.model.access.csv",
-
         'views/client_config_views.xml',
     ],
     'installable': True,
