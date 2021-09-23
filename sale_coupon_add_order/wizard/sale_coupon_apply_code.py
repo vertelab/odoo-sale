@@ -16,16 +16,18 @@ class SaleCouponApplyCode(models.TransientModel):
 
     def apply_coupon(self, order, coupon_code):
         error_status = {}
+        has_added_to_cart = False
         coupon = self.env['coupon.coupon'].search([('code', '=', coupon_code)], limit=1)
         if coupon and coupon.program_id and coupon.program_id.reward_product_id:
             order._cart_update(
                 product_id=coupon.program_id.reward_product_id.id,
                 add_qty=coupon.program_id.reward_product_quantity,
             )
+            has_added_to_cart = True
         error_status = super(SaleCouponApplyCode, self).apply_coupon(
             order, coupon_code
         )
-        if error_status:
+        if error_status and has_added_to_cart:
             # remove same quantity of products that we added in order to
             # leave the cart in the state that we found it.
             order._cart_update(

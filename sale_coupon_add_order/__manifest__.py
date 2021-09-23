@@ -21,7 +21,7 @@
 
 {
     'name': 'Sale Coupon add to order',
-    'version': '14.0.1.0.0',
+    'version': '14.0.1.0.1',
     'category': 'sale',
     'description': """
 This module will add coupon products to the sale order when applying a coupon.
