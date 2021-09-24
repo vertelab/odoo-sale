@@ -39,7 +39,6 @@ try:
 except:
     _logger.info('xlrd not installed. sudo pip install xlrd')
 
-
 class SaleOrderImport(models.TransientModel):
     _name = 'sale.order.import.wizard'
 
@@ -197,7 +196,6 @@ class SaleOrderImport(models.TransientModel):
                     'datas': self.order_file,
                     'store_fname': order.client_order_ref,
                 })
-
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'sale.order',
