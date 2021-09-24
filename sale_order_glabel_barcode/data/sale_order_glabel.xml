@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <report string="Sale Order Glabels" id="sale_order_glabel_report" model="sale.order" report_type="glabels" name="sale_order_glabel.glabel_sale_order" />
+    <record id="sale_order_glabel_report" model="ir.actions.report">
+        <field name="glabels_template" type="base64" file="sale_order_glabel_barcode/reports/sale_order_glabel.glabels" />
+    </record>
+    </data>
+</odoo>

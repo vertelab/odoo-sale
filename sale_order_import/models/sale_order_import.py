@@ -39,10 +39,6 @@ try:
 except:
     _logger.info('xlrd not installed. sudo pip install xlrd')
 
-
-_logger = logging.getLogger(__name__)
-
-
 class SaleOrderImport(models.TransientModel):
     _name = 'sale.order.import.wizard'
 
@@ -77,7 +73,6 @@ class SaleOrderImport(models.TransientModel):
                 result = pop.communicate()[0]
                 read_mime = result.split(b';')[0]
             except OSError as e:
-                # _logger.warning("Failed attempt to execute file. This program is necessary to check MIME type of %s", fname)
                 _logger.warning("Failed attempt to execute file. This program is necessary to check MIME type")
                 _logger.debug("Trace of the failed MIME file attempt.", exc_info=True)
                 raise Warning(e)
@@ -201,9 +196,6 @@ class SaleOrderImport(models.TransientModel):
                     'datas': self.order_file,
                     'store_fname': order.client_order_ref,
                 })
-            # if attachment.mimetype == 'application/pdf':
-            # attachment.pdf2image(800,1200)
-
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'sale.order',
