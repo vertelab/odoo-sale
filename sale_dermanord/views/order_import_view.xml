@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_cavarosa_import_form" model="ir.ui.view">
+            <field name="name">sale.dermanord.import.wizard.form</field>
+            <field name="model">sale.dermanord.import.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Cavarosa PRoduct Import">
+                    <sheet>
+                        <group>
+                            <field name="order_file"  filename="file_name" />
+                            <field name="file_name" invisible="1"/>
+                            <field name="order_url"/>
+                            <field name="info" readonly="1"/>
+                            <field name="mime" invisible="1"/>
+                            <field name="import_type"/>
+                            <field name="tmp_file" invisible="1"/>
+                        </group>
+                        <group>
+                        <span>Filer vi har stöd för</span><br/>
+                        <span> </span><span>Fina mig i Hedemora AB (pdf)</span>
+                        <span> </span><span>Lyko Online AB (Excel)</span>
+                        <span> </span><span>SKINCITY SWEDEN AB (pdf/Excel)</span>
+                        <span> </span><span>Isaksen &amp; CO AS (Excel)</span>
+                        <span> </span><span>Nordic Web Trading AB (Excel)</span>
+                        <span> </span><span>Eckerö Group - Rederiaktiebolaget Eckerö (Birka) (Text)</span>
+                        <span> </span><span>Tailwide AB (Naturligt snygg) (Url)</span>
+                        <span> </span><span>Bangerhead AB (Excel)</span>
+                        <span> </span><span>HARMONIQ AB (Url)</span>
+                        <span> </span><span>Åhléns AB(Url)</span>
+                        </group>
+                    </sheet>
+                    <footer attrs="{'invisible': ['|', ('mime', '=', False), ('import_type', '=', False)]}">
+                        <button name="import_files" type="object" string="Import" class="oe_highlight" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_dermanord_import_order" model="ir.actions.act_window">
+            <field name="name">Order Import</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.dermanord.import.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{}</field>
+            <field name="domain"></field>
+        </record>
+
+
+        <menuitem action="action_dermanord_import_order" id="menu_dermanord_order_import" parent="sale.menu_sale_config" sequence="99" groups="sales_team.group_sale_salesman,sales_team.group_sale_manager"/>
+
+    </data>
+</odoo>
