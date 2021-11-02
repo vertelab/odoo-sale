@@ -3,8 +3,8 @@
 
 {
     'name': 'Sale Order Phone Number',
-    'version': '1.1',
-    'category': 'Sales/Sales',
+    'version': '14.0.0.0.1',
+    'category': 'Sales',
     'summary': 'Sale Order Phone Number',
     'description': """
 This module adds phone number to sale order.
