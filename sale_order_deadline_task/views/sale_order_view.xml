@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <record id="project_sale_deadline_form" model="ir.ui.view">
+            <field name="name">sale.order</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="sale_order_template_id" position="after">
+                    <field name="date_deadline"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>
