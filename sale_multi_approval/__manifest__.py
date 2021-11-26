@@ -20,16 +20,15 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
+    'depends': ['base', 'sale', 'rest_base', 'rest_signport', 'res_user_groups_skogsstyrelsen', "partner_ssn"],
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
-        'views/views.xml',
+        'security/groups.xml',
+        'security/ir.model.access.csv',
         'views/templates.xml',
-    ],
-    # only loaded in demonstration mode
-    'demo': [
-        'demo/demo.xml',
+        'views/sale_approval_view.xml',
+        'views/sale_inherited.xml',
+        'data/data.xml',
     ],
 }

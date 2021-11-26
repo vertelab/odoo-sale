@@ -1,24 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-<!--
-        <template id="listing">
-          <ul>
-            <li t-foreach="objects" t-as="object">
-              <a t-attf-href="#{ root }/objects/#{ object.id }">
-                <t t-esc="object.display_name"/>
-              </a>
-            </li>
-          </ul>
-        </template>
-        <template id="object">
-          <h1><t t-esc="object.display_name"/></h1>
-          <dl>
-            <t t-foreach="object._fields" t-as="field">
-              <dt><t t-esc="field"/></dt>
-              <dd><t t-esc="object[field]"/></dd>
-            </t>
-          </dl>
-        </template>
--->
-    </data>
+  <template id="signport_form" name="Signport Form">
+    <form id="autosubmit" action="https://dss.test.underskriftstjanst.se/sign/BeginSigning" method="POST" class="js_accept_json modal-content">
+        <input type="hidden" name="relayState" id="relayState" t-att-value="relay_state"/>
+        <input type="hidden" name="eidSignRequest" id="eidSignRequest" t-att-value="eid_sign_request"/>
+        <input type="hidden" name="binding" id="binding" t-att-value="binding"/>
+    </form>
+    <script type="text/javascript">
+      function formAutoSubmit () {
+      var frm = document.getElementById("autosubmit");
+      frm.submit();
+      }
+      window.onload = formAutoSubmit;
+    </script>
+  </template>
 </odoo>

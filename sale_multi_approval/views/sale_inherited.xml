@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="sale_order_approval_inherited">
+      <field name="name">sale.order.form.approval.inherited</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="context">{'form_no_edit': True}</field> 
+      <field name="arch" type="xml">
+        <xpath expr="//page[@name='customer_signature']" position="after">
+          <page string="Employee Signatures" name="employee_signatures">
+            <group>
+              <field name="document_fully_approved" invisible="1"/>
+              <field name="check_approve_ability" invisible="1"/>
+              <field name="is_approved" invisible="1"/>
+              <field name="page_visibility" invisible="1"/>
+            </group>
+            <group>
+              <button name="%(add_approver_action)d" class="oe_highlight"
+                    string="Add Approver" type="action"/>
+              <field name="approval_ids" mode="tree">
+                <tree string="Approval lines" create="0" edit="0" delete="1">
+                  <field name="approver_id"/>
+                  <field name="approval_status"/>
+                  <field name="signed_document"/>
+                  <field name="signer_ca"/>
+                  <field name="assertion"/>
+                  <field name="relay_state"/>
+                </tree>
+              </field>
+            </group>
+          </page>
+        </xpath>
+        <xpath expr="//button[@name='action_quotation_send'][1]" position="attributes">
+                <attribute name="attrs">{'invisible': ['|',('document_fully_approved', '!=',
+                    True)]}
+                </attribute>
+        </xpath>
+        <xpath expr="//button[@name='action_quotation_send'][2]" position="attributes">
+            <attribute name="attrs">{'invisible': ['|', '|', ('state', '!=', 'draft'), 
+            ('invoice_count','&gt;=',1), ('document_fully_approved', '!=', True)]}
+            </attribute>
+        </xpath>
+        <xpath expr="//button[@name='action_quotation_send'][3]" position="attributes">
+            <attribute name="attrs">{'invisible': ['|', '|', ('state', '=', 'draft'), 
+            ('invoice_count','&gt;=',1), ('document_fully_approved', '!=', True)]}
+            </attribute>
+        </xpath>
+        <xpath expr="//button[@name='action_quotation_send'][4]" position="attributes">
+            <attribute name="attrs">{'invisible': ['|',('document_fully_approved', '!=',
+                True)]}
+            </attribute>
+        </xpath>
+        <xpath expr="//button[@name='action_confirm']" position="before">
+            <button name="sale_approve" class="oe_highlight"
+                    string="Approve and Lock" type="object"
+                    groups="sale_multi_approval.group_approver,sale_multi_approval.group_approve_manager"
+                        attrs="{'invisible': ['|','|',('check_approve_ability', '!=', True),('document_fully_approved', '=', True),('is_approved','=',True)]}"/>
+            <button name="sale_unlock" class="oe_highlight"
+                    string="Unlock and Unapprove" type="object"
+                    groups="sale_multi_approval.group_approver,sale_multi_approval.group_approve_manager"/>
+        </xpath>
+        <!-- <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+            <attribute name="attrs">{'invisible': ['|',('document_fully_approved', '!=',
+                True)]}
+            </attribute>
+        </xpath>
+        <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
+            <attribute name="attrs">{'invisible': ['|',('document_fully_approved', '!=',
+                True)]}
+            </attribute>
+        </xpath> -->
+      </field>
+    </record>
+
+    <!-- <record id="sale.action_quotations_with_onboarding" model="ir.actions.act_window">
+            <field name="name">Quotations Multi Approval</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_id" ref="sale.view_quotation_tree_with_onboarding"/>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
+            <field name="search_view_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+            <field name="context">{'search_default_my_quotation': 1, 'show_warning': 1}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new quotation, the first step of a new sale!
+              </p><p>
+                Once the quotation is confirmed by the customer, it becomes a sales order.<br/> You will be able to create an invoice and collect the payment.
+              </p>
+            </field>
+    </record> -->
+    
+    <menuitem id="approval_main_menu" name="Approvals" parent="sale.menu_sale_config" sequence="10"/>
+    <menuitem id="approval_sub_menu" name="Sale Approval" parent="approval_main_menu"
+              action="approval_sub_menu_action" sequence="1"/>
+</odoo>
