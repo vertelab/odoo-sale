@@ -4,12 +4,12 @@
       <field name="name">sale.order.form.approval.inherited</field>
       <field name="model">sale.order</field>
       <field name="inherit_id" ref="sale.view_order_form"/>
-      <field name="context">{'form_no_edit': True}</field> 
       <field name="arch" type="xml">
         <xpath expr="//page[@name='customer_signature']" position="after">
           <page string="Employee Signatures" name="employee_signatures">
             <group>
               <field name="document_fully_approved" invisible="1"/>
+              <field name="quotation_locked" invisible="1"/>
               <field name="check_approve_ability" invisible="1"/>
               <field name="is_approved" invisible="1"/>
               <field name="page_visibility" invisible="1"/>
@@ -59,6 +59,58 @@
                     string="Unlock and Unapprove" type="object"
                     groups="sale_multi_approval.group_approver,sale_multi_approval.group_approve_manager"/>
         </xpath>
+        <field name="order_line" position="attributes">
+          <attribute name="attrs">{'readonly': ['|',('state', 'in', ['done','cancel']), ('quotation_locked', '=', True)]}</attribute>
+        </field>
+        <field name="note" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>
+        <field name="partner_id" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>     
+        <field name="validity_date" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>
+        <field name="date_order" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)], 'invisible': [('state', 'in', ['sale', 'done', 'cancel'])]}</attribute>
+        </field>
+        <field name="payment_term_id" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>    
+        <field name="user_id" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>  
+        <field name="team_id" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field> 
+        <field name="require_signature" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field> 
+        <field name="require_payment" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>  
+        <field name="client_order_ref" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>  
+        <field name="tag_ids" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>
+        <field name="commitment_date" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>
+        <field name="origin" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>
+        <field name="campaign_id" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>
+        <field name="medium_id" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>
+        <field name="source_id" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>
+
         <!-- <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
             <attribute name="attrs">{'invisible': ['|',('document_fully_approved', '!=',
                 True)]}
@@ -71,7 +123,20 @@
         </xpath> -->
       </field>
     </record>
-
+    <record model="ir.ui.view" id="sale_management_order_approval_inherited">
+      <field name="name">sale.order.form.approval.inherited</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
+      <field name="arch" type="xml">
+        <field name="sale_order_template_id" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>
+        <field name="sale_order_option_ids" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>
+        
+      </field>
+    </record>
     <!-- <record id="sale.action_quotations_with_onboarding" model="ir.actions.act_window">
             <field name="name">Quotations Multi Approval</field>
             <field name="type">ir.actions.act_window</field>
