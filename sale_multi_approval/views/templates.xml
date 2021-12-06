@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="signport_form" name="Signport Form">
+    <form id="autosubmit" action="https://dss.test.underskriftstjanst.se/sign/BeginSigning" method="POST" class="js_accept_json modal-content">
+        <input type="hidden" name="relayState" id="relayState" t-att-value="relay_state"/>
+        <input type="hidden" name="eidSignRequest" id="eidSignRequest" t-att-value="eid_sign_request"/>
+        <input type="hidden" name="binding" id="binding" t-att-value="binding"/>
+    </form>
+    <script type="text/javascript">
+      function formAutoSubmit () {
+      var frm = document.getElementById("autosubmit");
+      frm.submit();
+      }
+      window.onload = formAutoSubmit;
+    </script>
+  </template>
+</odoo>
