@@ -39,6 +39,7 @@
     'depends': ['sale', 'project'],
     'data': [
         'views/project_view.xml',
+        'views/hr_employee_view.xml',
         'views/sale_order_view.xml',
     ],
     'installable': True,
