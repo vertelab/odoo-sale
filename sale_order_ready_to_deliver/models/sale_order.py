@@ -50,7 +50,7 @@ class SaleOrder(models.Model):
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-    ready_to_deliver = fields.Boolean(string="Set Products to Ready to Deliver", default=False)
+    ready_to_deliver = fields.Boolean(string="Set Products to Ready to Deliver", default=False, copy=False)
 
     @api.onchange('product_id')
     def _toggle_ready_to_deliver(self):

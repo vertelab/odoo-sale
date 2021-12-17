@@ -10,6 +10,11 @@ class ProjectTask(models.Model):
             self.sale_line_id.write({
                 'ready_to_deliver': True
             })
+            not_ready_to_deliver = list(self.sale_order_id.order_line.filtered(lambda line: not line.ready_to_deliver))
+            if not not_ready_to_deliver and self.sale_order_id.state in ['sale', 'done']:
+                self.sale_order_id.write({
+                    'state': 'ready_to_deliver',
+                })
         else:
             self.sale_line_id.write({
                 'ready_to_deliver': False
