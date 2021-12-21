@@ -12,7 +12,10 @@
                     <field name="state" widget="statusbar" statusbar_visible="draft,sent,sale,ready_to_deliver,delivered"/>
                 </field>
                 <button name="action_quotation_send" position="after">
+                    <button name="action_cancel" type="object" string="Cancel" attrs="{'invisible': ['|', ('state', 'not in', ['delivered', 'ready_to_deliver']), ('id', '=', False)]}"/>
+<!--
                     <button name="action_send_delivery_message" string="Send Delivery Email" type="object" states="ready_to_deliver"/>
+-->
                     <button name="action_set_to_delivery" string="Delivered" type="object" states="ready_to_deliver" class="btn btn-primary"/>
                 </button>
             </field>

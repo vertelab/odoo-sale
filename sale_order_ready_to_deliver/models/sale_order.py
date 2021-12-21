@@ -1,5 +1,7 @@
 from odoo import fields, models, api, _
 
+import logging
+_logger = logging.getLogger(__name__)
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -42,10 +44,21 @@ class SaleOrder(models.Model):
             'target': 'new',
             'context': ctx,
         }
-
+    
+    def send_message_ready_to_deliver(self):
+        hr_employee_ids = self.env['hr.employee'].search([('get_notified', '=', True), ('work_email', '!=', False)])
+        hr_partner_ids = hr_employee_ids.mapped('address_home_id').ids
+        msg =  'A sale order is ready to deliver'
+        self.message_post(body=msg, partner_ids=hr_partner_ids)
+        
+    def write(self,values):
+        res = super(SaleOrder,self).write(values)
+        if values.get('state') and values.get('state') == "ready_to_deliver":
+            self.send_message_ready_to_deliver()
+        return res
+            
     def action_set_to_delivery(self):
         self.state = 'delivered'
-
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
