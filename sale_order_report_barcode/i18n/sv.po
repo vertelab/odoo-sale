@@ -20,4 +20,4 @@ msgstr ""
 #. module: sale_order_report_barcode
 #: model_terms:ir.ui.view,arch_db:sale_order_report_barcode.barcode_report_saleorder_document
 msgid "SO Number"
-msgstr ""
+msgstr "SO-nummer"
