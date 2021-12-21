@@ -20,13 +20,13 @@ msgstr ""
 #. module: sale_order_ready_to_deliver
 #: model_terms:ir.ui.view,arch_db:sale_order_ready_to_deliver.sale_order_form_view
 msgid "Cancel"
-msgstr ""
+msgstr "Avbryt"
 
 #. module: sale_order_ready_to_deliver
 #: model:ir.model.fields.selection,name:sale_order_ready_to_deliver.selection__sale_order__state__delivered
 #: model_terms:ir.ui.view,arch_db:sale_order_ready_to_deliver.sale_order_form_view
 msgid "Delivered"
-msgstr ""
+msgstr "Levererad"
 
 #. module: sale_order_ready_to_deliver
 #: model:ir.model.fields,field_description:sale_order_ready_to_deliver.field_hr_employee__display_name
@@ -35,22 +35,22 @@ msgstr ""
 #: model:ir.model.fields,field_description:sale_order_ready_to_deliver.field_sale_order__display_name
 #: model:ir.model.fields,field_description:sale_order_ready_to_deliver.field_sale_order_line__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Visningsnamn"
 
 #. module: sale_order_ready_to_deliver
 #: model:ir.model,name:sale_order_ready_to_deliver.model_hr_employee
 msgid "Employee"
-msgstr ""
+msgstr "Anställd"
 
 #. module: sale_order_ready_to_deliver
 #: model:ir.model.fields,field_description:sale_order_ready_to_deliver.field_hr_employee__get_notified
 msgid "Get Notified"
-msgstr ""
+msgstr "Bli meddelad"
 
 #. module: sale_order_ready_to_deliver
 #: model:ir.model.fields,help:sale_order_ready_to_deliver.field_hr_employee__get_notified
 msgid "Get help notified of sale orders ready to deliver"
-msgstr ""
+msgstr "Bli meddelad när säljordrar är redo att levereras"
 
 #. module: sale_order_ready_to_deliver
 #: model:ir.model.fields,field_description:sale_order_ready_to_deliver.field_hr_employee__id
@@ -59,7 +59,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:sale_order_ready_to_deliver.field_sale_order__id
 #: model:ir.model.fields,field_description:sale_order_ready_to_deliver.field_sale_order_line__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: sale_order_ready_to_deliver
 #: model:ir.model.fields,field_description:sale_order_ready_to_deliver.field_hr_employee____last_update
@@ -68,41 +68,41 @@ msgstr ""
 #: model:ir.model.fields,field_description:sale_order_ready_to_deliver.field_sale_order____last_update
 #: model:ir.model.fields,field_description:sale_order_ready_to_deliver.field_sale_order_line____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Senast ändrad den"
 
 #. module: sale_order_ready_to_deliver
 #: model:ir.model.fields.selection,name:sale_order_ready_to_deliver.selection__sale_order__state__ready_to_deliver
 #: model_terms:ir.ui.view,arch_db:sale_order_ready_to_deliver.sale_order_form_view
 msgid "Ready to Deliver"
-msgstr ""
+msgstr "Redo att leverera"
 
 #. module: sale_order_ready_to_deliver
 #: model:ir.model,name:sale_order_ready_to_deliver.model_sale_order
 msgid "Sales Order"
-msgstr ""
+msgstr "Säljorder"
 
 #. module: sale_order_ready_to_deliver
 #: model:ir.model,name:sale_order_ready_to_deliver.model_sale_order_line
 msgid "Sales Order Line"
-msgstr ""
+msgstr "Säljorderrad"
 
 #. module: sale_order_ready_to_deliver
 #: model:ir.model.fields,field_description:sale_order_ready_to_deliver.field_project_task_type__ready_to_deliver
 #: model:ir.model.fields,field_description:sale_order_ready_to_deliver.field_sale_order_line__ready_to_deliver
 msgid "Set Products to Ready to Deliver"
-msgstr ""
+msgstr "Ändra produkter till Redo att leverera"
 
 #. module: sale_order_ready_to_deliver
 #: model:ir.model.fields,field_description:sale_order_ready_to_deliver.field_sale_order__state
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #. module: sale_order_ready_to_deliver
 #: model:ir.model,name:sale_order_ready_to_deliver.model_project_task
 msgid "Task"
-msgstr ""
+msgstr "Aktivitet"
 
 #. module: sale_order_ready_to_deliver
 #: model:ir.model,name:sale_order_ready_to_deliver.model_project_task_type
 msgid "Task Stage"
-msgstr ""
+msgstr "Aktivitetsetapp"
