@@ -18,6 +18,12 @@ msgstr ""
 "Language: sv\n"
 
 #. module: sale_order_ready_to_deliver
+#: code:addons/sale_order_ready_to_deliver/models/sale_order.py:0
+#, python-format
+msgid "A sale order is ready to deliver"
+msgstr "En säljorder är redo att levereras"
+
+#. module: sale_order_ready_to_deliver
 #: model_terms:ir.ui.view,arch_db:sale_order_ready_to_deliver.sale_order_form_view
 msgid "Cancel"
 msgstr "Avbryt"
