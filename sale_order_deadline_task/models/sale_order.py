@@ -16,6 +16,13 @@ class SaleOrder(models.Model):
         if values.get('date_deadline'):
             self.commitment_date = values.get('date_deadline')
         return res
+        
+    def create(self,values):
+        res = super(SaleOrder,self).create(values)
+        if values.get('date_deadline'):
+            self.commitment_date = values.get('date_deadline')
+        return res
+        
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 

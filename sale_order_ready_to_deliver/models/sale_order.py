@@ -52,7 +52,7 @@ class SaleOrder(models.Model):
         # ~ self.message_post(body=msg, partner_ids=hr_partner_ids)
         
     def create_ready_to_deliver_activity(self):
-        hr_employee_ids = self.env['hr.employee'].search([('get_notified', '=', True), ('work_email', '!=', False)])
+        hr_employee_ids = self.env['hr.employee'].search([('get_notified', '=', True))])
         hr_partner_ids = hr_employee_ids.mapped('user_id').ids
         msg =  _('A sale order is ready to deliver')
         
