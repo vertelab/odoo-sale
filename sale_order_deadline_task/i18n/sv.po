@@ -27,29 +27,29 @@ msgstr "Aktivitetsdeadline"
 #: model:ir.model.fields,field_description:sale_order_deadline_task.field_sale_order__display_name
 #: model:ir.model.fields,field_description:sale_order_deadline_task.field_sale_order_line__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Visningsnamn"
 
 #. module: sale_order_deadline_task
 #: model:ir.model.fields,field_description:sale_order_deadline_task.field_sale_order__id
 #: model:ir.model.fields,field_description:sale_order_deadline_task.field_sale_order_line__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: sale_order_deadline_task
 #: model:ir.model.fields,field_description:sale_order_deadline_task.field_sale_order____last_update
 #: model:ir.model.fields,field_description:sale_order_deadline_task.field_sale_order_line____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Senast ändrad den"
 
 #. module: sale_order_deadline_task
 #: model:ir.model,name:sale_order_deadline_task.model_sale_order
 msgid "Sales Order"
-msgstr ""
+msgstr "Säljorder"
 
 #. module: sale_order_deadline_task
 #: model:ir.model,name:sale_order_deadline_task.model_sale_order_line
 msgid "Sales Order Line"
-msgstr ""
+msgstr "Säljorderrad"
 
 #. module: sale_order_deadline_task
 #: code:addons/sale_order_deadline_task/models/sale_order.py:0
