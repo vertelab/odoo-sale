@@ -19,6 +19,10 @@ class ProjectTask(models.Model):
             self.sale_line_id.write({
                 'ready_to_deliver': False
             })
+            if self.sale_order_id.state == "ready_to_deliver" or self.sale_order_id.state == "delivered":
+                self.sale_order_id.write({
+                        'state': 'sale',
+                })
 
 
 class Project(models.Model):

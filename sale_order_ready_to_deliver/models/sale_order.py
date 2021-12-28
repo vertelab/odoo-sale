@@ -21,40 +21,58 @@ class SaleOrder(models.Model):
                 'date_order': fields.Datetime.now()
             }
 
-    def action_send_delivery_message(self):
-        hr_employee_ids = self.env['hr.employee'].search([('get_notified', '=', True), ('work_email', '!=', False)])
-        hr_partner_ids = hr_employee_ids.mapped('address_home_id')
+    # ~ def action_send_delivery_message(self):
+        # ~ hr_employee_ids = self.env['hr.employee'].search([('get_notified', '=', True), ('work_email', '!=', False)])
+        # ~ hr_partner_ids = hr_employee_ids.mapped('address_home_id')
 
-        ctx = {
-            'default_model': 'sale.order',
-            'default_res_id': self.ids[0],
-            'default_composition_mode': 'comment',
-            'force_email': True,
-            'model_description': self.with_context(lang=self.env.context.get('lang')).type_name,
-            'default_partner_ids': hr_partner_ids.ids,
-            'default_subject': 'Ready to Deliver',
-            'default_body': 'A sale order is ready to deliver',
-        }
-        return {
-            'type': 'ir.actions.act_window',
-            'view_mode': 'form',
-            'res_model': 'mail.compose.message',
-            'views': [(False, 'form')],
-            'view_id': False,
-            'target': 'new',
-            'context': ctx,
-        }
+        # ~ ctx = {
+            # ~ 'default_model': 'sale.order',
+            # ~ 'default_res_id': self.ids[0],
+            # ~ 'default_composition_mode': 'comment',
+            # ~ 'force_email': True,
+            # ~ 'model_description': self.with_context(lang=self.env.context.get('lang')).type_name,
+            # ~ 'default_partner_ids': hr_partner_ids.ids,
+            # ~ 'default_subject': 'Ready to Deliver',
+            # ~ 'default_body': 'A sale order is ready to deliver',
+        # ~ }
+        # ~ return {
+            # ~ 'type': 'ir.actions.act_window',
+            # ~ 'view_mode': 'form',
+            # ~ 'res_model': 'mail.compose.message',
+            # ~ 'views': [(False, 'form')],
+            # ~ 'view_id': False,
+            # ~ 'target': 'new',
+            # ~ 'context': ctx,
+        # ~ }
     
-    def send_message_ready_to_deliver(self):
+    # ~ def send_message_ready_to_deliver(self):
+        # ~ hr_employee_ids = self.env['hr.employee'].search([('get_notified', '=', True), ('work_email', '!=', False)])
+        # ~ hr_partner_ids = hr_employee_ids.mapped('address_home_id').ids
+        # ~ msg =  _('A sale order is ready to deliver')
+        # ~ self.message_post(body=msg, partner_ids=hr_partner_ids)
+        
+    def create_ready_to_deliver_activity(self):
         hr_employee_ids = self.env['hr.employee'].search([('get_notified', '=', True), ('work_email', '!=', False)])
-        hr_partner_ids = hr_employee_ids.mapped('address_home_id').ids
-        msg =  'A sale order is ready to deliver'
-        self.message_post(body=msg, partner_ids=hr_partner_ids)
+        hr_partner_ids = hr_employee_ids.mapped('user_id').ids
+        msg =  _('A sale order is ready to deliver')
+        
+        for hr_partner_id in  hr_partner_ids:
+                
+            self.env['mail.activity'].create({
+            'display_name': msg,
+            'summary':msg,
+            'date_deadline': fields.Datetime.now(),
+            'user_id': hr_partner_id,
+            'res_id':self.id,
+            'res_model_id':self.env.ref('sale.model_sale_order').id,
+            # ~ 'activity_type_id':4,
+            })
         
     def write(self,values):
         res = super(SaleOrder,self).write(values)
         if values.get('state') and values.get('state') == "ready_to_deliver":
-            self.send_message_ready_to_deliver()
+            # ~ self.send_message_ready_to_deliver()
+            self.create_ready_to_deliver_activity()
         return res
             
     def action_set_to_delivery(self):
