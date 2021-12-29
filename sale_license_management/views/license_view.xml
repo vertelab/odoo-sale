@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_license_overview_tree" model="ir.ui.view">
+        <field name="name">sale.license.overview.tree</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+            <tree string="Quotation" multi_edit="0" sample="1" create="false">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="order_id"/>
+                <field name="product_uom_qty"/>
+                <field name="price_unit"/>
+                <field name="price_subtotal"/>
+                <field name="license_start"/>
+                <field name="license_stop"/>
+                <field name="order_partner_id"/>
+                <field name="phone"/>
+                <field name="contact_address"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="view_license_overview_form" model="ir.ui.view">
+        <field name="name">sale.license.overview.form</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.sale_order_line_view_form_readonly"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form" position="attributes">
+                <attribute name="create">false</attribute>
+            </xpath>
+            <form position="inside">
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+            <field name="price_total" position="after">
+                <field name="license_start"/>
+                <field name="license_stop"/>
+                <field name="stand_alone_end_date_check" class="oe_edit_only"/>
+                <field name="stand_alone_end_date" attrs="{'invisible':[('stand_alone_end_date_check','=', False)]}" class="oe_edit_only"/>
+            </field>
+            <field name="qty_delivered" position="replace"/>
+            <field name="qty_invoiced" position="replace"/>
+            <field name="product_uom" position="replace"/>
+            <field name="tax_id" position="replace"/>
+            <field name="price_tax" position="replace"/>
+            <field name="price_total" position="replace"/>
+        </field>
+    </record>
+
+    <record id="action_license_overview" model="ir.actions.act_window">
+        <field name="name">License overview</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('product_id.type','=','license'),('code','!=',None)]</field> <!-- Visar endast licensrader och ifall raderna har en koppling till avtal-->
+        <field name="context">{'group_by':''}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new quotation, the first step of a new sale!
+            </p><p>
+                Once the quotation is confirmed by the customer, it becomes a sales order.<br/> You will be able to create an invoice and collect the payment.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_view_license_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_license_overview_tree"/>
+        <field name="act_window_id" ref="action_license_overview"/>
+    </record>
+
+    <record id="action_view_license_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sale.sale_order_line_view_form_readonly"/>
+        <field name="act_window_id" ref="action_license_overview"/>
+    </record>
+</odoo>
