@@ -23,7 +23,6 @@ class AddApproverWizard(models.TransientModel):
         # offlimit_ids.append(self.env.uid)
         _logger.warning("#"*99)
         _logger.warning(self.env["sale.order"].browse(self.env.context.get('active_ids')).approval_ids)
-
         return [('groups_id', 'in', group_ids), ('id', 'not in', offlimit_ids)]
 
     sale_order = fields.Many2one(comodel_name='sale.order', string='Sale Order', default=_get_sale_order, readonly=True)
