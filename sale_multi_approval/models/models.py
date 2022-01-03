@@ -25,7 +25,7 @@ class AddApproverWizard(models.TransientModel):
         group_ids.append(self.env.ref('sale_multi_approval.group_approve_manager').id)
         group_ids.append(self.env.ref('sale_multi_approval.group_approver').id)
         offlimit_ids = [i.id for i in self.env["sale.order"].browse(self.env.context.get('active_ids')).approval_ids]
-        offlimit_ids.append(self.env.uid)
+        # offlimit_ids.append(self.env.uid)
         return [('groups_id', 'in', group_ids), ('id', 'not in', offlimit_ids)]
 
     sale_order = fields.Many2one(comodel_name='sale.order', string='Sale Order', default=_get_sale_order, readonly=True)
