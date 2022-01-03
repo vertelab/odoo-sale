@@ -24,11 +24,11 @@
 
     # always loaded
     'data': [
+        'data/data.xml',
         'security/groups.xml',
         'security/ir.model.access.csv',
         'views/templates.xml',
         'views/sale_approval_view.xml',
         'views/sale_inherited.xml',
-        'data/data.xml',
     ],
 }

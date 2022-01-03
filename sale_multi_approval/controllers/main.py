@@ -58,4 +58,4 @@ class SaleMultiApproval(http.Controller):
         order_sudo = request.env["sale.order"].sudo().browse(order_id)
         request.env["approval.line"].sudo().browse(approval_id).update({'approval_status': True})
         base_url = request.env["ir.config_parameter"].sudo().get_param("web.base.url")
-        return request.redirect(f"{base_url}/web#id={order_id}&action=347&model=sale.order&view_type=form")
+        return request.redirect(f"{base_url}/web#id={order_id}&model=sale.order&view_type=form")
