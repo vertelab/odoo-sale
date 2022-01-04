@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+<!--
+    Adding a notebook to agreement form
+-->
+    <record id="agreement_form_view_notebook" model="ir.ui.view">
+        <field name="name">agreement.tree.view.notebook</field>
+        <field name="model">agreement</field>
+        <field name="inherit_id" ref="agreement.agreement_form"/>
+        <field name="arch" type="xml">
+            <field name="code" position="after">
+                <field name="sale_order_id"/>
+            </field>
+            <field name="domain" position="replace">
+                <field name="is_license" class="oe_edit_only"/>
+                <field name="phone"/>
+                <field name="contact_address"/>
+                <field name="email"/>
+            </field>
+            <field name="company_id" position="replace"> <!-- Replacing field company_id -->
+                <field name="notification_date"/>
+                <field name="notification_days" class="oe_edit_only"/>
+                <field name="form_of_agreement"/>
+            </field>
+            <notebook position="inside">
+                <page string="Licenser">
+                    <field name="sale_order_line_ids">
+                        <tree string="tree">
+                            <field name="name"/>
+                            <field name="license_start"/>
+                            <field name="license_stop"/>
+                            <field name="product_uom_qty"/>
+                            <field name="price_unit"/>
+                            <field name="price_total"/>
+                            <field name="product_type"/>
+                            <field name="manufacturer"/>
+                        </tree>
+                    </field>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+<!--
+    Following record is for the agreements in tree view
+-->
+    <record id="agreement_tree_view" model="ir.ui.view">
+        <field name="name">agreement.tree.view</field>
+        <field name="model">agreement</field>
+        <field name="inherit_id" ref="agreement.agreement_tree"/>
+        <field name="arch" type="xml">
+            <field name="signature_date" position="replace"/>
+            <field name="company_id" position="replace"/>
+            <field name="domain" position="replace"/>
+            <field name="partner_id" position="after">
+                <field name="sale_order_id"/>
+                <field name="form_of_agreement"/>
+            </field>
+        </field>
+    </record>
+
+    <menuitem id="menu_agreement_license_overview"
+                action="action_license_overview"
+                parent="agreement.agreement_menu_root"
+                sequence="10" groups="base.group_user"/>
+</odoo>

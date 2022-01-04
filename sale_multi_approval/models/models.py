@@ -8,24 +8,21 @@ import werkzeug
 from odoo.http import request
 import json
 import base64
-
-class AddApproverWizard(models.TransientModel):
-    _name="sale.approval.consistency.wizard"
-    
     
 class AddApproverWizard(models.TransientModel):
     _name="approver.add.wizard"
     def _get_sale_order(self):
         sale_order = self.env["sale.order"].browse(self.env.context.get('active_ids'))
         return sale_order
-
     @api.model
     def _get_approvers_domain(self):
         group_ids = []
         group_ids.append(self.env.ref('sale_multi_approval.group_approve_manager').id)
         group_ids.append(self.env.ref('sale_multi_approval.group_approver').id)
         offlimit_ids = [i.id for i in self.env["sale.order"].browse(self.env.context.get('active_ids')).approval_ids]
-        offlimit_ids.append(self.env.uid)
+        # offlimit_ids.append(self.env.uid)
+        _logger.warning("#"*99)
+        _logger.warning(self.env["sale.order"].browse(self.env.context.get('active_ids')).approval_ids)
         return [('groups_id', 'in', group_ids), ('id', 'not in', offlimit_ids)]
 
     sale_order = fields.Many2one(comodel_name='sale.order', string='Sale Order', default=_get_sale_order, readonly=True)
@@ -114,6 +111,10 @@ class SaleOrder(models.Model):
     is_approved = fields.Boolean(compute='_compute_is_approved')
     page_visibility = fields.Boolean(compute='_compute_page_visibility')
     quotation_locked = fields.Boolean()
+    signed_document = fields.Binary(string='Signed Document', readonly=1)
+    signer_ca = fields.Binary(string='Signer Ca', readonly=1)
+    assertion = fields.Binary(string='Assertion', readonly=1)
+    relay_state = fields.Binary(string='Relay State', readonly=1)
 
 
 
@@ -205,7 +206,7 @@ class SaleOrder(models.Model):
                 data = json.loads(request.httprequest.data)
                 access_token=data.get("params", {}).get("access_token")
                 res = signport.sudo().post_sign_sale_order(
-                    ssn=self.env.user.partner_id.social_sec_nr.replace("-", ""),
+                    ssn=self.env.user.partner_id.social_sec_nr and self.env.user.partner_id.social_sec_nr.replace("-", "") or False,
                     order_id=self.id,
                     access_token=access_token,
                     message="Signering av dokument",
@@ -260,26 +261,3 @@ class SaleOrder(models.Model):
             self.document_fully_approved = True
         else:
             self.document_fully_approved = False
-
-    def write(self, values):
-        allowed_to_change = [
-            'approval_ids', 
-            'document_fully_approved', 
-            'check_approve_ability', 
-            'is_approved', 
-            'page_visibility'
-            ]
-        if not (self.document_fully_approved and self.signed_by) and self.approval_ids:
-            for key in values.keys():
-                if key not in allowed_to_change:
-                    if self.quotation_locked:
-                        return False
-                        
-                    
-
-                    # kill signatures and break
-
-
-
-        result = super().write(values)
-        return result
