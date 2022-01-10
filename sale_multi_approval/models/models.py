@@ -44,7 +44,7 @@ class MailComposer(models.TransientModel):
             /!\ for x2many field, this onchange return command instead of ids
         """
         res = super().onchange_template_id(template_id, composition_mode, model, res_id)
-        if res["value"]["attachment_ids"] and model == "sale.order":
+        if "attachment_ids" in res["value"] and res["value"]["attachment_ids"] and model == "sale.order":
             new_report = self.env["ir.attachment"].browse(res["value"]["attachment_ids"][0][2][0])
             existing_report = self.env["ir.attachment"].search([("res_model", "=", model), ("res_id", "=", res_id)])
             if new_report.name == existing_report.name:
