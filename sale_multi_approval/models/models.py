@@ -19,6 +19,7 @@ class AddApproverWizard(models.TransientModel):
         group_ids = []
         group_ids.append(self.env.ref('sale_multi_approval.group_approve_manager').id)
         group_ids.append(self.env.ref('sale_multi_approval.group_approver').id)
+        group_ids.append(self.env.ref('res_user_groups_skogsstyrelsen.group_sks_saljare').id)
         offlimit_ids = [i.id for i in self.env["sale.order"].browse(self.env.context.get('active_ids')).approval_ids]
         # offlimit_ids.append(self.env.uid)
         _logger.warning("#"*99)
@@ -44,7 +45,7 @@ class MailComposer(models.TransientModel):
             /!\ for x2many field, this onchange return command instead of ids
         """
         res = super().onchange_template_id(template_id, composition_mode, model, res_id)
-        if res["value"]["attachment_ids"] and model == "sale.order":
+        if res.get("value",{}).get("attachment_ids") and model == "sale.order":
             new_report = self.env["ir.attachment"].browse(res["value"]["attachment_ids"][0][2][0])
             existing_report = self.env["ir.attachment"].search([("res_model", "=", model), ("res_id", "=", res_id)])
             if new_report.name == existing_report.name:
@@ -117,6 +118,22 @@ class SaleOrder(models.Model):
     relay_state = fields.Binary(string='Relay State', readonly=1)
 
 
+    @api.model_create_multi
+    def create(self, vals):
+        records = super(SaleOrder, self).create(vals)
+        _logger.warning("here"*99)
+        _logger.warning(records)
+        for record in records:
+            _logger.warning(f"record: {record}")
+            approval_vals = {
+            'approver_id': record.user_id.id,
+            'sale_order_id': record.id
+             }
+            line = self.env["approval.line"].sudo().create(approval_vals)
+            _logger.warning(line.read())
+            record.write({'approval_ids': [(4, line.id, 0)]})
+            _logger.warning(f"approver_ids: {record.approval_ids}")
+        return records
 
     def generate_sale_pdf(self):
         report_name = self.name
@@ -155,19 +172,21 @@ class SaleOrder(models.Model):
         else:
             self.page_visibility = False
 
-    @api.onchange('partner_id')
-    def _onchange_partner_id(self):
-        """This is the onchange function of the partner which loads the
-        persons for the approval to the approver table of the account.move"""
-        sale_approval_id = self.env['sale.approval'].search([])
-        self.approval_ids = None
-        if sale_approval_id.approve_customer_sale:
-            vals = {
-                'approver_id': self.user_id.id,
-                'sale_order_id': self.id
-            }
-            line = self.env["approval.line"].sudo().create(vals)
-            self.write({'approval_ids': [(4, line, 0)]})
+    # @api.onchange('partner_id')
+    # def _onchange_partner_id(self):
+    #     """This is the onchange function of the partner which loads the
+    #     persons for the approval to the approver table of the account.move"""
+    #     # sale_approval_id = self.env['sale.approval'].search([])
+    #     # self.approval_ids = None
+    #     # if sale_approval_id.approve_customer_sale:
+    #     _logger.warning(f"SET APROVER IDS"*99)
+    #     vals = {
+    #         'approver_id': self.user_id.id,
+    #         'sale_order_id': self.id
+    #     }
+    #     line = self.env["approval.line"].sudo().create(vals)
+    #     self.write({'approval_ids': [(4, line, 0)]})
+    #     _logger.warning(f"line: {line}")
 
     @api.depends('approval_ids.approver_id')
     def _compute_check_approve_ability(self):

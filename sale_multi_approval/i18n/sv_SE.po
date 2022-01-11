@@ -1,0 +1,480 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sale_multi_approval
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0-20211230\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-01-10 14:38+0000\n"
+"PO-Revision-Date: 2022-01-10 14:38+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_multi_approval
+#: model:ir.module.category,description:sale_multi_approval.group_sale_multi_approval
+msgid "Access to the Sale approval menu"
+msgstr "Tillgång till sälg-signerings menyn"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_needaction
+msgid "Action Needed"
+msgstr "Åtgärd Krävs"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_ids
+msgid "Activities"
+msgstr "Aktiviteter"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_state
+msgid "Activity State"
+msgstr "Aktivitets Status"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "Aktivitetstyp Ikon"
+
+#. module: sale_multi_approval
+#: model:ir.actions.act_window,name:sale_multi_approval.add_approver_action
+#: model_terms:ir.ui.view,arch_db:sale_multi_approval.add_approver_view
+#: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_approval_inherited
+msgid "Add Approver"
+msgstr "Lägg Till Signerare"
+
+#. module: sale_multi_approval
+#: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_approval_form_view
+msgid "Apply"
+msgstr "Applicera"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__approval_ids
+msgid "Approval"
+msgstr "Signering"
+
+#. module: sale_multi_approval
+#: model:ir.model,name:sale_multi_approval.model_approval_line
+msgid "Approval line in Sale Order"
+msgstr "Signeringsrad i Säljorder"
+
+#. module: sale_multi_approval
+#: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_approval_inherited
+msgid "Approval lines"
+msgstr "Signeringsrader"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__approve_customer_sale
+msgid "Approval on Sale Orders"
+msgstr "Signering på Säljorder"
+
+#. module: sale_multi_approval
+#: model:ir.ui.menu,name:sale_multi_approval.approval_main_menu
+msgid "Approvals"
+msgstr "Signeringar"
+
+#. module: sale_multi_approval
+#: model:res.groups,name:sale_multi_approval.group_approve_manager
+msgid "Approve Manager"
+msgstr "Signerings Administrator"
+
+#. module: sale_multi_approval
+#: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_approval_inherited
+msgid "Approve and Lock"
+msgstr "Signera och Lås"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__approver_id
+msgid "Approver"
+msgstr "Signerare"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approver_add_wizard__user_id
+msgid "Approver to add"
+msgstr "Signerare att lägga till"
+
+#. module: sale_multi_approval
+#: model:res.groups,name:sale_multi_approval.group_approver
+msgid "Approvers"
+msgstr "Signerare"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__assertion
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__assertion
+msgid "Assertion"
+msgstr "Assertion"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_attachment_count
+msgid "Attachment Count"
+msgstr "Mängd Bifogade Filer"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__binding
+msgid "Binding"
+msgstr "Binding"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__check_approve_ability
+msgid "Check Approve Ability"
+msgstr "Kolla Signeringsmöjlighet"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__create_uid
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approver_add_wizard__create_uid
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__create_uid
+#: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__create_uid
+msgid "Created by"
+msgstr "Skapad av"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__create_date
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approver_add_wizard__create_date
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__create_date
+#: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__create_date
+msgid "Created on"
+msgstr "Skapad den"
+
+#. module: sale_multi_approval
+#: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_approval_form_view
+msgid "Customer Configuration"
+msgstr "Kundkonfigurering"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__display_name
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approver_add_wizard__display_name
+#: model:ir.model.fields,field_description:sale_multi_approval.field_mail_compose_message__display_name
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__display_name
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__display_name
+#: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__display_name
+msgid "Display Name"
+msgstr "Visningsnamn"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__document_fully_approved
+msgid "Document Fully Approved"
+msgstr "Dokument Helt Signerat"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__eid_sign_request
+msgid "Eid Sign Request"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model,name:sale_multi_approval.model_mail_compose_message
+msgid "Email composition wizard"
+msgstr "E-postredigeringsguide"
+
+#. module: sale_multi_approval
+#: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_approval_inherited
+msgid "Employee Signatures"
+msgstr "Anställdas Signaturer"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__approve_customer_sale
+msgid "Enable this field for adding the approvals for the Sale Orders"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_follower_ids
+msgid "Followers"
+msgstr "Följare"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_channel_ids
+msgid "Followers (Channels)"
+msgstr "Följare (Kanaler)"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Följare (Kontakter)"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__id
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approver_add_wizard__id
+#: model:ir.model.fields,field_description:sale_multi_approval.field_mail_compose_message__id
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__id
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__id
+#: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__id
+msgid "ID"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_exception_icon
+msgid "Icon"
+msgstr "Ikon"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__message_needaction
+#: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__message_unread
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__message_has_error
+#: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: sale_multi_approval
+#: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_edit_warning
+msgid ""
+"If you save these changes, the current signatures will be deleted, and the "
+"document will need to be signed again."
+msgstr "Om du sparar dessa ändringar, så kommer signaturerna bli borttagna, och dokumentet måste bli signerat igen"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__sale_approver_ids
+msgid "In this field you can add the approvers for the Sale Order"
+msgstr "I detta fältet kan du lägga till signerare på säljordern"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__is_approved
+msgid "Is Approved"
+msgstr "Signerat"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_is_follower
+msgid "Is Follower"
+msgstr "Är Följare"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line____last_update
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approver_add_wizard____last_update
+#: model:ir.model.fields,field_description:sale_multi_approval.field_mail_compose_message____last_update
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval____last_update
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order____last_update
+#: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request____last_update
+msgid "Last Modified on"
+msgstr "Senast redigerad"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__write_uid
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approver_add_wizard__write_uid
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__write_uid
+#: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__write_uid
+msgid "Last Updated by"
+msgstr "Senast Uppdaterad av"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__write_date
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approver_add_wizard__write_date
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__write_date
+#: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__write_date
+msgid "Last Updated on"
+msgstr "Senast Uppdaterad den"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__name
+msgid "Name"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__message_unread_counter
+msgid "Number of unread messages"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__page_visibility
+msgid "Page Visibility"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__quotation_locked
+msgid "Quotation Locked"
+msgstr "Säljorder Låst"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__relay_state
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__relay_state
+#: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__relay_state
+msgid "Relay State"
+msgstr "Relay State"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_user_id
+msgid "Responsible User"
+msgstr "Ansvarig Användare"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.module.category,name:sale_multi_approval.group_sale_multi_approval
+#: model:ir.ui.menu,name:sale_multi_approval.approval_sub_menu
+msgid "Sale Approval"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__sale_approver_ids
+msgid "Sale Approver"
+msgstr "Säljorder Signerare"
+
+#. module: sale_multi_approval
+#: model:ir.actions.act_window,name:sale_multi_approval.approval_sub_menu_action
+msgid "Sale Multi Approval"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__sale_order_id
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approver_add_wizard__sale_order
+msgid "Sale Order"
+msgstr "Säljorder"
+
+#. module: sale_multi_approval
+#: model:ir.model,name:sale_multi_approval.model_sale_approval
+msgid "Sale Order Multi Approval"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model,name:sale_multi_approval.model_sale_order
+msgid "Sales Order"
+msgstr "Kalkyl"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__signed_document
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__signed_document
+msgid "Signed Document"
+msgstr "Signerat Dokument"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__signer_ca
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__signer_ca
+msgid "Signer Ca"
+msgstr "Signer Ca"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__signing_service_url
+msgid "Signing Service Url"
+msgstr "Signeringstjänst Url"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__approval_status
+msgid "Status"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: sale_multi_approval
+#: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_approval_inherited
+msgid "Unlock and Unapprove"
+msgstr "Lås upp och ta bort Signaturer"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_unread
+msgid "Unread Messages"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model,name:sale_multi_approval.model_approver_add_wizard
+msgid "approver.add.wizard"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model,name:sale_multi_approval.model_signport_request
+msgid "signport.request"
+msgstr ""
