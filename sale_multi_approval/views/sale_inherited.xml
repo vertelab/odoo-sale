@@ -110,12 +110,25 @@
         <field name="source_id" position="attributes">
           <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
         </field>
+<!--
         <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
           <attribute name="invisible">True</attribute>
         </xpath>
         <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
           <attribute name="invisible">True</attribute>
         </xpath>
+-->
+
+
+        <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+            <attribute name="attrs">{'invisible': [('require_signature', '==',True)]}
+            </attribute>
+        </xpath>
+        <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
+            <attribute name="attrs">{'invisible': [('require_signature', '==',True)]}
+            </attribute>
+        </xpath> 
+        
       </field>
     </record>
     <record model="ir.ui.view" id="sale_management_order_approval_inherited">
