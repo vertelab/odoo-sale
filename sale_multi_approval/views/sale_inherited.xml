@@ -13,6 +13,7 @@
               <field name="check_approve_ability" invisible="1"/>
               <field name="is_approved" invisible="1"/>
               <field name="page_visibility" invisible="1"/>
+              <field name="signed_document"/>
             </group>
             <group>
               <button name="%(add_approver_action)d" class="oe_highlight"
