@@ -18,7 +18,7 @@ msgstr ""
 #. module: sale_multi_approval
 #: model:ir.module.category,description:sale_multi_approval.group_sale_multi_approval
 msgid "Access to the Sale approval menu"
-msgstr "Tillgång till sälg-signerings menyn"
+msgstr "Tillgång till sälj-signerings menyn"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_needaction
