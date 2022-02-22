@@ -4,16 +4,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0-20211230\n"
+"Project-Id-Version: Odoo Server 14.0-20210914\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-10 14:38+0000\n"
-"PO-Revision-Date: 2022-01-10 14:38+0000\n"
+"POT-Creation-Date: 2022-02-22 13:06+0000\n"
+"PO-Revision-Date: 2022-02-22 14:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"Language: sv\n"
+"X-Generator: Poedit 2.3\n"
 
 #. module: sale_multi_approval
 #: model:ir.module.category,description:sale_multi_approval.group_sale_multi_approval
@@ -111,7 +113,7 @@ msgstr "Signerare"
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__assertion
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__assertion
 msgid "Assertion"
-msgstr "Assertion"
+msgstr ""
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_attachment_count
@@ -121,7 +123,12 @@ msgstr "Mängd Bifogade Filer"
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__binding
 msgid "Binding"
-msgstr "Binding"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model:ir.model,name:sale_multi_approval.model_rest_api
+msgid "Centralized model to make REST calls from Odoo."
+msgstr ""
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__check_approve_ability
@@ -153,6 +160,7 @@ msgstr "Kundkonfigurering"
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__display_name
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approver_add_wizard__display_name
 #: model:ir.model.fields,field_description:sale_multi_approval.field_mail_compose_message__display_name
+#: model:ir.model.fields,field_description:sale_multi_approval.field_rest_api__display_name
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__display_name
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__display_name
 #: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__display_name
@@ -182,7 +190,7 @@ msgstr "Anställdas Signaturer"
 #. module: sale_multi_approval
 #: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__approve_customer_sale
 msgid "Enable this field for adding the approvals for the Sale Orders"
-msgstr ""
+msgstr "Bocka för detta fält för att lägga till signeringar på säljordrar"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_follower_ids
@@ -208,6 +216,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__id
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approver_add_wizard__id
 #: model:ir.model.fields,field_description:sale_multi_approval.field_mail_compose_message__id
+#: model:ir.model.fields,field_description:sale_multi_approval.field_rest_api__id
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__id
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__id
 #: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__id
@@ -241,7 +250,9 @@ msgstr ""
 msgid ""
 "If you save these changes, the current signatures will be deleted, and the "
 "document will need to be signed again."
-msgstr "Om du sparar dessa ändringar, så kommer signaturerna bli borttagna, och dokumentet måste bli signerat igen"
+msgstr ""
+"Om du sparar dessa ändringar, så kommer signaturerna bli borttagna, och "
+"dokumentet måste bli signerat igen"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__sale_approver_ids
@@ -262,6 +273,7 @@ msgstr "Är Följare"
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line____last_update
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approver_add_wizard____last_update
 #: model:ir.model.fields,field_description:sale_multi_approval.field_mail_compose_message____last_update
+#: model:ir.model.fields,field_description:sale_multi_approval.field_rest_api____last_update
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval____last_update
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order____last_update
 #: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request____last_update
@@ -364,7 +376,7 @@ msgstr "Säljorder Låst"
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__relay_state
 #: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__relay_state
 msgid "Relay State"
-msgstr "Relay State"
+msgstr ""
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_user_id
@@ -380,7 +392,7 @@ msgstr ""
 #: model:ir.module.category,name:sale_multi_approval.group_sale_multi_approval
 #: model:ir.ui.menu,name:sale_multi_approval.approval_sub_menu
 msgid "Sale Approval"
-msgstr ""
+msgstr "Säljordersignering"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__sale_approver_ids
@@ -406,7 +418,7 @@ msgstr ""
 #. module: sale_multi_approval
 #: model:ir.model,name:sale_multi_approval.model_sale_order
 msgid "Sales Order"
-msgstr "Kalkyl"
+msgstr "Kundorder"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__signed_document
@@ -418,7 +430,7 @@ msgstr "Signerat Dokument"
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__signer_ca
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__signer_ca
 msgid "Signer Ca"
-msgstr "Signer Ca"
+msgstr ""
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__signing_service_url
