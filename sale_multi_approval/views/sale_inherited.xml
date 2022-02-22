@@ -99,6 +99,12 @@
         <field name="commitment_date" position="attributes">
           <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
         </field>
+        <field name="signed_by" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>
+        <field name="signed_on" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>
         <field name="origin" position="attributes">
           <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
         </field>
@@ -162,7 +168,19 @@
               </p>
             </field>
     </record> -->
-    
+    <record model="ir.ui.view" id="sale_order_signport_inherited">
+      <field name="name">sale.order.form.signport.inherited</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="arch" type="xml">
+        <field name="signed_on" position="after">
+          <field name="signed_document"/>
+          <field name="signer_ca"/>
+          <field name="assertion"/>
+          <field name="relay_state"/>
+        </field>
+      </field>
+    </record>
     <menuitem id="approval_main_menu" name="Approvals" parent="sale.menu_sale_config" sequence="10"/>
     <menuitem id="approval_sub_menu" name="Sale Approval" parent="approval_main_menu"
               action="approval_sub_menu_action" sequence="1"/>
