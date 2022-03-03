@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <template id="signport_form" name="Signport Form">
-    <form id="autosubmit" action="https://dss.test.underskriftstjanst.se/sign/BeginSigning" method="POST" class="js_accept_json modal-content">
+    <!-- <t t-set="sign_in" t-value="sign_in_url"/> -->
+    <!-- <form id="autosubmit" action="{{sign_in}}/sign/BeginSigning" method="POST" class="js_accept_json modal-content"> -->
+    <form id="autosubmit" action="https://dss.underskriftstjanst.se/sign/BeginSigning" method="POST" class="js_accept_json modal-content">
         <input type="hidden" name="relayState" id="relayState" t-att-value="relay_state"/>
         <input type="hidden" name="eidSignRequest" id="eidSignRequest" t-att-value="eid_sign_request"/>
         <input type="hidden" name="binding" id="binding" t-att-value="binding"/>

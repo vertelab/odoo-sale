@@ -79,9 +79,7 @@ class SaleApproval(models.Model):
     name = fields.Char(default='Approval Configuration')
     approve_customer_sale = fields.Boolean(string="Approval on Sale Orders",
                                               help='Enable this field for adding the approvals for the Sale Orders')
-    sale_approver_ids = fields.Many2many('res.users', 'sale_id', string='Sale Approver', domain=lambda self: [
-        ('groups_id', 'in', self.env.ref('base.group_user').id)],
-                                            help='In this field you can add the approvers for the Sale Order')
+    threshold = fields.Integer("Threshold for double signing", default=200000)
     
     
 
@@ -101,6 +99,7 @@ class ApprovalLine(models.Model):
     signer_ca = fields.Binary(string='Signer Ca', readonly=1)
     assertion = fields.Binary(string='Assertion', readonly=1)
     relay_state = fields.Binary(string='Relay State', readonly=1)
+    signed_on = fields.Datetime(string='Signed on')
     
     
 
@@ -123,12 +122,13 @@ class SaleOrder(models.Model):
     def create(self, vals):
         records = super().create(vals)
         for record in records:
-            approval_vals = {
-            'approver_id': record.user_id.id,
-            'sale_order_id': record.id
-             }
-            line = self.env["approval.line"].sudo().create(approval_vals)
-            record.write({'approval_ids': [(4, line.id, 0)]})
+            if record.require_signature:
+                approval_vals = {
+                'approver_id': record.user_id.id,
+                'sale_order_id': record.id
+                }
+                line = self.env["approval.line"].sudo().create(approval_vals)
+                record.write({'approval_ids': [(4, line.id, 0)]})
         return records
 
     def generate_sale_pdf(self):
@@ -199,6 +199,13 @@ class SaleOrder(models.Model):
 
     def sale_unlock(self):
         self.quotation_locked = False
+        self.signed_document = False
+        self.signer_ca = False
+        self.assertion = False
+        self.relay_state = False
+        self.signed_by = False
+        self.signed_on = False
+        self.state = "draft"
         for signature in self.approval_ids:
             signature.write({'approval_status': False, 'signed_document': None, 'signer_ca': None, 'assertion': None, 'relay_state': None})
         self.env["ir.attachment"].search([('name', '=', f'{self.name}.pdf'), ('res_model', '=', 'sale.order'), ('res_id', '=', self.id)], limit=1).unlink()
@@ -224,7 +231,7 @@ class SaleOrder(models.Model):
                     ssn=self.env.user.partner_id.social_sec_nr and self.env.user.partner_id.social_sec_nr.replace("-", "") or False,
                     order_id=self.id,
                     access_token=access_token,
-                    message="Signering av dokument",
+                    message="Signering av offert",
                     sign_type="employee",
                     approval_id=approval_id.id
                 )
@@ -270,7 +277,7 @@ class SaleOrder(models.Model):
             self.quotation_locked = True
         else:
             self.quotation_locked = False
-        if  length_approve_lines >= 1 and self.amount_total < 200000:
+        if  length_approve_lines >= 1 and self.amount_total < self.env.ref("sale_multi_approval.default_sale_multi_approval_config").threshold:
             self.document_fully_approved = True
         elif length_approve_lines >= 2:
             self.document_fully_approved = True
@@ -314,8 +321,10 @@ class RestApiSignport(models.Model):
 
         base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
         if sign_type == "customer":
+            role = self.customer_string
             response_url = f"{base_url}/my/orders/{order_id}/sign_complete?access_token={access_token}"
         elif sign_type == "employee":
+            role = self.employee_string
             response_url = f"{base_url}/web/{order_id}/{approval_id}/sign_complete?access_token={access_token}"
         _logger.warning("add signature page")
         guid = str(uuid.uuid1())
@@ -338,7 +347,6 @@ class RestApiSignport(models.Model):
         )
         _logger.warning(f"res: {res}")
         document_content = res['documents'][0]['content']
-
         get_sign_request_vals = {
             "username": f"{self.user}",
             "password": f"{self.password}",
@@ -375,11 +383,17 @@ class RestApiSignport(models.Model):
                 "initialPosition": "last",
                 "templateId": "e33d2a21-1d23-4b4f-9baa-def11634ceb4",
                 "allowRemovalOfExistingSignatures": False,
-                "signerAttributes": [{
+                "signerAttributes": [
+                    {
+                    "label": _("Role"),
+                    "value": role
+                    },
+                    {
                     "label": "Namn",
                     "value": self.env.user.name
-                }],
-                "signatureTitle": "Signed by",
+                    }
+                ],
+                "signatureTitle": "Signerad av",
             },
         }
         res = self.call_endpoint(
@@ -435,6 +449,7 @@ class RestApiSignport(models.Model):
             approval_line.signer_ca = res["signerCa"]
             approval_line.assertion = res["assertion"]
             approval_line.relay_state = base64.b64encode(res["relayState"].encode())
+            approval_line.signed_on = fields.Datetime.now()
         else:
             self.env["ir.attachment"].sudo().create(
                 {

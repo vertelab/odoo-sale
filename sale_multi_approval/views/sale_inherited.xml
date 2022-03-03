@@ -23,9 +23,10 @@
                   <field name="approver_id"/>
                   <field name="approval_status"/>
                   <field name="signed_document"/>
-                  <field name="signer_ca"/>
-                  <field name="assertion"/>
-                  <field name="relay_state"/>
+                  <field name="signed_on"/>
+                  <field name="signer_ca" groups="base.group_no_one"/>
+                  <field name="assertion" groups="base.group_no_one"/>
+                  <field name="relay_state" groups="base.group_no_one"/>
                 </tree>
               </field>
             </group>
@@ -175,9 +176,9 @@
       <field name="arch" type="xml">
         <field name="signed_on" position="after">
           <field name="signed_document"/>
-          <field name="signer_ca"/>
-          <field name="assertion"/>
-          <field name="relay_state"/>
+          <field name="signer_ca" groups="base.group_no_one"/>
+          <field name="assertion" groups="base.group_no_one"/>
+          <field name="relay_state" groups="base.group_no_one"/>
         </field>
       </field>
     </record>

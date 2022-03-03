@@ -18,8 +18,7 @@
                         <group>
                             <group string="Customer Configuration">
                                 <field name="approve_customer_sale"/>
-                                <field name="sale_approver_ids" widget="many2many_tags"
-                                       attrs="{'invisible': [('approve_customer_sale', '=', False)],'required':[('approve_customer_sale', '=', True)]}"/>
+                                <field name="threshold"/>
                             </group>
                         </group>
                     </sheet>
