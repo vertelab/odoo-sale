@@ -1,17 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <template id="signport_form" name="Signport Form">
-    <form id="autosubmit" action="https://dss.test.underskriftstjanst.se/sign/BeginSigning" method="POST" class="js_accept_json modal-content">
-        <input type="hidden" name="relayState" id="relayState" t-att-value="relay_state"/>
-        <input type="hidden" name="eidSignRequest" id="eidSignRequest" t-att-value="eid_sign_request"/>
-        <input type="hidden" name="binding" id="binding" t-att-value="binding"/>
-    </form>
-    <script type="text/javascript">
-      function formAutoSubmit () {
-      var frm = document.getElementById("autosubmit");
-      frm.submit();
-      }
-      window.onload = formAutoSubmit;
-    </script>
-  </template>
+    <template id="signport_form" name="Signport Form">
+        <form id="autosubmit" action="https://dss.test.underskriftstjanst.se/sign/BeginSigning" method="POST" class="js_accept_json modal-content">
+            <input type="hidden" name="relayState" id="relayState" t-att-value="relay_state"/>
+            <input type="hidden" name="eidSignRequest" id="eidSignRequest" t-att-value="eid_sign_request"/>
+            <input type="hidden" name="binding" id="binding" t-att-value="binding"/>
+        </form>
+        <script type="text/javascript">
+            function formAutoSubmit () {
+                var frm = document.getElementById("autosubmit");
+                frm.submit();
+            }
+            window.onload = formAutoSubmit;
+        </script>
+    </template>
+
+    <template id="sale_order_portal_template" inherit_id="sale.sale_order_portal_template">
+        <xpath expr="//div[hasclass('o_portal_sale_sidebar')]/t[@t-call='portal.portal_record_sidebar']//div[hasclass('o_download_pdf')]" position="replace">
+            <div class="o_download_pdf btn-toolbar flex-sm-nowrap">
+                <div class="btn-group flex-grow-1 mr-1 mb-1">
+                    <t t-if="sale_order.signed_document">
+                        <a class="btn btn-secondary btn-block o_download_btn" t-attf-href="/my/orders/#{sale_order.id}/download_signed_doc?{{ keep_query() }}" title="Download"><i class="fa fa-download"/> Download</a>
+                    </t>
+                    <t t-else="">
+                        <a class="btn btn-secondary btn-block o_download_btn" t-att-href="sale_order.get_portal_url(report_type='pdf', download=True)" title="Download"><i class="fa fa-download"/> Download</a>
+                    </t>
+                </div>
+                <div class="btn-group flex-grow-1 mb-1">
+                    <a class="btn btn-secondary btn-block o_print_btn o_portal_invoice_print" t-att-href="sale_order.get_portal_url(report_type='pdf')" id="print_invoice_report" title="Print" target="_blank"><i class="fa fa-print"/> Print</a>
+                </div>
+            </div>
+        </xpath>
+    </template>
 </odoo>
