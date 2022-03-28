@@ -13,6 +13,7 @@
               <field name="check_approve_ability" invisible="1"/>
               <field name="is_approved" invisible="1"/>
               <field name="page_visibility" invisible="1"/>
+              <field name="signed_document"/>
             </group>
             <group>
               <button name="%(add_approver_action)d" class="oe_highlight"
@@ -22,9 +23,10 @@
                   <field name="approver_id"/>
                   <field name="approval_status"/>
                   <field name="signed_document"/>
-                  <field name="signer_ca"/>
-                  <field name="assertion"/>
-                  <field name="relay_state"/>
+                  <field name="signed_on"/>
+                  <field name="signer_ca" groups="base.group_no_one"/>
+                  <field name="assertion" groups="base.group_no_one"/>
+                  <field name="relay_state" groups="base.group_no_one"/>
                 </tree>
               </field>
             </group>
@@ -53,11 +55,11 @@
         <xpath expr="//button[@name='action_confirm']" position="before">
             <button name="sale_approve" class="oe_highlight"
                     string="Approve and Lock" type="object"
-                    groups="sale_multi_approval.group_approver,sale_multi_approval.group_approve_manager"
+                    groups="res_user_groups_skogsstyrelsen.group_sks_saljare"
                         attrs="{'invisible': ['|','|',('check_approve_ability', '!=', True),('document_fully_approved', '=', True),('is_approved','=',True)]}"/>
             <button name="sale_unlock" class="oe_highlight"
                     string="Unlock and Unapprove" type="object"
-                    groups="sale_multi_approval.group_approver,sale_multi_approval.group_approve_manager"/>
+                    groups=" 	res_user_groups_skogsstyrelsen.group_sks_saljare"/>
         </xpath>
         <field name="order_line" position="attributes">
           <attribute name="attrs">{'readonly': ['|',('state', 'in', ['done','cancel']), ('quotation_locked', '=', True)]}</attribute>
@@ -98,6 +100,12 @@
         <field name="commitment_date" position="attributes">
           <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
         </field>
+        <field name="signed_by" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>
+        <field name="signed_on" position="attributes">
+          <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
+        </field>
         <field name="origin" position="attributes">
           <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
         </field>
@@ -110,17 +118,25 @@
         <field name="source_id" position="attributes">
           <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
         </field>
+<!--
+        <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+          <attribute name="invisible">True</attribute>
+        </xpath>
+        <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
+          <attribute name="invisible">True</attribute>
+        </xpath>
+-->
 
-        <!-- <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
-            <attribute name="attrs">{'invisible': ['|',('document_fully_approved', '!=',
-                True)]}
+
+        <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+            <attribute name="attrs">{'invisible': [('require_signature', '==',True)]}
             </attribute>
         </xpath>
         <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
-            <attribute name="attrs">{'invisible': ['|',('document_fully_approved', '!=',
-                True)]}
+            <attribute name="attrs">{'invisible': [('require_signature', '==',True)]}
             </attribute>
-        </xpath> -->
+        </xpath> 
+        
       </field>
     </record>
     <record model="ir.ui.view" id="sale_management_order_approval_inherited">
@@ -153,7 +169,19 @@
               </p>
             </field>
     </record> -->
-    
+    <record model="ir.ui.view" id="sale_order_signport_inherited">
+      <field name="name">sale.order.form.signport.inherited</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="arch" type="xml">
+        <field name="signed_on" position="after">
+          <field name="signed_document"/>
+          <field name="signer_ca" groups="base.group_no_one"/>
+          <field name="assertion" groups="base.group_no_one"/>
+          <field name="relay_state" groups="base.group_no_one"/>
+        </field>
+      </field>
+    </record>
     <menuitem id="approval_main_menu" name="Approvals" parent="sale.menu_sale_config" sequence="10"/>
     <menuitem id="approval_sub_menu" name="Sale Approval" parent="approval_main_menu"
               action="approval_sub_menu_action" sequence="1"/>
