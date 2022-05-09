@@ -235,7 +235,7 @@ class SaleOrder(models.Model):
                     sign_type="employee",
                     approval_id=approval_id.id
                 )
-                _logger.warning(res)
+                _logger.warning(f"sale_approve res: {res}")
                 base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
                 signport_request = self.env["signport.request"].sudo().create({
                     'relay_state': res['relayState'],
@@ -243,6 +243,7 @@ class SaleOrder(models.Model):
                     'binding': res['binding'],
                     'signing_service_url': res['signingServiceUrl']
                 })
+                _logger.warning(f"returning the view, signport request: {signport_request}")
                 return {
                     'type': 'ir.actions.act_url',
                     'target': 'self',
@@ -402,6 +403,7 @@ class RestApiSignport(models.Model):
             headers=headers,
             data_vals=get_sign_request_vals,
         )
+        _logger.warning(f"getsignrequest res: {res}")
         return res
 
     def signport_post(self, data_vals={}, order_id=False, endpoint=False, sign_type="customer"):
