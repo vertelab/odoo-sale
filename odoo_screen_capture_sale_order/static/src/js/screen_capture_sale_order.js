@@ -24,14 +24,14 @@ odoo.define("odoo_screen_capture_sale_order.screen_capture_sale_order", function
                 title += formatted_title[i].trim()
             }
 
-            let width = element.offsetWidth * 1.65;
-            let height = element.offsetHeight * 1.25;
-            let opt = {
-                margin: 25,
+            const s_width = element.offsetWidth * 1.75;
+            const s_height = element.offsetHeight * 1.04;
+            const opt = {
+                margin: 20,
                 filename: title,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 1 },
-                jsPDF: { unit: 'px', format: [width, height], orientation: 'portrait' }
+                jsPDF: { unit: 'px', format: [s_width, s_height], orientation: 'portrait' }
             };
 
             html2pdf().set(opt).from(element).toContainer().toCanvas().toImg().toPdf().save()
