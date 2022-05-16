@@ -1,0 +1,19 @@
+<odoo>
+    <data>
+      <template id="button_override" name="sale_order_pdf_override" inherit_id="sale.sale_order_portal_template">
+        <xpath expr="//a[@class='btn btn-secondary btn-block o_download_btn']" position="attributes">
+            <attribute name="t-att-href"/>
+        </xpath>
+      </template>
+    </data>
+</odoo>
+
+<!-- <odoo>
+    <data>
+      <template id="button_override" name="sale_order_pdf_override" inherit_id="sale_multi_approval.sale_order_portal_template">
+        <xpath expr="//div[@class='btn-group flex-grow-1 mr-1 mb-1']" position="inside">
+            <a class="btn btn-secondary btn-block o_download_btn" title="Download PDF"><i class="fa fa-download"/> Download PDF</a>
+        </xpath>
+      </template>
+    </data>
+</odoo> -->

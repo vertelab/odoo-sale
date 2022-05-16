@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+from odoo import models, fields, api, _
 
-from odoo import models, fields, api
 import logging
 _logger = logging.getLogger(__name__)
 import requests
@@ -11,7 +11,7 @@ import base64
 from odoo.exceptions import UserError
 from datetime import datetime
 import uuid
-    
+
 class AddApproverWizard(models.TransientModel):
     _name="approver.add.wizard"
     def _get_sale_order(self):
@@ -33,9 +33,7 @@ class AddApproverWizard(models.TransientModel):
     def set_approver(self):
         line = self.env["approval.line"].create({'approver_id': self.user_id.id, 'sale_order_id': self.sale_order.id, 'approval_status': False})
         self.sale_order.write({'approval_ids': [(4, line.id, 0)]})
-    
-    
-    
+
 
 class MailComposer(models.TransientModel):
     _inherit = 'mail.compose.message'
@@ -48,13 +46,15 @@ class MailComposer(models.TransientModel):
         res = super().onchange_template_id(template_id, composition_mode, model, res_id)
         if res.get("value",{}).get("attachment_ids") and model == "sale.order":
             new_report = self.env["ir.attachment"].browse(res["value"]["attachment_ids"][0][2][0])
-            existing_report = self.env["ir.attachment"].search([("res_model", "=", model), ("res_id", "=", res_id)])
+            actual_model = self.env[model].browse(res_id)
+            existing_report = self.env["ir.attachment"].search([("res_model", "=", model), ("res_id", "=", res_id), ("name", "=", actual_model.name)])
             if new_report.name == existing_report.name:
                 new_report.unlink()
                 res["value"]["attachment_ids"][0][2][0] = existing_report.id
 
 
         return res
+
 
 class SignportRequest(models.TransientModel):
     _name = 'signport.request'
@@ -63,12 +63,13 @@ class SignportRequest(models.TransientModel):
     eid_sign_request = fields.Char()
     binding = fields.Char()
     signing_service_url = fields.Char()
-    
-    
+
+
 
     def apply_configuration(self):
         """Function for applying the approval configuration"""
         return True
+
 
 class SaleApproval(models.Model):
     _name = 'sale.approval'
@@ -80,8 +81,6 @@ class SaleApproval(models.Model):
     approve_customer_sale = fields.Boolean(string="Approval on Sale Orders",
                                               help='Enable this field for adding the approvals for the Sale Orders')
     threshold = fields.Integer("Threshold for double signing", default=200000)
-    
-    
 
     def apply_configuration(self):
         """Function for applying the approval configuration"""
@@ -100,8 +99,7 @@ class ApprovalLine(models.Model):
     assertion = fields.Binary(string='Assertion', readonly=1)
     relay_state = fields.Binary(string='Relay State', readonly=1)
     signed_on = fields.Datetime(string='Signed on')
-    
-    
+
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
@@ -112,11 +110,10 @@ class SaleOrder(models.Model):
     is_approved = fields.Boolean(compute='_compute_is_approved')
     page_visibility = fields.Boolean(compute='_compute_page_visibility')
     quotation_locked = fields.Boolean()
-    signed_document = fields.Binary(string='Signed Document', readonly=1)
+    signed_document = fields.Binary(string='Signed Document', readonly=False)
     signer_ca = fields.Binary(string='Signer Ca', readonly=1)
     assertion = fields.Binary(string='Assertion', readonly=1)
     relay_state = fields.Binary(string='Relay State', readonly=1)
-
 
     @api.model_create_multi
     def create(self, vals):
@@ -156,9 +153,6 @@ class SaleOrder(models.Model):
             'type': 'binary',  # override default_type from context, possibly meant for another model!
         }
         self.env["ir.attachment"].create(data_attach)
-
-
-    
 
     @api.depends('approval_ids')
     def _compute_page_visibility(self):
@@ -235,7 +229,7 @@ class SaleOrder(models.Model):
                     sign_type="employee",
                     approval_id=approval_id.id
                 )
-                _logger.warning(res)
+                _logger.warning(f"sale_approve res: {res}")
                 base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
                 signport_request = self.env["signport.request"].sudo().create({
                     'relay_state': res['relayState'],
@@ -243,6 +237,7 @@ class SaleOrder(models.Model):
                     'binding': res['binding'],
                     'signing_service_url': res['signingServiceUrl']
                 })
+                _logger.warning(f"returning the view, signport request: {signport_request}")
                 return {
                     'type': 'ir.actions.act_url',
                     'target': 'self',
@@ -402,6 +397,7 @@ class RestApiSignport(models.Model):
             headers=headers,
             data_vals=get_sign_request_vals,
         )
+        _logger.warning(f"getsignrequest res: {res}")
         return res
 
     def signport_post(self, data_vals={}, order_id=False, endpoint=False, sign_type="customer"):
