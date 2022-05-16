@@ -25,7 +25,7 @@
     'author': ' Vertel AB',
     'website': 'https://vertel.se',
     'category': 'sale',
-    'depends': ['sale_management', 'sale_project'],
+    'depends': ['sale_management', 'sale_project', 'project'],
     'data': [
         'views/sale_order_view.xml',
     ],
