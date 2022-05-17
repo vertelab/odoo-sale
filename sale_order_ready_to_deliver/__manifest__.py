@@ -36,7 +36,7 @@
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-sale',
-    'depends': ['sale', 'project'],
+    'depends': ['sale', 'project', 'hr', 'hr_timesheet'],
     'data': [
         'views/project_view.xml',
         'views/hr_employee_view.xml',
