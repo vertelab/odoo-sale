@@ -78,6 +78,44 @@ class SaleOrder(models.Model):
     def action_set_to_delivery(self):
         self.state = 'delivered'
 
+        # archieve timesheets
+        if self.tasks_ids.timesheet_ids:
+            for timesheet in self.tasks_ids.timesheet_ids:
+                timesheet.write({
+                    'active': False
+                })
+        # archieve tasks
+        for task in self.tasks_ids:
+            task.write({
+                'active': False
+            })
+
+    def action_set_to_back(self):
+        self.state = 'ready_to_deliver'
+
+    def _action_cancel(self):
+        inv = self.invoice_ids.filtered(lambda inv: inv.state == 'draft')
+        inv.button_cancel()
+        self._action_unlink_tasks()
+        return self.write({'state': 'cancel'})
+    
+    def _action_unlink_tasks(self):
+        # dissocaite with the tasks
+        
+        if self.tasks_ids:
+            self.tasks_ids.write({
+                'sale_line_id': False
+            })
+
+        # archieve timesheets
+        if self.tasks_ids.timesheet_ids:
+            for timesheet in self.tasks_ids.timesheet_ids:
+                timesheet.unlink()
+        # archieve timesheets
+        for task in self.tasks_ids:
+            task.unlink()
+
+
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
