@@ -15,6 +15,7 @@
         </record>
 -->
     
+<!--
         <record id="product_template_form_view_inherit" model="ir.ui.view">
             <field name="name">product.work_description.form</field>
             <field name="model">product.product</field>
@@ -27,6 +28,7 @@
                 </xpath>
             </field>
         </record>
+-->
     </data>
 </odoo>
 

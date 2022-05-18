@@ -22,15 +22,17 @@
             </field>
         </record>
         
+<!--
         <record id="project_task_tree_view2" model="ir.ui.view">
             <field name="name">project.task.form.inherit2</field>
             <field name="model">project.task</field>
             <field name="inherit_id" ref="sale_project.view_sale_project_inherit_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='sale_line_id']" position="after">
+                <xpath expr="//field[@name='sale_line_id']" position="replace">
                         <field name="product_id" string="Sales Order Product" attrs="{'invisible': [('partner_id', '=', False)]}" readonly="1"/>
                 </xpath>
             </field>
         </record>
+-->
     </data>
 </odoo>

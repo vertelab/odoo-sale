@@ -78,7 +78,7 @@ msgstr "Orderrad"
 #. module: sale_project_task_description
 #: model_terms:ir.ui.view,arch_db:sale_project_task_description.project_task_tree_view2
 msgid "Sales Order Product"
-msgstr "Säljorderobjekt"
+msgstr "Försäljningsorderprodukt"
 
 #. module: sale_project_task_description
 #: model:ir.model,name:sale_project_task_description.model_project_task
