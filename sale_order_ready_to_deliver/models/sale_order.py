@@ -72,8 +72,22 @@ class SaleOrder(models.Model):
         
         # ~ return res
 
-    def action_set_to_back(self):
-        self.state = 'ready_to_deliver'
+    def action_draft(self):
+        orders = self.filtered(lambda s: s.state in ['cancel', 'sent'])
+
+
+        achieved_tasks_ids = self.env['project.task'].sudo().search(
+            [('active', '=', False), ('sale_line_id.order_id', '=', self.id)]
+            )
+        if achieved_tasks_ids:
+            achieved_tasks_ids.write({'active': True})
+
+        return orders.write({
+            'state': 'draft',
+            'signature': False,
+            'signed_by': False,
+            'signed_on': False,
+        })
 
     def _action_cancel(self):
         inv = self.invoice_ids.filtered(lambda inv: inv.state == 'draft')
