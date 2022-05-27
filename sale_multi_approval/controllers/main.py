@@ -78,8 +78,8 @@ class SaleCustomerPortal(CustomerPortal):
         except (AccessError, MissingError):
             return request.redirect('/my')
 
-        filecontent = base64.b64decode(order_sudo.signed_document)
-        content_type = ["Content-Type", "application/octet-stream"]
+        filecontent = base64.b64decode(order_sudo.signed_xml_document.datas)
+        content_type = ["Content-Type", "application/xml"]
         disposition_content = [
             "Content-Disposition",
             content_disposition(order_sudo.name),
