@@ -20,36 +20,6 @@ class SaleOrder(models.Model):
                 'state': 'ready_to_deliver',
                 'date_order': fields.Datetime.now()
             }
-
-    # ~ def action_send_delivery_message(self):
-        # ~ hr_employee_ids = self.env['hr.employee'].search([('get_notified', '=', True), ('work_email', '!=', False)])
-        # ~ hr_partner_ids = hr_employee_ids.mapped('address_home_id')
-
-        # ~ ctx = {
-            # ~ 'default_model': 'sale.order',
-            # ~ 'default_res_id': self.ids[0],
-            # ~ 'default_composition_mode': 'comment',
-            # ~ 'force_email': True,
-            # ~ 'model_description': self.with_context(lang=self.env.context.get('lang')).type_name,
-            # ~ 'default_partner_ids': hr_partner_ids.ids,
-            # ~ 'default_subject': 'Ready to Deliver',
-            # ~ 'default_body': 'A sale order is ready to deliver',
-        # ~ }
-        # ~ return {
-            # ~ 'type': 'ir.actions.act_window',
-            # ~ 'view_mode': 'form',
-            # ~ 'res_model': 'mail.compose.message',
-            # ~ 'views': [(False, 'form')],
-            # ~ 'view_id': False,
-            # ~ 'target': 'new',
-            # ~ 'context': ctx,
-        # ~ }
-    
-    # ~ def send_message_ready_to_deliver(self):
-        # ~ hr_employee_ids = self.env['hr.employee'].search([('get_notified', '=', True), ('work_email', '!=', False)])
-        # ~ hr_partner_ids = hr_employee_ids.mapped('address_home_id').ids
-        # ~ msg =  _('A sale order is ready to deliver')
-        # ~ self.message_post(body=msg, partner_ids=hr_partner_ids)
         
     def create_ready_to_deliver_activity(self):
         hr_employee_ids = self.env['hr.employee'].search([('get_notified', '=', True)])
@@ -77,6 +47,70 @@ class SaleOrder(models.Model):
             
     def action_set_to_delivery(self):
         self.state = 'delivered'
+
+        # archieve timesheets
+        # ~ if self.tasks_ids.timesheet_ids:
+            # ~ for timesheet in self.tasks_ids.timesheet_ids:
+                # ~ timesheet.write({
+                    # ~ 'active': False
+                # ~ })
+        # archieve tasks
+        for task in self.tasks_ids:
+            task.write({
+                'active': False
+            })
+            
+    # ~ def action_draft(self):
+        # ~ _logger.warning("action_draft action_draft action_draft action_draft")
+        # ~ res = super(SaleOrder, self).action_draft()
+        # ~ _logger.warning(f"{self.tasks_ids}")
+        # ~ for task in self.tasks_ids:
+            # ~ _logger.warning(f"{task=}")
+            # ~ task.write({
+                # ~ 'active': True
+        # ~ })
+        
+        # ~ return res
+
+    def action_draft(self):
+        orders = self.filtered(lambda s: s.state in ['cancel', 'sent'])
+
+
+        achieved_tasks_ids = self.env['project.task'].sudo().search(
+            [('active', '=', False), ('sale_line_id.order_id', '=', self.id)]
+            )
+        if achieved_tasks_ids:
+            achieved_tasks_ids.write({'active': True})
+
+        return orders.write({
+            'state': 'draft',
+            'signature': False,
+            'signed_by': False,
+            'signed_on': False,
+        })
+
+    def _action_cancel(self):
+        inv = self.invoice_ids.filtered(lambda inv: inv.state == 'draft')
+        inv.button_cancel()
+        self._action_unlink_tasks()
+        return self.write({'state': 'cancel'})
+    
+    def _action_unlink_tasks(self):
+        # dissocaite with the tasks
+        
+        if self.tasks_ids:
+            self.tasks_ids.write({
+                'sale_line_id': False
+            })
+
+        # archieve timesheets
+        if self.tasks_ids.timesheet_ids:
+            for timesheet in self.tasks_ids.timesheet_ids:
+                timesheet.unlink()
+        # archieve timesheets
+        for task in self.tasks_ids:
+            task.unlink()
+
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'

@@ -16,7 +16,7 @@
 <!--
                     <button name="action_send_delivery_message" string="Send Delivery Email" type="object" states="ready_to_deliver"/>
 -->
-                    <button name="action_set_to_delivery" string="Delivered" type="object" states="ready_to_deliver" class="btn btn-primary"/>
+                    <button name="action_set_to_delivery" string="Delivered" type="object" states="ready_to_deliver" class="btn btn-primary"/> 
                 </button>
             </field>
         </record>

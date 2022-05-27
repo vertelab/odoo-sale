@@ -20,27 +20,22 @@
 ##############################################################################
 
 {
-    'name': 'Sale Order Ready to Deliver',
-    'version': '14.0.0.0.0',
-    # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
-    'summary': 'Sale Order Ready to Deliver',
-    'category': 'Marketing',
+    'name': 'Sale Order Print Template',
+    'version': '14.0.0.1.0',
+    'summary': 'Hide Quotation Price Details',
+    'category': 'Sales',
     'description': """
-        This module adds ready to deliver to project and sale order.
+        This module hide price details for quotations.
     """,
-    #'sequence': '1'
-    #'images': ['images/main_screenshot.png']
     'author': 'Vertel AB',
     'website': 'https://vertel.se/apps/',
     'license': 'AGPL-3',
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-sale',
-    'depends': ['sale', 'project', 'hr', 'hr_timesheet'],
+    'depends': ['sale'],
     'data': [
-        'views/project_view.xml',
-        'views/hr_employee_view.xml',
-        'views/sale_order_view.xml',
+        'report/sale_report_templates.xml',
     ],
     'installable': True,
     'auto_install': False,

@@ -3,7 +3,7 @@
     "name": "License Management",
     "version": "14.0.0.0.0",
     "license": "AGPL-3",
-    "author": "Viktor Ericsson",
+    "author": "Vertel AB",
     "website": "https://vertel.se/",
     "category": "Sales",
     "summary": "License Manager",

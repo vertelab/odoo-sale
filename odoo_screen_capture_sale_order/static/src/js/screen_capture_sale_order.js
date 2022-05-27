@@ -27,11 +27,11 @@ odoo.define("odoo_screen_capture_sale_order.screen_capture_sale_order", function
             const s_width = element.offsetWidth * 1.75;
             const s_height = element.offsetHeight * 1.04;
             const opt = {
-                margin: 20,
+                margin: [5, 5, 10, 5], //top, left, buttom, right
                 filename: title,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 1 },
-                jsPDF: { unit: 'px', format: [s_width, s_height], orientation: 'portrait' }
+                html2canvas: { scale: 1},
+                jsPDF: { unit: 'mm', format: ['210', '297'], orientation: 'portrait' },
             };
 
             html2pdf().set(opt).from(element).toContainer().toCanvas().toImg().toPdf().save()
