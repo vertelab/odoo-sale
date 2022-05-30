@@ -10,8 +10,24 @@ odoo.define("odoo_screen_capture_sale_order.screen_capture_sale_order", function
         },
 
         _fetch_pdf: function () {
-            const element = document.querySelector('#portal_sale_content')
             const title_element = document.querySelector('.my-0')
+
+            let elems = document.querySelectorAll("#portal_sale_content > div > .card-body > div[data-oe-model='sale.order']") // when there is a user logged in
+            if (elems.length === 0) {
+                elems = document.querySelectorAll("#portal_sale_content > div > .card-body > .oe_no_empty") // when there is no user logged in
+            }
+
+            Array.from(elems).forEach( function (el) {
+                const section_div = el.querySelectorAll("section > div.container")
+
+                Array.from(section_div).forEach( function (section_div_el) {
+                    section_div_el.classList.remove('container')
+                    
+                })
+            });
+
+            const element = document.querySelector('#portal_sale_content')
+            
 
             let title = ""
             let formatted_title = title_element.textContent.trim().split('\n')
@@ -24,8 +40,6 @@ odoo.define("odoo_screen_capture_sale_order.screen_capture_sale_order", function
                 title += formatted_title[i].trim()
             }
 
-            const s_width = element.offsetWidth * 1.75;
-            const s_height = element.offsetHeight * 1.04;
             const opt = {
                 margin: [5, 5, 10, 5], //top, left, buttom, right
                 filename: title,
