@@ -11,6 +11,7 @@ import base64
 from odoo.exceptions import UserError
 from datetime import datetime
 import uuid
+import re
 
 class AddApproverWizard(models.TransientModel):
     _name="approver.add.wizard"
@@ -423,8 +424,12 @@ class RestApiSignport(models.Model):
                 raise UserError('Invalid Personalnumber, please format it like "YYYYMMDDXXXX"')
             elif 'SignatureResponseUserCancel' in res['status']['statusCode']:
                 raise UserError('Digital signing cancelled')
+            elif 'The request was canceled' in res['status']['statusCodeDescription']:
+                raise UserError('Digital signing cancelled')
             else:
-                raise UserError(res)
+                match = re.search("StatusMessage: \'(.)+\'", res['status']['statusCodeDescription'])
+                _logger.warning(f"res statuss description: {res['status']['statusCodeDescription']} match: {match}")
+                raise UserError(match[0])
         
         attachment = self.env['ir.attachment'].create(
                 {
