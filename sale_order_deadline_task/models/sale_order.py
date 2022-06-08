@@ -14,7 +14,10 @@ class SaleOrder(models.Model):
     def set_date_default(self):
         current_date = fields.Date.today()
         _logger.warning(f"{current_date=}")
-        two_weeks_forward = current_date + relativedelta(days =+ 14)
+        icp = self.env['ir.config_parameter'].sudo()
+        days = icp.get_param('sale_order_deadline_task.sale_order_deadline_default', default=14)
+        
+        two_weeks_forward = current_date + relativedelta(days =+ int(days))
         _logger.warning(f"{two_weeks_forward=}")
         # your logic goes here
         return two_weeks_forward
@@ -57,12 +60,27 @@ class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
     date_deadline = fields.Date(string="Deadline", related='order_id.date_deadline')
-
+    
     def _timesheet_create_task_prepare_values(self, project):
+        # ~ tasks = self.env['project.task'].search([('date_deadline' ,=, self.date_deadline)])
+        
         res = super(SaleOrderLine, self)._timesheet_create_task_prepare_values(project)
         res.update({
             'date_deadline': self.date_deadline,
         })
+        len(res)
+        _logger.warning(f"{len(res)}")
+        _logger.warning(f"{res=}")
+        _logger.warning("LOOKHERE"*10)
+        tasks = self.env['project.task'].search([('date_deadline' ,'=', self.date_deadline)])
+        amount_of_tasks = len(tasks)
+        _logger.warning(f"{tasks=}")
+        _logger.warning(f"{amount_of_tasks=}")
+        icp = self.env['ir.config_parameter'].sudo()
+        deadline_max_tasks = icp.get_param('sale_order_deadline_task.sale_order_deadline_default', default=10)
+        
+
+        
         return res
         
 

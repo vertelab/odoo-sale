@@ -28,6 +28,7 @@
     'depends': ['sale_management', 'sale_project', 'project'],
     'data': [
         'views/sale_order_view.xml',
+        'views/res_config_settings.xml'
     ],
     'installable': 'True',
     'application': 'False',
