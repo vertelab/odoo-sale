@@ -23,7 +23,7 @@
         <xpath expr="//div[hasclass('o_portal_sale_sidebar')]/t[@t-call='portal.portal_record_sidebar']//div[hasclass('o_download_pdf')]" position="replace">
             <div class="o_download_pdf btn-toolbar flex-sm-nowrap">
                 <div class="btn-group flex-grow-1 mr-1 mb-1">
-                    <t t-if="sale_order.signed_document">
+                    <t t-if="sale_order.signed_xml_document">
                         <a class="btn btn-secondary btn-block o_download_btn" t-attf-href="/my/orders/#{sale_order.id}/download_signed_doc?{{ keep_query() }}" title="Download"><i class="fa fa-download"/> Download</a>
                     </t>
                     <t t-else="">

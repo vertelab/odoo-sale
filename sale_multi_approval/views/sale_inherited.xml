@@ -5,6 +5,9 @@
       <field name="model">sale.order</field>
       <field name="inherit_id" ref="sale.view_order_form"/>
       <field name="arch" type="xml">
+        <page name="customer_signature" position="attributes">
+        <attribute name="groups"></attribute>
+        </page>
         <xpath expr="//page[@name='customer_signature']" position="after">
           <page string="Employee Signatures" name="employee_signatures">
             <group>
@@ -13,7 +16,7 @@
               <field name="check_approve_ability" invisible="1"/>
               <field name="is_approved" invisible="1"/>
               <field name="page_visibility" invisible="1"/>
-              <field name="signed_document"/>
+              <field name="signed_xml_document"/>
             </group>
             <group>
               <button name="%(add_approver_action)d" class="oe_highlight"
@@ -22,7 +25,7 @@
                 <tree string="Approval lines" create="0" edit="0" delete="1">
                   <field name="approver_id"/>
                   <field name="approval_status"/>
-                  <field name="signed_document"/>
+                  <field name="signed_xml_document"/>
                   <field name="signed_on"/>
                   <field name="signer_ca" groups="base.group_no_one"/>
                   <field name="assertion" groups="base.group_no_one"/>
@@ -175,7 +178,7 @@
       <field name="inherit_id" ref="sale.view_order_form"/>
       <field name="arch" type="xml">
         <field name="signed_on" position="after">
-          <field name="signed_document"/>
+          <field name="signed_xml_document"/>
           <field name="signer_ca" groups="base.group_no_one"/>
           <field name="assertion" groups="base.group_no_one"/>
           <field name="relay_state" groups="base.group_no_one"/>

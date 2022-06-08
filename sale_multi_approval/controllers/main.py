@@ -47,6 +47,7 @@ class SaleMultiApproval(http.Controller):
         website=True,
     )
     def complete_signing(self, order_id, approval_id, **res):
+        _logger.warning(f"complete_signing first res: {res}")
         data = {
             "relayState": res["RelayState"],
             "eidSignResponse": res["EidSignResponse"],
@@ -55,6 +56,7 @@ class SaleMultiApproval(http.Controller):
 
         api_signport = request.env.ref("rest_signport.api_signport")
         res = api_signport.sudo().signport_post(data, order_id, "/CompleteSigning", sign_type="employee")
+        _logger.warning(f"complete_signing second res: {res}")
 
         order_sudo = request.env["sale.order"].sudo().browse(order_id)
         request.env["approval.line"].sudo().browse(approval_id).update({'approval_status': True})
@@ -78,8 +80,8 @@ class SaleCustomerPortal(CustomerPortal):
         except (AccessError, MissingError):
             return request.redirect('/my')
 
-        filecontent = base64.b64decode(order_sudo.signed_document)
-        content_type = ["Content-Type", "application/octet-stream"]
+        filecontent = base64.b64decode(order_sudo.signed_xml_document.datas)
+        content_type = ["Content-Type", "application/xml"]
         disposition_content = [
             "Content-Disposition",
             content_disposition(order_sudo.name),
