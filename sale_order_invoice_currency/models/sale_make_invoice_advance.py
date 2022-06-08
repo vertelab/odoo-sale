@@ -4,7 +4,6 @@
 import time
 
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError
 
 
 class SaleAdvancePaymentInv(models.TransientModel):
@@ -40,6 +39,4 @@ class SaleAdvancePaymentInv(models.TransientModel):
                 'analytic_account_id': order.analytic_account_id.id or False,
             })],
         }
-        print(invoice_vals)
-
         return invoice_vals
