@@ -61,26 +61,17 @@ class SaleOrderLine(models.Model):
 
     date_deadline = fields.Date(string="Deadline", related='order_id.date_deadline')
     
-    def _timesheet_create_task_prepare_values(self, project):
-        # ~ tasks = self.env['project.task'].search([('date_deadline' ,=, self.date_deadline)])
-        
+    def _timesheet_create_task_prepare_values(self, project):        
         res = super(SaleOrderLine, self)._timesheet_create_task_prepare_values(project)
         res.update({
             'date_deadline': self.date_deadline,
         })
-        len(res)
-        _logger.warning(f"{len(res)}")
-        _logger.warning(f"{res=}")
-        _logger.warning("LOOKHERE"*10)
-        tasks = self.env['project.task'].search([('date_deadline' ,'=', self.date_deadline)])
-        amount_of_tasks = len(tasks)
-        _logger.warning(f"{tasks=}")
-        _logger.warning(f"{amount_of_tasks=}")
+        amount_of_tasks = self.env['project.task'].search_count([('date_deadline' ,'=', self.date_deadline)])
         icp = self.env['ir.config_parameter'].sudo()
-        deadline_max_tasks = icp.get_param('sale_order_deadline_task.sale_order_deadline_default', default=10)
-        
-
-        
+        deadline_max_tasks = icp.get_param('sale_order_deadline_task.deadline_max_tasks', default=10)
+        if amount_of_tasks > int(deadline_max_tasks):
+            raise UserError(_("You have a lot of task set for this deadline"))
+                
         return res
         
 
