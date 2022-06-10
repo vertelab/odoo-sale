@@ -76,7 +76,9 @@ class SaleOrderLine(models.Model):
             implied if so line of generated task has been modified, we may regenerate it.
         """
         before_create_amount_of_tasks = self.env['project.task'].search_count([('date_deadline' ,'=', self.order_id.date_deadline)])
-
+        already_created_tasks_amount = 0
+        if self.task_id:
+            already_created_tasks_amount = len(self.task_id)
         so_line_task_global_project = self.filtered(lambda sol: sol.is_service and sol.product_id.service_tracking == 'task_global_project')
         so_line_new_project = self.filtered(lambda sol: sol.is_service and sol.product_id.service_tracking in ['project_only', 'task_in_project'])
 
@@ -153,7 +155,7 @@ class SaleOrderLine(models.Model):
         # ~ _logger.warning(f"{self.task_id}")
         _logger.warning(f"{len(self.task_id)}")
         icp = self.env['ir.config_parameter'].sudo()
-        created_tasks_amount = len(self.task_id)
+        created_tasks_amount = len(self.task_id) - already_created_tasks_amount
         total_tasks = created_tasks_amount + before_create_amount_of_tasks
         deadline_max_tasks = icp.get_param('sale_order_deadline_task.deadline_max_tasks', default=10)
         if total_tasks > int(deadline_max_tasks):
