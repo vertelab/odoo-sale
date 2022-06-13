@@ -11,3 +11,5 @@ class ResConfigSettings(models.TransientModel):
 
     sale_order_deadline_default = fields.Integer(string='Days Deadline', config_parameter='sale_order_deadline_task.sale_order_deadline_default', default=14)
     deadline_max_tasks = fields.Integer(string='Max Sale Deadlines', config_parameter='sale_order_deadline_task.deadline_max_tasks', default=20)
+
+    deadline_overview_count = fields.Integer(string='Deadline Overview Count', config_parameter='sale_order_deadline_task.deadline_overview_count', default=5)

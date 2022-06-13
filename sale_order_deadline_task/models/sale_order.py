@@ -1,5 +1,9 @@
+from calendar import c
+from itertools import count
+from typing import Counter
 from odoo import models, fields, api, _
 from dateutil.relativedelta import relativedelta
+from odoo.models import expression
 from odoo.exceptions import UserError, ValidationError
 import logging
 _logger = logging.getLogger(__name__)
@@ -7,6 +11,19 @@ _logger = logging.getLogger(__name__)
 class ProjectTask(models.Model):
     _inherit = "project.task"
     _order = "date_deadline desc, priority desc, sequence, id desc"
+
+
+class ProjectTaskDeadlineOverview(models.Model):
+    _name = "project.task.deadline.overview"
+    _description = "Project Task Deadline Overview"
+    _order = "date desc"
+
+
+    date = fields.Char(string='Date')
+    count = fields.Integer(string='Count')
+    sale_order_id = fields.Many2one('sale.order', string='Sale Order')
+
+    
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -23,7 +40,27 @@ class SaleOrder(models.Model):
         return two_weeks_forward
 
     date_deadline = fields.Date(string="Deadline",default=set_date_default, required=True)
-    
+
+    task_deadline_overview = fields.One2many('project.task.deadline.overview', 'sale_order_id', string='Task Overview', compute='_compute_task_deadline_overview')
+
+
+    def _compute_task_deadline_overview(self):
+        for record in self:
+            if record.date_deadline:
+                deadline_overview_count = self.env['ir.config_parameter'].sudo().get_param('sale_order_deadline_task.deadline_overview_count', default=5)
+                date_domain = [('date_deadline', '=', record.date_deadline)]
+                for rcount in range(1, int(deadline_overview_count)):
+                    date_domain = expression.OR([date_domain, [('date_deadline', '=', record.date_deadline + relativedelta(days=+rcount))]])
+                    
+                task_ids = self.env['project.task'].search(date_domain)
+                record.task_deadline_overview.create({
+                    'date': date,
+                    'count': count,
+                    'sale_order_id': record.id
+                } for date, count in Counter(task_ids.mapped('date_deadline')).items())
+            else:
+                record.task_deadline_overview = False
+
     
     
     # ~ @api.onchange("date_deadline")
@@ -163,3 +200,5 @@ class SaleOrderLine(models.Model):
             raise UserError(_('When confirming this sale order you have tried to create %s tasks.\nThere were already %s  with the deadline %s .\nThis will result in %s  tasks with the same deadline, which is more than the max allowed of %s.\nKindly change deadline before confirming.'% (str(created_tasks_amount), str(before_create_amount_of_tasks), str(self.order_id.date_deadline),str(total_tasks), str(deadline_max_tasks))))
             
         # ~ _logger.warn(_("Couldn't match line (id %s) against existing transfer item!\nlines:%s\ntransfer items:%s") % (line['id'], lines, wizard.item_ids.read()))
+
+

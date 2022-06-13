@@ -27,6 +27,7 @@
     'category': 'sale',
     'depends': ['sale_management', 'sale_project', 'project'],
     'data': [
+        'security/ir.model.access.csv',
         'views/sale_order_view.xml',
         'views/res_config_settings.xml'
     ],

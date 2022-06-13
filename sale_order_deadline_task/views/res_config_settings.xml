@@ -28,6 +28,18 @@
                                 </div>
                     </div>
                 </div>
+
+                <div class="col-12 col-lg-6 o_setting_box" id="deadline_overview_count_div">
+                    <div class="o_setting_left_pane">
+                                <field name="deadline_overview_count"/>
+                                </div>
+                    <div class="o_setting_right_pane">
+                                <label for="deadline_overview_count"/>
+                                <div class="text-muted">
+                                    Deadline Overview Count
+                                </div>
+                    </div>
+                </div>
                     
                 </xpath>
             </field>
@@ -77,5 +89,3 @@ default_order="date_deadline asc"
 <!--
 	sale.res_config_settings_view_form
 -->
-
-
