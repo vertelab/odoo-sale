@@ -22,6 +22,7 @@ class ProjectTaskDeadlineOverview(models.Model):
     date = fields.Char(string='Date')
     count = fields.Integer(string='Count')
     sale_order_id = fields.Many2one('sale.order', string='Sale Order')
+    max_tasks = fields.Integer(string="Max Tasks")
 
     
 
@@ -43,8 +44,10 @@ class SaleOrder(models.Model):
 
     task_deadline_overview = fields.One2many('project.task.deadline.overview', 'sale_order_id', string='Task Overview', compute='_compute_task_deadline_overview')
 
-
+    @api.onchange('date_deadline')
     def _compute_task_deadline_overview(self):
+        icp = self.env['ir.config_parameter'].sudo()
+        max_tasks = icp.get_param('sale_order_deadline_task.deadline_max_tasks', default=10)
         for record in self:
             if record.date_deadline:
                 deadline_overview_count = self.env['ir.config_parameter'].sudo().get_param('sale_order_deadline_task.deadline_overview_count', default=5)
@@ -53,11 +56,18 @@ class SaleOrder(models.Model):
                     date_domain = expression.OR([date_domain, [('date_deadline', '=', record.date_deadline + relativedelta(days=+rcount))]])
                     
                 task_ids = self.env['project.task'].search(date_domain)
-                record.task_deadline_overview.create({
-                    'date': date,
-                    'count': count,
-                    'sale_order_id': record.id
-                } for date, count in Counter(task_ids.mapped('date_deadline')).items())
+                if task_ids:
+                    for date, count in Counter(task_ids.mapped('date_deadline')).items():
+                        _logger.warning(f"{date}: {count}")
+                    record.task_deadline_overview.create({
+                        'max_tasks':max_tasks,
+                        'date': date,
+                        'count': count,
+                        'sale_order_id': record.id
+                    } for date, count in Counter(task_ids.mapped('date_deadline')).items())
+                else:
+                    record.task_deadline_overview = False
+                    
             else:
                 record.task_deadline_overview = False
 
@@ -112,7 +122,9 @@ class SaleOrderLine(models.Model):
             new project/task. This explains the searches on 'sale_line_id' on project/task. This also
             implied if so line of generated task has been modified, we may regenerate it.
         """
-        before_create_amount_of_tasks = self.env['project.task'].search_count([('date_deadline' ,'=', self.order_id.date_deadline)])
+        before_create_amount_of_tasks = 0
+        if self.order_id.date_deadline:
+            before_create_amount_of_tasks = self.env['project.task'].search_count([('date_deadline' ,'=', self.order_id.date_deadline)])
         already_created_tasks_amount = 0
         if self.task_id:
             already_created_tasks_amount = len(self.task_id)
@@ -190,14 +202,17 @@ class SaleOrderLine(models.Model):
         # ~ after_create_amount_of_tasks = self.env['project.task'].search_count([('date_deadline' ,'=', self.order_id.date_deadline)])
         # ~ _logger.warning(f"{after_create_amount_of_tasks=}")
         # ~ _logger.warning(f"{self.task_id}")
-        _logger.warning(f"{len(self.task_id)}")
+        # ~ _logger.warning(f"{len(self.task_id)}")
         icp = self.env['ir.config_parameter'].sudo()
         created_tasks_amount = len(self.task_id) - already_created_tasks_amount
         total_tasks = created_tasks_amount + before_create_amount_of_tasks
         deadline_max_tasks = icp.get_param('sale_order_deadline_task.deadline_max_tasks', default=10)
         if total_tasks > int(deadline_max_tasks):
-            # ~ raise UserError(_(f"When confirming this sale order you have tried to create {created_tasks_amount} tasks.\nThere were already {before_create_amount_of_tasks} with the deadline {self.order_id.date_deadline}.\nThis will result in {total_tasks} tasks with the same deadline, which is more than the max allowed of {deadline_max_tasks}.\nKindly change deadline before confirming."))
-            raise UserError(_('When confirming this sale order you have tried to create %s tasks.\nThere were already %s  with the deadline %s .\nThis will result in %s  tasks with the same deadline, which is more than the max allowed of %s.\nKindly change deadline before confirming.'% (str(created_tasks_amount), str(before_create_amount_of_tasks), str(self.order_id.date_deadline),str(total_tasks), str(deadline_max_tasks))))
+            # ~ raise UserError(_('When confirming this sale order you have tried to create %s tasks.\nThere were already %s  with the deadline %s .\nThis will result in %s  tasks with the same deadline, which is more than the max allowed of %s.\nKindly change deadline before confirming.'% (str(created_tasks_amount), str(before_create_amount_of_tasks), str(self.order_id.date_deadline),str(total_tasks), str(deadline_max_tasks))))
+        # ~ _logger.warn(_("Couldn't match line (id %s) against existing transfer item!\nlines:%s\ntransfer items:%s") % (line['id'], lines, wizard.item_ids.read()))
+
+
+            raise UserError(_('You have exceeded the number of allowed tasks. (%s)\nKindly change deadline before confirming again.'% str(deadline_max_tasks)))
             
         # ~ _logger.warn(_("Couldn't match line (id %s) against existing transfer item!\nlines:%s\ntransfer items:%s") % (line['id'], lines, wizard.item_ids.read()))
 
