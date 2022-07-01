@@ -49,6 +49,7 @@ class SaleOrder(models.Model):
         icp = self.env['ir.config_parameter'].sudo()
         max_tasks = icp.get_param('sale_order_deadline_task.deadline_max_tasks', default=10)
         for record in self:
+            record.task_deadline_overview = False
             if record.date_deadline:
                 deadline_overview_count = self.env['ir.config_parameter'].sudo().get_param('sale_order_deadline_task.deadline_overview_count', default=5)
                 date_domain = [('date_deadline', '=', record.date_deadline)]
@@ -59,6 +60,7 @@ class SaleOrder(models.Model):
                 if task_ids:
                     for date, count in Counter(task_ids.mapped('date_deadline')).items():
                         _logger.warning(f"{date}: {count}")
+                        
                     record.task_deadline_overview.create({
                         'max_tasks':max_tasks,
                         'date': date,
