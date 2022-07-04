@@ -8,7 +8,7 @@ _logger = logging.getLogger(__name__)
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-    estimated_time = fields.Float(string="Estimated Time", copy=False, related='product_id.estimated_time', readonly=False, store=True)
+    estimated_time = fields.Float(string="Estimated Time", copy=False)
 
 
     def _convert_qty_company_hours(self, dest_company):
@@ -20,3 +20,7 @@ class SaleOrderLine(models.Model):
         return planned_hours
 
     
+    @api.onchange('product_id')
+    def product_estimated_time(self):
+        if self.product_id:
+            self.estimated_time = self.product_id.estimated_time
