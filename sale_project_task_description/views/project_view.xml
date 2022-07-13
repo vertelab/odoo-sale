@@ -21,6 +21,18 @@
                 </field>
             </field>
         </record>
+
+        <record id="view_project_task_pivot_extend" model="ir.ui.view">
+            <field name="name">sale.project.task.form.extend</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_project_task_pivot"/>
+            <field name="arch" type="xml">
+                <field name="project_id" position="after">
+                    <field name="product_id" type="row"/>
+                    <field name="categ_id" type="row"/>
+                </field>
+            </field>
+        </record>
         
 
         <record id="sale_project_project_task_view_extend" model="ir.ui.view">
@@ -37,6 +49,8 @@
                 </xpath>
             </field>
         </record>
+
+
 
     </data>
 </odoo>
