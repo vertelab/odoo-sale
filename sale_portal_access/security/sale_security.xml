@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Portal Access Rules -->      
+
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'sale')]" />
+            </function>
+            <value eval="{'noupdate': False}" />
+        </function>
+
+            <record id="sale.sale_order_rule_portal" model="ir.rule">
+                <field name="name">Portal Personal Quotations/Sales Orders</field>
+                <field name="model_id" ref="sale.model_sale_order"/>
+                <field name="domain_force">['|', ('message_partner_ids','child_of',[user.commercial_partner_id.id]), ('allowed_portal_sale_user_ids', 'in', user.ids)]</field>
+                <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+                <field name="perm_unlink" eval="True"/>
+                <field name="perm_write" eval="True"/>
+                <field name="perm_read" eval="True"/>
+                <field name="perm_create" eval="False"/>
+            </record>
+
+            <record id="sale.sale_order_line_rule_portal" model="ir.rule">
+                <field name="name">Portal Sales Orders Line</field>
+                <field name="model_id" ref="sale.model_sale_order_line"/>
+                <field name="domain_force">['|', ('order_id.message_partner_ids','child_of',[user.commercial_partner_id.id]), ('order_id.allowed_portal_sale_user_ids', 'in', user.ids)]</field>
+                <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+            </record>
+
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'sale')]" />
+            </function>
+            <value eval="{'noupdate': True}" />
+        </function>
+
+
+    </data>
+</odoo>

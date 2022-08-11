@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+        <record id="sale_portal_access_form_view" model="ir.ui.view">
+            <field name="name">sale.order.portal.access.form.view</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="user_id" position="after">
+                    <field name="privacy_visibility" widget="radio"/>
+                    <field name="allowed_internal_sale_user_ids" widget="many2many_tags" attrs="{'invisible': [('privacy_visibility', '!=', 'followers')]}"/>
+                    <field name="allowed_portal_sale_user_ids" widget="many2many_tags" options="{'no_create': True}" attrs="{'invisible': [('privacy_visibility', '!=', 'portal')]}"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>
