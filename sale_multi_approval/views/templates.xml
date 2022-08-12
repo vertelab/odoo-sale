@@ -19,7 +19,7 @@
         </script>
     </template>
 
-    <template id="sale_order_portal_template" inherit_id="sale.sale_order_portal_template">
+    <template id="sale_order_portal_template_sign_form" inherit_id="sale.sale_order_portal_template">
         <xpath expr="//div[hasclass('o_portal_sale_sidebar')]/t[@t-call='portal.portal_record_sidebar']//div[hasclass('o_download_pdf')]" position="replace">
             <div class="o_download_pdf btn-toolbar flex-sm-nowrap">
                 <div class="btn-group flex-grow-1 mr-1 mb-1">
@@ -37,6 +37,54 @@
                     <a class="btn btn-secondary btn-block o_print_btn o_portal_invoice_print" t-att-href="sale_order.get_portal_url(report_type='pdf')" id="print_invoice_report" title="Print" target="_blank"><i class="fa fa-print"/> Print</a>
                 </div>
             </div>
+        </xpath>
+    </template>
+
+    <template id="sale_order_portal_template_signed_info" inherit_id="sale.sale_order_portal_template">
+        <xpath expr="//div[@id='portal_sale_content']" position="after">
+                <tbody>
+                    
+                    <t t-foreach="sale_order.approval_ids" t-as="approval">
+                        <div class="card" style="display:flex;">
+                            <div  class="col-md-8 offset-md-2" style="margin: auto;
+                                padding: 10px; justify-content: center; display:flex;">
+                                <p>
+                                    <span style="font-weight: bold;">Signed electronically: 	&#160; </span>
+                                    <span
+                                        t-esc="approval.signed_on"
+                                        t-options="{'widget': 'datetime'}"
+                                    />
+                                    
+                                <br/>
+                                    <span style="font-weight: bold;">by:&#160;</span> <span t-esc="approval.approver_id.name" />
+                                <br/>
+                                    <span style="font-weight: bold;">on behalf of:&#160;</span>
+                                    <span t-esc="sale_order.user_id.company_id.name" />
+                                </p>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-if="sale_order.signed_xml_document">
+                    <div class="card" style="display:flex;">
+                        <div  class="col-md-8 offset-md-2" style="margin: auto;
+                            padding: 10px; justify-content: center; display:flex;">
+                            <p>
+                                <span style="font-weight: bold;">Signed electronically: 	&#160; </span>
+                                <span
+                                    t-esc="sale_order.signed_on"
+                                    t-options="{'widget': 'datetime'}"
+                                />
+                                
+                            <br/>
+                                <span style="font-weight: bold;">by:&#160;</span> <span t-esc="sale_order.signed_by" />
+                            <br/>
+                                <span style="font-weight: bold;">on behalf of:&#160;</span>
+                                <span t-esc="sale_order.partner_id.name" />
+                            </p>
+                        </div>
+                    </div>
+                    </t>
+                </tbody>
         </xpath>
     </template>
 </odoo>
