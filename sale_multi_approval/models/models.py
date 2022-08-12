@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 
 import logging
@@ -362,7 +362,7 @@ class RestApiSignport(models.Model):
             },
             "document": [
                 {
-                    "mimeType": document.mimetype,  # TODO: check mime type
+                    "mimeType": 'application/xml', #document.mimetype,  # TODO: check mime type
                     "content": document_content,  # TODO: include document to sign
                     "fileName": document.display_name,  # TODO: add filename
                     # "encoding": False  # TODO: should we use this?
@@ -426,10 +426,18 @@ class RestApiSignport(models.Model):
                 raise UserError('Digital signing cancelled')
             elif 'The request was canceled' in res['status']['statusCodeDescription']:
                 raise UserError('Digital signing cancelled')
+            elif 'The signer attributes in the sign request cannot be verified against the attributes of the authenticated user' in res['status']['statusCodeDescription']:
+                raise UserError('Mismatching personal numbers')
+                
             else:
                 match = re.search("StatusMessage: \'(.)+\'", res['status']['statusCodeDescription'])
-                _logger.warning(f"res statuss description: {res['status']['statusCodeDescription']} match: {match}")
-                raise UserError(match[0])
+                if not match:
+                    match = re.search("Message.*\'(.)+\'", res['status']['statusCodeDescription'])
+                if match:
+                    _logger.warning(f"res statuss description: {res['status']['statusCodeDescription']} match: {match}")
+                    raise UserError(match[0])
+                else:
+                    raise UserError(res['status']['statusCodeDescription'])
         
         attachment = self.env['ir.attachment'].create(
                 {
