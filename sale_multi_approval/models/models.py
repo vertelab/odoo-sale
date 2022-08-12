@@ -421,9 +421,9 @@ class RestApiSignport(models.Model):
         _logger.warning(f"res: {res}")
         if not res['status']['success']:
             if 'not valid personal number' in res['status']['statusCodeDescription']:
-                raise UserError('Invalid Personalnumber, please format it like "YYYYMMDDXXXX"')
+                raise UserError(_('Invalid Personal number, please format it like "YYYYMMDDXXXX"'))
             elif 'SignatureResponseUserCancel' in res['status']['statusCode']:
-                raise UserError('Digital signing cancelled')
+                raise UserError(_('Digital signing cancelled'))
             elif 'The request was canceled' in res['status']['statusCodeDescription']:
                 raise UserError('Digital signing cancelled')
             elif 'The signer attributes in the sign request cannot be verified against the attributes of the authenticated user' in res['status']['statusCodeDescription']:

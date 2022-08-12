@@ -67,8 +67,8 @@
                     <!-- In case we want to repeat the header, remove "display: table-row-group" -->
                     <thead style="display: table-row-group">
                         <tr>
-                            <th name="th_description" class="text-left">Description</th>
-                            <th name="th_description" class="text-left">Work Description</th>
+                            <th name="th_description" class="text-left">Produkt</th>
+                            <!--<th name="th_description" class="text-left">Work Description</th> -->
                             <th name="th_quantity" class="text-right">Quantity</th>
                             <th name="th_priceunit" class="text-right">Unit Price</th>
                             <th name="th_discount" t-if="display_discount" class="text-right" groups="product.group_discount_per_so_line">
@@ -92,7 +92,9 @@
                             <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
                                 <t t-if="not line.display_type">
                                     <td name="td_name"><span t-field="line.name"/></td>
+<!--
                                     <td name="td_work_description"><span t-field="line.work_description"/></td>
+-->
 
                                     <td name="td_quantity" class="text-right">
                                         <span t-field="line.product_uom_qty"/>

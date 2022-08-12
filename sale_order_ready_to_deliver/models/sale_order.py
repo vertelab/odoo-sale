@@ -89,11 +89,11 @@ class SaleOrder(models.Model):
             'signed_on': False,
         })
 
-    def _action_cancel(self):
-        inv = self.invoice_ids.filtered(lambda inv: inv.state == 'draft')
-        inv.button_cancel()
-        self._action_unlink_tasks()
-        return self.write({'state': 'cancel'})
+    # ~ def _action_cancel(self):
+        # ~ inv = self.invoice_ids.filtered(lambda inv: inv.state == 'draft')
+        # ~ inv.button_cancel()
+        # ~ self._action_unlink_tasks()
+        # ~ return self.write({'state': 'cancel'})
     
     def _action_unlink_tasks(self):
         # dissocaite with the tasks
@@ -123,4 +123,5 @@ class SaleOrderLine(models.Model):
             self.write({
                 'ready_to_deliver': True
             })
+
 

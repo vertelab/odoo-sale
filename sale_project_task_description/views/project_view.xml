@@ -1,5 +1,6 @@
 <odoo>
     <data>
+<!--
         <record id="project_task_form_view" model="ir.ui.view">
             <field name="name">project.task.form</field>
             <field name="model">project.task</field>
@@ -10,6 +11,7 @@
                 </field>
             </field>
         </record>
+-->
 
         <record id="project_task_tree_view" model="ir.ui.view">
             <field name="name">project.task.tree</field>
@@ -21,18 +23,37 @@
                 </field>
             </field>
         </record>
+
+        <record id="view_project_task_pivot_extend" model="ir.ui.view">
+            <field name="name">sale.project.task.form.extend</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_project_task_pivot"/>
+            <field name="arch" type="xml">
+                <field name="project_id" position="after">
+                    <field name="product_id" type="row"/>
+                    <field name="categ_id" type="row"/>
+                </field>
+            </field>
+        </record>
         
-<!--
-        <record id="project_task_tree_view2" model="ir.ui.view">
-            <field name="name">project.task.form.inherit2</field>
+
+        <record id="sale_project_project_task_view_extend" model="ir.ui.view">
+            <field name="name">sale.project.task.form.extend</field>
             <field name="model">project.task</field>
             <field name="inherit_id" ref="sale_project.view_sale_project_inherit_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='sale_line_id']" position="replace">
-                        <field name="product_id" string="Sales Order Product" attrs="{'invisible': [('partner_id', '=', False)]}" readonly="1"/>
+                    <field name="sale_line_id" string="Sales Order Product" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='sale_line_id']" position="after">
+                    <field name="categ_id" string="Product Category" attrs="{'invisible': [('partner_id', '=', False)]}" readonly="1"/>
+                    <field name="product_id" string="Sales Order Product" attrs="{'invisible': [('partner_id', '=', False)]}" readonly="1"/>
+                    <field name="object_description"/>
                 </xpath>
             </field>
         </record>
--->
+
+
+
     </data>
 </odoo>

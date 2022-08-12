@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Odoo, Open Source Enterprise Management Solution, third party addon
-#    Copyright (C) 2020- Vertel AB (<http://vertel.se>).
+#    Odoo SA, Open Source Management Solution, third party addon
+#    Copyright (C) 2021- Vertel AB (<https://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -15,23 +15,29 @@
 #    GNU Affero General Public License for more details.
 #
 #    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+
 {
-    'name': 'Task Sale Order DeadLine',
-    'version': '14.0.1.0',
+    'name': 'Sale Order Portal Access',
+    'version': '14.0.0.1.0',
+    'summary': 'Sale Order Portal Access',
+    'category': 'Sales',
+    'description': """
+        This module adds the flexibility to allow portal access to sales order.
+    """,
+    'author': 'Vertel AB',
+    'website': 'https://vertel.se/apps/',
     'license': 'AGPL-3',
-    'author': ' Vertel AB',
-    'website': 'https://vertel.se',
-    'category': 'sale',
-    'depends': ['sale_management', 'sale_project', 'project'],
+    'contributor': '',
+    'maintainer': 'Vertel AB',
+    'repository': 'https://github.com/vertelab/odoo-sale',
+    'depends': ['sale'],
     'data': [
-        'security/ir.model.access.csv',
         'views/sale_order_view.xml',
-        'views/res_config_settings.xml'
+        'security/sale_security.xml',
     ],
-    'installable': 'True',
-    'application': 'False',
+    'installable': True,
+    'auto_install': False,
 }
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
