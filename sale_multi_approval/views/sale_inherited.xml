@@ -36,22 +36,22 @@
           </page>
         </xpath>
         <xpath expr="//button[@name='action_quotation_send'][1]" position="attributes">
-                <attribute name="attrs">{'invisible': ['|',('document_fully_approved', '!=',
-                    True)]}
-                </attribute>
+            <attribute name="attrs">{'invisible': ['|', '&amp;',('require_signature', '==',True), ('document_fully_approved', '!=',
+                True)]}
+            </attribute>
         </xpath>
         <xpath expr="//button[@name='action_quotation_send'][2]" position="attributes">
             <attribute name="attrs">{'invisible': ['|', '|', ('state', '!=', 'draft'), 
-            ('invoice_count','&gt;=',1), ('document_fully_approved', '!=', True)]}
+            ('invoice_count','!=',1), '&amp;',('document_fully_approved', '!=', True), ('require_signature', '==',True)]}
             </attribute>
         </xpath>
         <xpath expr="//button[@name='action_quotation_send'][3]" position="attributes">
             <attribute name="attrs">{'invisible': ['|', '|', ('state', '=', 'draft'), 
-            ('invoice_count','&gt;=',1), ('document_fully_approved', '!=', True)]}
+            ('invoice_count','&gt;=',1), '&amp;', ('document_fully_approved', '!=', True), ('require_signature', '==',True)]}
             </attribute>
         </xpath>
         <xpath expr="//button[@name='action_quotation_send'][4]" position="attributes">
-            <attribute name="attrs">{'invisible': ['|',('document_fully_approved', '!=',
+            <attribute name="attrs">{'invisible': ['|', '&amp;', ('require_signature', '==',True), ('document_fully_approved', '!=',
                 True)]}
             </attribute>
         </xpath>
@@ -132,11 +132,11 @@
 
 
         <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
-            <attribute name="attrs">{'invisible': [('require_signature', '==',True)]}
+            <attribute name="attrs">{'invisible': ['|', ('require_signature', '==',True), ('state', 'not in', ['sent'])]}
             </attribute>
         </xpath>
         <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
-            <attribute name="attrs">{'invisible': [('require_signature', '==',True)]}
+            <attribute name="attrs">{'invisible': ['|', ('require_signature', '==',True), ('state', 'not in', ['draft'])]}
             </attribute>
         </xpath> 
         
