@@ -41,7 +41,7 @@
             </attribute>
         </xpath>
         <xpath expr="//button[@name='action_quotation_send'][2]" position="attributes">
-            <attribute name="attrs">{'invisible': ['|', '|', ('state', '!=', 'draft'), 
+            <attribute name="attrs">{'invisible': ['|', '|', ('state', '!=', 'draft'),
             ('invoice_count','!=',1), '&amp;',('document_fully_approved', '!=', True), ('require_signature', '==',True)]}
             </attribute>
         </xpath>
