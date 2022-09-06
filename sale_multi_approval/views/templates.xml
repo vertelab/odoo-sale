@@ -45,26 +45,28 @@
                 <tbody>
                     
                     <t t-foreach="sale_order.approval_ids" t-as="approval">
-                        <div class="card" style="display:flex;">
-                            <div  class="col-md-8 offset-md-2" style="margin: auto;
-                                padding: 10px; justify-content: center; display:flex;">
-                                <p>
-                                    <span style="font-weight: bold;">Signed electronically: 	&#160; </span>
-                                    <span
-                                        t-esc="approval.signed_on"
-                                        t-options="{'widget': 'datetime'}"
-                                    />
-                                    
-                                <br/>
-                                    <span style="font-weight: bold;">by:&#160;</span> <span t-esc="approval.approver_id.name" />
-                                <br/>
-                                    <span style="font-weight: bold;">on behalf of:&#160;</span>
-                                    <span t-esc="sale_order.user_id.company_id.name" />
-                                </p>
+                        <t t-if="approval.signed_on">
+                            <div class="card" style="display:flex;">
+                                <div  class="col-md-8 offset-md-2" style="margin: auto;
+                                    padding: 10px; justify-content: center; display:flex;">
+                                    <p>
+                                        <span style="font-weight: bold;">Signed electronically: 	&#160; </span>
+                                        <span
+                                            t-esc="approval.signed_on"
+                                            t-options="{'widget': 'datetime'}"
+                                        />
+                                        
+                                    <br/>
+                                        <span style="font-weight: bold;">by:&#160;</span> <span t-esc="approval.approver_id.name" />
+                                    <br/>
+                                        <span style="font-weight: bold;">on behalf of:&#160;</span>
+                                        <span t-esc="sale_order.user_id.company_id.name" />
+                                    </p>
+                                </div>
                             </div>
-                        </div>
+                        </t>
                     </t>
-                    <t t-if="sale_order.signed_xml_document">
+                    <t t-if="sale_order.signed_xml_document and sale_order.signed_on">
                     <div class="card" style="display:flex;">
                         <div  class="col-md-8 offset-md-2" style="margin: auto;
                             padding: 10px; justify-content: center; display:flex;">
