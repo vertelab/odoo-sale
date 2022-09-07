@@ -36,19 +36,8 @@ class ElkSmsSaleOrder(models.TransientModel):
         temp_sms = self.env['temp.elk.sms'].create({'body': self.body, 'number': self.number, 'elk_api_id': self.elk_api_id, 'status': self.status, 'sale_id': self.sale_id})
         _logger.warning(f"{temp_sms=}")
 
-        #look at api results instead of this since its always 200               
-        # if res.content == 200:
-        #     if (active_id := self.env.context.get('active_id')):
-        #         sale_order = self.env['sale.order'].browse(active_id)
-        #         sale_order.message_post(body = self.body )
-
         return res
 
     @api.onchange('partner_id')
     def _onchange_partner(self):
         self.number = self.partner_id.mobile
-
-    # def create_sms_object(self, body, number, id, status, sale_id):
-    #     _logger.warning(f"{body} {number} {id} {status} {sale_id}")
-    #     temp_sms = self.env['temp.elk.sms'].create({'body': body, 'number': number, 'elk_api_id': id, 'status': 'Sent', 'sale_id': id})
-    #     _logger.warning(f"{temp_sms=}")
