@@ -196,7 +196,7 @@ class SaleOrder(models.Model):
 
     def sale_unlock(self):
         self.quotation_locked = False
-        self.signed_document = False
+        self.signed_xml_document = False
         self.signer_ca = False
         self.assertion = False
         self.relay_state = False
@@ -204,7 +204,7 @@ class SaleOrder(models.Model):
         self.signed_on = False
         self.state = "draft"
         for signature in self.approval_ids:
-            signature.write({'approval_status': False, 'signed_document': None, 'signer_ca': None, 'assertion': None, 'relay_state': None})
+            signature.write({'approval_status': False, 'signed_xml_document': None, 'signer_ca': None, 'assertion': None, 'relay_state': None})
         self.env["ir.attachment"].search([('name', '=', f'{self.name}.pdf'), ('res_model', '=', 'sale.order'), ('res_id', '=', self.id)], limit=1).unlink()
 
     def sale_approve(self):
