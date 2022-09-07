@@ -67,32 +67,33 @@ class SaleOrder(models.Model):
 
 
 
-    # @api.depends('analytic_account_id.line_ids') TODO IMPLEMENT
-    # def _compute_other_analytic_ids(self):
-    #     for order in self:
-    #         if order.analytic_account_id:
-    #             order.timesheet_ids = self.env['account.analytic.line'].search(
-    #                 [('so_line', 'in', order.order_line.ids),
-    #                     ('amount', '<=', 0.0),
-    #                     ('project_id', '!=', False)])
-    #         else:
-    #             order.timesheet_ids = []
-    #         order.timesheet_count = len(order.timesheet_ids)
+    @api.depends('analytic_account_id.line_ids')
+    def _compute_other_analytic_ids(self):
+        for order in self:
+            if order.analytic_account_id:
+                order.timesheet_ids = self.env['account.analytic.line'].search(
+                    [('so_line', 'in', order.order_line.ids),
+                        ('amount', '<=', 0.0),
+                        ('project_id', '!=', False)])
+            else:
+                order.other_analytic_ids = []
+            order.other_analytic_count = len(order.timesheet_ids)
 
-    # other_analytic_ids = fields.Many2many('account.analytic.line', compute='_compute_other_analytic_ids', string='Timesheet activities associated to this sale')
-    # other_analytic_count = fields.Float(string='Timesheet activities', compute='_compute_other_analytic_ids', groups="hr_timesheet.group_hr_timesheet_user")
-    # def action_view_other_analytic_lines(self):
-    #     self.ensure_one()
-    #     action = self.env["ir.actions.actions"]._for_xml_id("sale_timesheet.timesheet_action_from_sales_order")
-    #     action['context'] = {
-    #         'search_default_billable_timesheet': True
-    #     }  # erase default filters
-    #     uom_category_time_ids = self.env['uom.category'].search([('name', '=', 'Working Time')], limit=1)
-    #     if self.timesheet_count > 0:
-    #         action['domain'] = [('so_line', 'in', self.order_line.ids), ('product_uom_id.category_id', '!=', uom_category_time_ids.ids)]
-    #     else:
-    #         action = {'type': 'ir.actions.act_window_close'}
-    #     return action
+    other_analytic_ids = fields.Many2many('account.analytic.line', compute='_compute_other_analytic_ids', string='Timesheet activities associated to this sale')
+    other_analytic_count = fields.Float(string='Timesheet activities', compute='_compute_other_analytic_ids', groups="hr_timesheet.group_hr_timesheet_user")
+
+    def action_view_other_analytic_lines(self):
+        self.ensure_one()
+        action = self.env["ir.actions.actions"]._for_xml_id("sale_timesheet.timesheet_action_from_sales_order")
+        action['context'] = {
+            'search_default_billable_timesheet': True
+        }  # erase default filters
+        uom_category_time_ids = self.env['uom.category'].search([('name', '=', 'Working Time')], limit=1)
+        if self.timesheet_count > 0:
+            action['domain'] = [('so_line', 'in', self.order_line.ids), ('product_uom_id.category_id', '!=', uom_category_time_ids.ids)]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        return action
 
 
 class ProductTemplate(models.Model):
