@@ -20,18 +20,6 @@ _logger = logging.getLogger(__name__)
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
-    
-    @api.depends('product_id')
-    def _compute_qty_delivered_method(self):
-        """ Stock module compute delivered qty for product [('type', 'in', ['consu', 'product'])]
-            For SO line coming from expense, no picking should be generate: we don't manage stock for
-            thoses lines, even if the product is a storable.
-        """
-        super(SaleOrderLine, self)._compute_qty_delivered_method()
-
-        for line in self:
-            if line.product_id.is_analytic_cost:
-                line.qty_delivered_method = 'analytic'
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -96,6 +84,3 @@ class SaleOrder(models.Model):
         return action
 
 
-class ProductTemplate(models.Model):
-    _inherit = 'product.template'
-    is_analytic_cost = fields.Boolean()
