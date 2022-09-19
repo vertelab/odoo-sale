@@ -1,5 +1,6 @@
 from urllib import request
-from odoo import api, fields, models
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 import requests
 import logging
 import json
@@ -44,6 +45,11 @@ class ElkSmsSaleOrder(models.TransientModel):
 
     # and create sms object
     def send_sms(self):
+        active_ids = self.env.context.get('active_ids')
+        sale_ids = self.env['sale.order'].browse(active_ids)
+        if sale_ids.filtered(lambda order: order.state != 'ready_to_deliver'):
+            raise UserError(_("You cannot send sms if order is not in ready state"))
+
         phone_number = self.number.split(",")
         for partner_id, phone_number in zip(self.partner_id, phone_number):
             sms = self.env['sms.sms'].create({'number': phone_number, 'body': self.body, 'partner_id': partner_id.id})
@@ -60,3 +66,4 @@ class ElkSmsSaleOrder(models.TransientModel):
                  'sale_id': self.sale_id})
             _logger.warning(f"{temp_sms=}")
 
+        sale_ids.write({'sms_sent': True})
