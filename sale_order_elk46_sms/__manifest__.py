@@ -8,7 +8,7 @@
     ],
     'data': [
         'security/ir.model.access.csv',
-        'wizard/send_sms_wizard_views.xml',
         'views/sale_order_sms_view.xml',
+        'wizard/send_sms_wizard_views.xml',
     ],
 }

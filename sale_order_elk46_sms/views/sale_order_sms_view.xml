@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <record id="sms_wizard_action" model="ir.actions.act_window" >
-        <field name="name">sms.wizard.action</field>
+    <record id="sms_wizard_action" model="ir.actions.act_window">
+        <field name="name">Send SMS</field>
+        <field name="type">ir.actions.act_window</field>
         <field name="res_model">elk.sms</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
-        <field name="view_id" ref="sale_order_elk46_sms.elk_sms_wizard_view"/>
+        <field name="binding_model_id" ref="sale.model_sale_order" />
+        <field name="binding_view_types">list,form</field>
+        <field name="context">{
+            'default_res_ids': active_ids
+        }</field>
     </record>
 
     <record id="sale_order_button_view" model="ir.ui.view" >

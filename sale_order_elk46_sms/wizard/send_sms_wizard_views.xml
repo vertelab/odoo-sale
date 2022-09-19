@@ -7,13 +7,11 @@
             <form>
                 <sheet>
                     <group>
-                        <group>
-                            <field name="partner_id" string="Contact"/>
-                            <field name="mail_message_id" readonly="1" attrs="{'invisible': [('mail_message_id', '=', False)]}"/>
-                        </group>
-                        <group>
-                            <field name="number" required="1"/>
-                        </group>
+                        <field name="partner_id" string="Contact" widget="many2many_tags"/>
+                        <field name="mail_message_id" readonly="1" attrs="{'invisible': [('mail_message_id', '=', False)]}"/>
+                    </group>
+                    <group>
+                        <field name="number" required="1"/>
                     </group>
                     <group>
                         <field name="body" widget="sms_widget" string="Message" required="1"/>
