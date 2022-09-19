@@ -223,6 +223,8 @@ class SaleOrder(models.Model):
             if current_user == approval_id.approver_id.id:
                 signport = self.env.ref("rest_signport.api_signport")
                 data = json.loads(request.httprequest.data)
+                _logger.warning("data"*999)
+                _logger.warning(f"{data=}")
                 access_token=data.get("params", {}).get("access_token")
                 res = signport.sudo().post_sign_sale_order(
                     ssn=self.env.user.partner_id.social_sec_nr and self.env.user.partner_id.social_sec_nr.replace("-", "") or False,
@@ -306,6 +308,8 @@ class RestApiSignport(models.Model):
         # if not document:
         #     return False
         # # TODO: attach pdf or xml of order to the request
+        _logger.warning("access_token"*999)
+        _logger.warning(f"{access_token=}")
         document = self.env['sale.order'].browse(order_id).latest_xml_export
         if self.env['sale.order'].browse(order_id).signed_document:
             document_content = self.env['sale.order'].browse(order_id).signed_document.decode()
@@ -449,13 +453,16 @@ class RestApiSignport(models.Model):
 
         username = self.env.user.name
         if sign_type == "employee":
+            _logger.warning("employee"*999)
             self.env['sale.order'].browse(order_id).signed_xml_document = attachment
+            approval_line.approval_status = True
             approval_line = self.env["approval.line"].search([("sale_order_id", "=", order_id), ("approver_id", "=", self.env.uid)], limit=1)
             approval_line.signed_xml_document = attachment
             approval_line.signer_ca = res["signerCa"]
             approval_line.assertion = res["assertion"]
             approval_line.relay_state = base64.b64encode(res["relayState"].encode())
             approval_line.signed_on = fields.Datetime.now()
+            _logger.warning("after employee"*999)
         elif sign_type == "customer":
             sale_order = self.env["sale.order"].sudo().browse(order_id)
 

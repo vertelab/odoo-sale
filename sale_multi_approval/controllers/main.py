@@ -42,7 +42,7 @@ class SaleMultiApproval(http.Controller):
         ["/web/<int:order_id>/<int:approval_id>/sign_complete"],
         type="http",
         auth="public",
-        methods=["POST"],
+        methods=["POST", "GET"],
         csrf=False,
         website=True,
     )
@@ -57,9 +57,6 @@ class SaleMultiApproval(http.Controller):
         api_signport = request.env.ref("rest_signport.api_signport")
         res = api_signport.sudo().signport_post(data, order_id, "/CompleteSigning", sign_type="employee")
         _logger.warning(f"complete_signing second res: {res}")
-
-        order_sudo = request.env["sale.order"].sudo().browse(order_id)
-        request.env["approval.line"].sudo().browse(approval_id).update({'approval_status': True})
         base_url = request.env["ir.config_parameter"].sudo().get_param("web.base.url")
         return request.redirect(f"{base_url}/web#id={order_id}&model=sale.order&view_type=form")
 
