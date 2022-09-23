@@ -64,9 +64,40 @@
                     string="Unlock and Unapprove" type="object"
                     groups=" 	res_user_groups_skogsstyrelsen.group_sks_saljare"/>
         </xpath>
-        <field name="order_line" position="attributes">
+
+<!--        <field name="order_line" position="attributes">-->
+<!--          <attribute name="attrs">{'readonly': ['|',('state', 'in', ['done','cancel']), ('quotation_locked', '=', True)]}</attribute>-->
+<!--        </field>-->
+
+
+        <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="after">
+          <field name="quotation_locked" invisible="1"/>
+        </xpath>
+
+        <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="attributes">
           <attribute name="attrs">{'readonly': ['|',('state', 'in', ['done','cancel']), ('quotation_locked', '=', True)]}</attribute>
-        </field>
+        </xpath>
+
+        <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="attributes">
+          <attribute name="attrs">{'readonly': ['|',('state', 'in', ['done','cancel']), ('quotation_locked', '=', True)]}</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='order_line']/tree/field[@name='product_uom_qty']" position="attributes">
+          <attribute name="attrs">{'readonly': ['|',('state', 'in', ['done','cancel']), ('quotation_locked', '=', True)]}</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="attributes">
+          <attribute name="attrs">{'readonly': ['|',('state', 'in', ['done','cancel']), ('quotation_locked', '=', True)]}</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="attributes">
+          <attribute name="attrs">{'readonly': ['|',('state', 'in', ['done','cancel']), ('quotation_locked', '=', True)]}</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='order_line']/tree/field[@name='customer_lead']" position="attributes">
+          <attribute name="attrs">{'readonly': ['|',('state', 'in', ['done','cancel']), ('quotation_locked', '=', True)]}</attribute>
+        </xpath>
+
         <field name="note" position="attributes">
           <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
         </field>
@@ -131,14 +162,14 @@
 -->
 
 
-        <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
-            <attribute name="attrs">{'invisible': ['|', ('require_signature', '==',True), ('state', 'not in', ['sent'])]}
-            </attribute>
-        </xpath>
-        <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
-            <attribute name="attrs">{'invisible': ['|', ('require_signature', '==',True), ('state', 'not in', ['draft'])]}
-            </attribute>
-        </xpath> 
+<!--        <xpath expr="//button[@name='action_confirm'][1]" position="attributes">-->
+<!--            <attribute name="attrs">{'invisible': ['|', ('require_signature', '==',True), ('state', 'not in', ['sent'])]}-->
+<!--            </attribute>-->
+<!--        </xpath>-->
+<!--        <xpath expr="//button[@name='action_confirm'][2]" position="attributes">-->
+<!--            <attribute name="attrs">{'invisible': ['|', ('require_signature', '==',True), ('state', 'not in', ['draft'])]}-->
+<!--            </attribute>-->
+<!--        </xpath> -->
         
       </field>
     </record>

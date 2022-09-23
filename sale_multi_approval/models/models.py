@@ -493,3 +493,9 @@ class RestApiSignport(models.Model):
             )
             sale_order.action_confirm()
         return res
+
+
+class SaleOrderLine(models.Model):
+    _inherit = "sale.order.line"
+
+    quotation_locked = fields.Boolean(string="Lock Quotation", related="order_id.quotation_locked")
