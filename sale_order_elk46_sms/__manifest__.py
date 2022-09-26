@@ -4,7 +4,8 @@
     'version': '1.0',
     'depends': [
         'sale',
-        'sale_management'
+        'sale_management',
+        'sale_order_phone_number'
     ],
     'data': [
         'security/ir.model.access.csv',

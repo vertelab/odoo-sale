@@ -1,6 +1,6 @@
 from urllib import request
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 import requests
 import logging
 import json
@@ -19,8 +19,10 @@ class ElkSmsSaleOrder(models.TransientModel):
     @api.depends('partner_id')
     def _compute_partner_phone_number(self):
         for rec in self:
-            if rec.partner_id and rec.partner_id.filtered(lambda partner: partner.mobile):
-                rec.number = ','.join(rec.partner_id.mapped('mobile'))
+            active_ids = self.env.context.get('active_ids')
+            partner_phone = self.env['sale.order'].browse(active_ids).mapped('partner_phone')
+            if partner_phone:
+                rec.number = ','.join(partner_phone)
             else:
                 rec.number = False
 
@@ -53,13 +55,16 @@ class ElkSmsSaleOrder(models.TransientModel):
         phone_number = self.number.split(",")
         for partner_id, phone_number in zip(self.partner_id, phone_number):
             sms = self.env['sms.sms'].create({'number': phone_number, 'body': self.body, 'partner_id': partner_id.id})
+
             res = sms.send(sms.number, sms.body)
-
-            obj = json.loads(res.content.decode("utf-8"))
-
-            self.elk_api_id = obj.get('id', False)
-            self.status = 'Sent'
-            self.sale_id = self.env.context.get('active_id')
+            if res.status_code == 200:
+                response = json.loads(res.content.decode("utf-8"))
+                self.elk_api_id = response.get('id', False)
+                self.status = 'Sent'
+                self.sale_id = self.env.context.get('active_id')
+            else:
+                response = res.content.decode("utf-8")
+                raise ValidationError(_(response))
 
             temp_sms = self.env['temp.elk.sms'].create(
                 {'body': self.body, 'number': phone_number, 'elk_api_id': self.elk_api_id, 'status': self.status,
