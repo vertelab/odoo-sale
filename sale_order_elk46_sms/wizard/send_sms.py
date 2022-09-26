@@ -22,7 +22,7 @@ class ElkSmsSaleOrder(models.TransientModel):
             active_ids = self.env.context.get('active_ids')
             partner_phone = self.env['sale.order'].browse(active_ids).mapped('partner_phone')
             if partner_phone:
-                rec.number = ','.join(partner_phone)
+                rec.number = ','.join(set(partner_phone))
             else:
                 rec.number = False
 
