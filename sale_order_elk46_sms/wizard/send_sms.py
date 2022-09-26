@@ -21,6 +21,9 @@ class ElkSmsSaleOrder(models.TransientModel):
         for rec in self:
             active_ids = self.env.context.get('active_ids')
             partner_phone = self.env['sale.order'].browse(active_ids).mapped('partner_phone')
+            print(partner_phone)
+            if False in partner_phone:
+                raise UserError(_("Some partners don't have phone number"))
             if partner_phone:
                 rec.number = ','.join(set(partner_phone))
             else:
