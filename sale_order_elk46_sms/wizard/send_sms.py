@@ -10,6 +10,7 @@ _logger = logging.getLogger(__name__)
 
 class ElkSmsSaleOrder(models.TransientModel):
     _name = "elk.sms"
+    _inherit = ['mail.render.mixin']
     _description = "Send SMS to Partners"
 
     def _default_sms_body(self):
@@ -21,7 +22,6 @@ class ElkSmsSaleOrder(models.TransientModel):
         for rec in self:
             active_ids = self.env.context.get('active_ids')
             partner_phone = self.env['sale.order'].browse(active_ids).mapped('partner_phone')
-            print(partner_phone)
             if False in partner_phone:
                 raise UserError(_("Some partners don't have phone number"))
             if partner_phone:
@@ -33,6 +33,12 @@ class ElkSmsSaleOrder(models.TransientModel):
         pass
 
     number = fields.Char('Number', compute=_compute_partner_phone_number, inverse=_inverse_partner_phone_number)
+
+    @api.onchange("sms_template_id")
+    def sms_template_body(self):
+        if self.sms_template_id:
+            self.body = self.sms_template_id.body
+
     sms_template_id = fields.Many2one(
         'sms.template', string='SMS Template',
         domain=[('model', '=', 'sale.order')], ondelete='restrict',
@@ -52,6 +58,7 @@ class ElkSmsSaleOrder(models.TransientModel):
     status = fields.Char()
     sale_id = fields.Integer()
     res_ids = fields.Char('Document IDs')
+    model = fields.Char(default=lambda self: self.env.context.get('active_model'))
 
     # and create sms object
     def send_sms(self):
@@ -60,11 +67,16 @@ class ElkSmsSaleOrder(models.TransientModel):
         if sale_ids.filtered(lambda order: order.state != 'ready_to_deliver'):
             raise UserError(_("You cannot send sms if order is not in ready state"))
 
-        phone_number = self.number.split(",")
-        for partner_id, phone_number in zip(self.partner_id, phone_number):
-            sms = self.env['sms.sms'].create({'number': phone_number, 'body': self.body, 'partner_id': partner_id.id})
-
+        for sale in sale_ids:
+            # formatted_body = self.sms_template_id._render_field('body', sale_ids.ids, set_lang=False)[sale.id]
+            formatted_body = self._render_field('body', sale_ids.ids)[sale.id]
+            sms = self.env['sms.sms'].create({
+                'number': sale.partner_phone,
+                'body': formatted_body,
+                'partner_id': sale.partner_id.id
+            })
             res = sms.send(sms.number, sms.body)
+
             if res.status_code == 200:
                 response = json.loads(res.content.decode("utf-8"))
                 self.elk_api_id = response.get('id', False)
@@ -74,9 +86,14 @@ class ElkSmsSaleOrder(models.TransientModel):
                 response = res.content.decode("utf-8")
                 raise ValidationError(_(response))
 
-            temp_sms = self.env['temp.elk.sms'].create(
-                {'body': self.body, 'number': phone_number, 'elk_api_id': self.elk_api_id, 'status': self.status,
-                 'sale_id': self.sale_id})
+            temp_sms = self.env['temp.elk.sms'].create({
+                'body': formatted_body,
+                'number': sale.partner_phone,
+                'elk_api_id': self.elk_api_id,
+                'status': self.status,
+                'sale_id': self.sale_id
+            })
             _logger.warning(f"{temp_sms=}")
 
         sale_ids.write({'sms_sent': True})
+

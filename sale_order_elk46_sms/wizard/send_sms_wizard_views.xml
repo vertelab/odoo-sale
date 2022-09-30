@@ -12,6 +12,7 @@
                     </group>
                     <group>
                         <field name="number" required="1"/>
+                        <field name="sms_template_id"/>
                     </group>
                     <group>
                         <field name="body" widget="sms_widget" string="Message" required="1"/>
