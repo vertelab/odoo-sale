@@ -33,6 +33,11 @@ class ElkSmsSaleOrder(models.TransientModel):
         pass
 
     number = fields.Char('Number', compute=_compute_partner_phone_number, inverse=_inverse_partner_phone_number)
+    sms_template_id = fields.Many2one(
+        'sms.template', string='SMS Template',
+        domain=[('model', '=', 'sale.order')], ondelete='restrict',
+        help='This field contains the template of the SMS that will be sent')
+
     body = fields.Text(default=_default_sms_body)
 
     def _load_partner_rec(self):
