@@ -5,7 +5,8 @@
     'depends': [
         'sale',
         'sale_management',
-        'sale_order_phone_number'
+        'sale_order_phone_number',
+        'elk46_send_sms',
     ],
     'data': [
         'security/ir.model.access.csv',

@@ -38,7 +38,6 @@ This module adds phone number to sale order.
     'repository': 'https://github.com/vertelab/odoo-sale',
     'depends': ['sale'],
     'data': [
-        'views/assets.xml',
         'views/sale_view.xml',
     ],
     'installable': True,
