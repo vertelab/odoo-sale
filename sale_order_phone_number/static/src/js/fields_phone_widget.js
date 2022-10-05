@@ -15,7 +15,6 @@ odoo.define('sale_order_phone_number.elk_phone_field', function (require) {
 
     Phone.include({
         _onClickSMS: function (ev) {
-            console.log("_onClickSMS")
             ev.preventDefault();
             ev.stopPropagation();
 
@@ -25,14 +24,14 @@ odoo.define('sale_order_phone_number.elk_phone_field', function (require) {
                 default_res_id: parseInt(this.res_id),
                 default_number_field_name: this.name,
                 default_composition_mode: 'comment',
-                active_ids: parseInt(this.res_id),
+                active_ids: [parseInt(this.res_id)],
                 active_model: this.model
             });
             var self = this;
             return this.do_action({
                 title: _t('Send SMS Text Message'),
                 type: 'ir.actions.act_window',
-                res_model: 'elk.sms',
+                res_model: this.model=='sale.order' ? 'elk.sms' : 'sms.composer',
                 target: 'new',
                 views: [[false, 'form']],
                 context: context,
