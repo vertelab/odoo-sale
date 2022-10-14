@@ -54,10 +54,6 @@ class ElkSmsSaleOrder(models.TransientModel):
 
     partner_id = fields.Many2many('res.partner', string="Customer", default=_load_partner_rec)
     mail_message_id = fields.Many2one('mail.message', index=True)
-    elk_api_id = fields.Text()
-    status = fields.Char()
-    sale_id = fields.Integer()
-    res_ids = fields.Char('Document IDs')
     model = fields.Char(default=lambda self: self.env.context.get('active_model'))
 
     # and create sms object
@@ -68,32 +64,14 @@ class ElkSmsSaleOrder(models.TransientModel):
             raise UserError(_("You cannot send sms if order is not in ready state"))
 
         for sale in sale_ids:
-            # formatted_body = self.sms_template_id._render_field('body', sale_ids.ids, set_lang=False)[sale.id]
             formatted_body = self._render_field('body', sale_ids.ids)[sale.id]
             sms = self.env['sms.sms'].create({
                 'number': sale.partner_phone,
                 'body': formatted_body,
-                'partner_id': sale.partner_id.id
+                'partner_id': sale.partner_id.id,
+                'rec_model': 'sale.order',
+                'rec_id': sale.id
             })
-            res = sms.send(sms.number, sms.body)
-
-            if res.status_code == 200:
-                response = json.loads(res.content.decode("utf-8"))
-                self.elk_api_id = response.get('id', False)
-                self.status = 'Sent'
-                self.sale_id = self.env.context.get('active_id')
-            else:
-                response = res.content.decode("utf-8")
-                raise ValidationError(_(response))
-
-            temp_sms = self.env['temp.elk.sms'].create({
-                'body': formatted_body,
-                'number': sale.partner_phone,
-                'elk_api_id': self.elk_api_id,
-                'status': self.status,
-                'sale_id': self.sale_id
-            })
-            _logger.warning(f"{temp_sms=}")
-
+            sms.send()
         sale_ids.write({'sms_sent': True})
 
