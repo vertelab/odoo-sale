@@ -1,4 +1,4 @@
-odoo-sale / sale_order_invoice_currency
+odoo-sale / sale_order_phone_number
 2022-10-18
 
 Be aware of these!
