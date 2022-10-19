@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution, third party addon
-#    Copyright (C) 2017- Vertel AB (<http://vertel.se>).
+#    Odoo SA, Open Source Management Solution, third party addon
+#    Copyright (C) 2022- Vertel AB (<https://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -15,23 +15,30 @@
 #    GNU Affero General Public License for more details.
 #
 #    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
 
 {
-    'name': 'Sale Order Import',
-    'version': '1.0',
-    'category': 'sale',
+    'name': 'Sale: Order Import',
+    'version': '14.0.0.0.0',
+    # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
+    'summary': 'Generic Sale order imports from Excel',
+    'category': 'Sales',
     'description': """
 Generic Sale order imports from Excel
 
 * Generic model
 
 """,
+    #'sequence': '1',
     'author': 'Vertel AB',
+    'website': 'https://vertel.se/apps/odoo-sale/sale_order_glabel_barcode',
+    'images': ['static/description/banner.png'], # 560x280 px.
     'license': 'AGPL-3',
-    'website': 'http://www.vertel.se',
+    'contributor': '',
+    'maintainer': 'Vertel AB',
+    'repository': 'https://github.com/vertelab/odoo-sale',
     'depends': ['sale', 'sale_management'],
     'external_dependencies': {
         'python': ['xlrd', 'unicodecsv'],
@@ -43,4 +50,4 @@ Generic Sale order imports from Excel
     'application': False,
     'installable': True,
 }
-# vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
