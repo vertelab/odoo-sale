@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Odoo SA, Open Source Management Solution, third party addon
-#    Copyright (C) 2021- Vertel AB (<https://vertel.se>).
+#    Copyright (C) 2022- Vertel AB (<https://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,16 +20,22 @@
 ##############################################################################
 
 {
-    'name': 'Sale Order Invoice Currency',
+    'name': 'Sale: Order Invoice Currency',
     'version': '14.0.0.1.0',
-    'summary': 'Sale Order Invoice Currency',
-    'category': 'Marketing',
+    # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
+    'summary': 'Sale Order Invoice Currency.',
+    'category': 'Sales',
     'description': """
-        Sale Order Invoice Currency
+    Sale Order Invoice Currency.
     """,
+    #'sequence': '1',
     'author': 'Vertel AB',
-    'website': 'https://vertel.se',
+    'website': 'https://vertel.se/apps/odoo-sale/sale_order_invoice_currency',
+    'images': ['static/description/banner.png'], # 560x280 px.
     'license': 'AGPL-3',
+    'contributor': '',
+    'maintainer': 'Vertel AB',
+    'repository': 'https://github.com/vertelab/odoo-sale',
     'depends': ['product', 'sale'],
     'data': [
         'views/pricelist_view.xml',
@@ -37,3 +43,4 @@
     'installable': True,
     'auto_install': False,
 }
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
