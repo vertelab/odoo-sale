@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Odoo SA, Open Source Management Solution, third party addon
-#    Copyright (C) 2021- Vertel AB (<https://vertel.se>).
+#    Copyright (C) 2022- Vertel AB (<https://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,23 +18,27 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+# Third part projects: https://github.com/OCA/contract,
 
 {
-    'name': 'Sale Order Contract Ongoing',
+    'name': 'Sale: Order Contract Ongoing',
     'version': '14.0.0.0.0',
-    'summary': 'Use a contract to invoice the same Sale order accoding to the contract',
-    'category': 'Marketing',
+    # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
+    'summary': 'Use a contract to invoice the same Sale order accoding to the contract.',
+    'category': 'Sales',
     'description': """
-        Adds a new function to a contract.
-        Create a sale order and to invoice the same sale order according to the contract.
+    Adds a new function to a contract.
+    Create a sale order and to invoice the same sale order according to the contract.
     """,
-    # 'sequence': '1'
-    # 'images': ['images/main_screenshot.png']
-    # Third part projects: https://github.com/OCA/contract,
+    #'sequence': '1',
     'author': 'Vertel AB',
+    # Third part projects: https://github.com/OCA/contract,
+    'website': 'https://vertel.se/apps/odoo-sale/sale_order_contract_ongoing',
+    'images': ['static/description/banner.png'], # 560x280 px.
     'license': 'AGPL-3',
     'contributor': '',
     'maintainer': 'Vertel AB',
+    'repository': 'https://github.com/vertelab/odoo-sale',
     'depends': ['sale', 'project', 'contract', 'hr', 'hr_timesheet', 'sale_timesheet', 'contract_sale_generation'],
     'data': [
         'views/contract.xml',
@@ -45,3 +49,4 @@
     'installable': True,
     'auto_install': False,
 }
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
