@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Odoo SA, Open Source Management Solution, third party addon
-#    Copyright (C) 2021- Vertel AB (<https://vertel.se>).
+#    Copyright (C) 2022- Vertel AB (<https://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,18 +20,18 @@
 ##############################################################################
 
 {
-    'name': 'Sale Order Report Barcode',
-    'version': '14.0.0.0.0',
+    'name': 'Sale: Order Report Barcode',
+    'version': '14.0.0.0.1',
     # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
-    'summary': 'Sale Order Report Barcode',
-    'category': 'Marketing',
+    'summary': 'Added barcode to sale order report.',
+    'category': 'Sales',
     'description': """
-        14.0.0.0.1 - Added barcode to sale order report.
+    14.0.0.0.1 - Added barcode to sale order report.
     """,
-    #'sequence': '1'
-    #'images': ['images/main_screenshot.png']
+    #'sequence': '1',
     'author': 'Vertel AB',
-    'website': 'https://vertel.se/apps/odoo-sale',
+    'website': 'https://vertel.se/apps/odoo-sale/sale_order_report_barcode',
+    'images': ['static/description/banner.png'], # 560x280 px.
     'license': 'AGPL-3',
     'contributor': '',
     'maintainer': 'Vertel AB',
@@ -43,3 +43,4 @@
     'installable': True,
     'auto_install': False,
 }
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
