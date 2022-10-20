@@ -24,7 +24,7 @@
     'name': 'Sale: Order Contract Ongoing',
     'version': '14.0.0.0.0',
     # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
-    'summary': 'Use a contract to invoice the same Sale order accoding to the contract.',
+    'summary': 'Use a contract to invoice the same Sale order according to the contract.',
     'category': 'Sales',
     'description': """
     Adds a new function to a contract.
