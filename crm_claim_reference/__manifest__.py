@@ -36,6 +36,9 @@
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-sale',
+    # bi_crm_claim:
+    # This module depends on a third party project.
+    # git clone -b 14.0 git@github.com:vertelab/odoo-website-dermanord.git
     'depends': ['sale','bi_crm_claim','crm'],
     'data': [
         "security/ir.model.access.csv",
