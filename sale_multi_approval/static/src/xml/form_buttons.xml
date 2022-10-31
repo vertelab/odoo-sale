@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<templates id="form_view" xml:space="preserve">
+    <t t-extend="FormView.buttons">
+        <t t-jquery="button.o_form_button_create" t-operation="after">
+            <button t-if="widget.modelName == 'sale.order'" class="btn btn-primary oe_download_button" type="button">Download</button>
+        </t>
+    </t>
+</templates>

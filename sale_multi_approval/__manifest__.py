@@ -56,6 +56,10 @@
         'views/templates.xml',
         'views/sale_approval_view.xml',
         'views/sale_inherited.xml',
+        'views/report.xml',
     ],
+    'qweb': [
+        'static/src/xml/form_buttons.xml'
+    ]
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -9,7 +9,7 @@ import werkzeug
 from odoo.http import request
 import json
 import base64
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from datetime import datetime
 import uuid
 import re
@@ -298,9 +298,9 @@ class RestApiSignport(models.Model):
     _inherit = "rest.api"
 
     def post_sign_sale_order(self, ssn, order_id, access_token, message=False, sign_type="customer", approval_id=False):
-        # export_wizard = self.env['xml.export'].with_context({'active_model': 'sale.order', 'active_ids': order_id}).create({})
-        # action = export_wizard.download_xml_export()
-        # self.env['ir.attachment'].browse(action['res_id']).update({'res_id': order_id, 'res_model': 'sale.order'})
+        # export_wizard = self.env['xml.export'].with_context({'active_model': 'sale.order', 'active_ids':
+        # order_id}).create({}) action = export_wizard.download_xml_export() self.env['ir.attachment'].browse(action[
+        # 'res_id']).update({'res_id': order_id, 'res_model': 'sale.order'})
 
         # document = (
         #     self.env["ir.attachment"]

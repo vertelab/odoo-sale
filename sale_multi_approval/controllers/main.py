@@ -1,4 +1,4 @@
-from odoo import fields, http, _
+from odoo import fields, http, _, SUPERUSER_ID
 from odoo.http import request
 import json
 import logging
@@ -17,14 +17,13 @@ from odoo.addons.portal.controllers.portal import (
 from odoo.addons.sale.controllers.portal import CustomerPortal
 
 
-
 _logger = logging.getLogger(__name__)
 
 
 class SaleMultiApproval(http.Controller):
 
-    @http.route(['/web/signport_form/<int:order_id>/<int:signport_id>/start_sign'], 
-        type='http', 
+    @http.route(['/web/signport_form/<int:order_id>/<int:signport_id>/start_sign'],
+        type='http',
         auth="none",
     )
     def start_sign(self, order_id, signport_id, **kw):
