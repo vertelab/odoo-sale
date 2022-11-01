@@ -496,9 +496,6 @@ class RestApiSignport(models.Model):
             sale_order.action_confirm()
         return res
 
-    def create_attachment(self, attachment_blob):
-        print(attachment_blob)
-
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
