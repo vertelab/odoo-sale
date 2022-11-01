@@ -15,16 +15,15 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
             if (this.$buttons) {
                 this.$buttons.find('.oe_download_button').click(this.proxy('action_def')) ;
             }
-            var res_id = this.model.get(this.handle).res_id;
         },
 
         action_def: function () {
             var self = this;
 
-            var res_id = this.model.get(this.handle).res_id;
+            var sale_order_id = this.model.get(this.handle);
 
             $.ajax({
-                url: `${session['web.base.url']}/my/orders/${res_id}`,
+                url: `${session['web.base.url']}/my/orders/${sale_order_id.res_id}`,
                 type: "GET",
                 success: function(res) {
                     var parser = new DOMParser();
@@ -54,7 +53,6 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
 
                     Array.from(elems).forEach( function (el) {
                         const section_div = el.querySelectorAll("section > div.container")
-                        console.log("section_div", section_div)
                         Array.from(section_div).forEach( function (section_div_el) {
                             section_div_el.classList.remove('container')
                         })
@@ -73,8 +71,6 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
                         title += formatted_title[i].trim()
                     }
 
-                    console.log("title", title)
-
                     const opt = {
                         margin: [5, 5, 10, 5], //top, left, bottom, right
                         filename: title,
@@ -83,7 +79,33 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
                         jsPDF: { unit: 'mm', format: ['210', '297'], orientation: 'portrait' },
                     };
 
-                    html2pdf().set(opt).from(element).toContainer().toCanvas().toImg().toPdf().save()
+//                    html2pdf().set(opt).from(element).toContainer().toCanvas().toImg().toPdf().save()
+                    html2pdf().set(opt).from(element).outputPdf().then(function(pdf) {
+                        self._rpc({
+                            model: 'ir.attachment',
+                            method: 'create',
+                            args: [{
+                                'name': title,
+                                'res_id': sale_order_id.res_id,
+                                'res_name': sale_order_id.data.name,
+                                'res_model': 'sale.order',
+                                'datas': btoa(pdf),
+                                'type': 'binary',
+                                'mimetype': 'application/pdf'
+                            }]
+                        })
+
+                        var action = {
+                            type: 'ir.actions.client',
+                            tag: 'display_notification',
+                            'params': {
+                                'message': 'PDF was generated successfully',
+                                'type':'success',
+                                'sticky': false,
+                            },
+                        };
+                        self.do_action(action);
+                    });
 
                 }
             });
