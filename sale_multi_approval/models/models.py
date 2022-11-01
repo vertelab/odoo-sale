@@ -17,6 +17,7 @@ import re
 
 class AddApproverWizard(models.TransientModel):
     _name = "approver.add.wizard"
+    _description = "Approval Add Wizard"
 
     def _get_sale_order(self):
         sale_order = self.env["sale.order"].browse(self.env.context.get('active_ids'))
@@ -64,6 +65,7 @@ class MailComposer(models.TransientModel):
 
 class SignportRequest(models.TransientModel):
     _name = 'signport.request'
+    _description = "Sign Port Request"
 
     relay_state = fields.Char()
     eid_sign_request = fields.Char()
