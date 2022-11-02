@@ -17,6 +17,7 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
             }
             var sale_order_id = this.model.get(this.handle);
             var sale_order_data = this.model.get(this.handle).data;
+
 //            console.log("sale_order_id", sale_order_id)
 //            console.log("session", session)
 //
@@ -115,6 +116,7 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
                                 model: 'sale.order',
                                 method: 'sale_approve',
                                 args: [[]],
+                                kwargs: {'order_id': sale_order_id.res_id}
                             }).then(async (res) => {
                                 var action = {
                                     type: 'ir.actions.client',
