@@ -216,7 +216,9 @@ class SaleOrder(models.Model):
             [('name', '=', f'{self.name}.pdf'), ('res_model', '=', 'sale.order'), ('res_id', '=', self.id)],
             limit=1).unlink()
 
-    def sale_approve(self):
+    def sale_approve(self, **kwargs):
+        if not self and kwargs:
+            self = self.env['sale.order'].browse(int(kwargs.get('order_id')))
         """This is the function of the approve button also
         updates the approval table values according to the
         approval of the users"""
