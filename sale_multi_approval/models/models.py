@@ -255,7 +255,6 @@ class SaleOrder(models.Model):
                     'binding': res['binding'],
                     'signing_service_url': res['signingServiceUrl']
                 })
-                signport_request = 1
                 _logger.warning(f"returning the view, signport request: {signport_request}")
                 return {
                     'type': 'ir.actions.act_url',
