@@ -18,20 +18,9 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
             var sale_order_id = this.model.get(this.handle);
             var sale_order_data = this.model.get(this.handle).data;
 
-//            console.log("sale_order_id", sale_order_id)
-//            console.log("session", session)
-//
-//            console.log("check_approve_ability", sale_order_data.check_approve_ability)
-//            console.log("document_fully_approved", sale_order_data.document_fully_approved)
-//            console.log("is_approved",  sale_order_data.is_approved)
-//            console.log(this.$buttons.find('.oe_download_button'))
-//            this.$buttons.find('.oe_download_button').addClass("o_invisible_modifier")
-//            o_invisible_modifier
-
-
-//            if (sale_order_data.check_approve_ability == false || sale_order_data.document_fully_approved == true || sale_order_data.is_approved == true) {
-//                this.$buttons.find('.oe_download_button').addClass("o_invisible_modifier")
-//            }
+            if (sale_order_data.check_approve_ability == false || sale_order_data.document_fully_approved == true || sale_order_data.is_approved == true) {
+                this.$buttons.find('.oe_download_button').addClass("o_invisible_modifier")
+            }
         },
 
         action_def: function () {
@@ -129,12 +118,10 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
                                 };
                                 self.do_action(action);
                                 self.trigger_up('reload');
-
+                                self.$buttons.find('.oe_download_button').addClass("o_invisible_modifier")
                             })
-
                         })
                     });
-
                 }
             });
         },

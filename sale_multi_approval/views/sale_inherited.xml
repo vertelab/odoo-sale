@@ -11,11 +11,11 @@
             <xpath expr="//page[@name='customer_signature']" position="after">
                 <page string="Employee Signatures" name="employee_signatures">
                     <group>
-                        <field name="document_fully_approved" invisible="1"/>
+                        <field name="document_fully_approved" invisible="0"/>
                         <field name="quotation_locked" invisible="1"/>
-                        <field name="check_approve_ability" invisible="1"/>
-                        <field name="is_approved" invisible="1"/>
-                        <field name="page_visibility" invisible="1"/>
+                        <field name="check_approve_ability" invisible="0"/>
+                        <field name="is_approved" invisible="0"/>
+                        <field name="page_visibility" invisible="0"/>
                         <field name="latest_pdf_export"/>
                         <field name="signed_xml_document"/>
                     </group>
