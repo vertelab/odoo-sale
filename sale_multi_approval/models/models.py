@@ -13,6 +13,8 @@ from odoo.exceptions import UserError, ValidationError
 from datetime import datetime
 import uuid
 import re
+from bs4 import BeautifulSoup
+import requests
 
 
 class AddApproverWizard(models.TransientModel):
@@ -220,7 +222,6 @@ class SaleOrder(models.Model):
         """This is the function of the approve button also
         updates the approval table values according to the
         approval of the users"""
-        self.ensure_one()
         current_user = self.env.uid
         # if not self.env["ir.attachment"].search([
         #     ("res_model", "=", "sale.order"),
@@ -295,6 +296,17 @@ class SaleOrder(models.Model):
         else:
             self.document_fully_approved = False
 
+    latest_pdf_export = fields.Many2one("ir.attachment", string="Latest PDF Export")
+
+
+class Attachment(models.Model):
+    _inherit = "ir.attachment"
+
+    def create_attachment(self, **kwargs):
+        attachment_id = self.create(kwargs)
+        sale_id = self.env[attachment_id.res_model].browse(attachment_id.res_id)
+        sale_id.write({'latest_pdf_export': attachment_id.id})
+
 
 class RestApiSignport(models.Model):
     _inherit = "rest.api"
@@ -321,7 +333,8 @@ class RestApiSignport(models.Model):
         # # TODO: attach pdf or xml of order to the request
         _logger.warning("access_token" * 999)
         _logger.warning(f"{access_token=}")
-        document = self.env['sale.order'].browse(order_id).latest_xml_export
+        # document = self.env['sale.order'].browse(order_id).latest_xml_export
+        document = self.env['sale.order'].browse(order_id).latest_pdf_export
         if self.env['sale.order'].browse(order_id).signed_document:
             document_content = self.env['sale.order'].browse(order_id).signed_document.decode()
         else:
@@ -380,7 +393,7 @@ class RestApiSignport(models.Model):
             },
             "document": [
                 {
-                    "mimeType": 'application/xml',  # document.mimetype,  # TODO: check mime type
+                    "mimeType": 'application/pdf',  # document.mimetype,  # TODO: check mime type
                     "content": document_content,  # TODO: include document to sign
                     "fileName": document.display_name,  # TODO: add filename
                     # "encoding": False  # TODO: should we use this?
