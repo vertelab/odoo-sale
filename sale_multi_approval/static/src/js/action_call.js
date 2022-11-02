@@ -15,6 +15,22 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
             if (this.$buttons) {
                 this.$buttons.find('.oe_download_button').click(this.proxy('action_def')) ;
             }
+            var sale_order_id = this.model.get(this.handle);
+            var sale_order_data = this.model.get(this.handle).data;
+//            console.log("sale_order_id", sale_order_id)
+//            console.log("session", session)
+//
+//            console.log("check_approve_ability", sale_order_data.check_approve_ability)
+//            console.log("document_fully_approved", sale_order_data.document_fully_approved)
+//            console.log("is_approved",  sale_order_data.is_approved)
+//            console.log(this.$buttons.find('.oe_download_button'))
+//            this.$buttons.find('.oe_download_button').addClass("o_invisible_modifier")
+//            o_invisible_modifier
+
+
+//            if (sale_order_data.check_approve_ability == false || sale_order_data.document_fully_approved == true || sale_order_data.is_approved == true) {
+//                this.$buttons.find('.oe_download_button').addClass("o_invisible_modifier")
+//            }
         },
 
         action_def: function () {
@@ -80,11 +96,12 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
                     };
 
 //                    html2pdf().set(opt).from(element).toContainer().toCanvas().toImg().toPdf().save()
-                    html2pdf().set(opt).from(element).outputPdf().then(function(pdf) {
+                    html2pdf().set(opt).from(element).outputPdf().then((pdf) => {
                         self._rpc({
                             model: 'ir.attachment',
-                            method: 'create',
-                            args: [{
+                            method: 'create_attachment',
+                            args: [[]],
+                            kwargs: {
                                 'name': title,
                                 'res_id': sale_order_id.res_id,
                                 'res_name': sale_order_id.data.name,
@@ -92,19 +109,28 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
                                 'datas': btoa(pdf),
                                 'type': 'binary',
                                 'mimetype': 'application/pdf'
-                            }]
-                        })
+                            }
+                        }).then(async (result) => {
+                            await self._rpc({
+                                model: 'sale.order',
+                                method: 'sale_approve',
+                                args: [[]],
+                            }).then(async (res) => {
+                                var action = {
+                                    type: 'ir.actions.client',
+                                    tag: 'display_notification',
+                                    'params': {
+                                        'message': 'PDF was generated successfully',
+                                        'type':'success',
+                                        'sticky': false,
+                                    },
+                                };
+                                self.do_action(action);
+                                self.trigger_up('reload');
 
-                        var action = {
-                            type: 'ir.actions.client',
-                            tag: 'display_notification',
-                            'params': {
-                                'message': 'PDF was generated successfully',
-                                'type':'success',
-                                'sticky': false,
-                            },
-                        };
-                        self.do_action(action);
+                            })
+
+                        })
                     });
 
                 }

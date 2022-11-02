@@ -16,6 +16,7 @@
                         <field name="check_approve_ability" invisible="1"/>
                         <field name="is_approved" invisible="1"/>
                         <field name="page_visibility" invisible="1"/>
+                        <field name="latest_pdf_export"/>
                         <field name="signed_xml_document"/>
                     </group>
                     <group>
