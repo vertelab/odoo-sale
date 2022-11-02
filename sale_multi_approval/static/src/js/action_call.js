@@ -107,18 +107,19 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
                                 args: [[]],
                                 kwargs: {'order_id': sale_order_id.res_id}
                             }).then(async (res) => {
-                                var action = {
-                                    type: 'ir.actions.client',
-                                    tag: 'display_notification',
-                                    'params': {
-                                        'message': 'PDF was generated successfully',
-                                        'type':'success',
-                                        'sticky': false,
-                                    },
-                                };
-                                self.do_action(action);
-                                self.trigger_up('reload');
-                                self.$buttons.find('.oe_download_button').addClass("o_invisible_modifier")
+                                window.location.href = res.url
+//                                var action = {
+//                                    type: 'ir.actions.client',
+//                                    tag: 'display_notification',
+//                                    'params': {
+//                                        'message': 'PDF was generated successfully',
+//                                        'type':'success',
+//                                        'sticky': false,
+//                                    },
+//                                };
+//                                self.do_action(action);
+//                                self.trigger_up('reload');
+//                                self.$buttons.find('.oe_download_button').addClass("o_invisible_modifier")
                             })
                         })
                     });
