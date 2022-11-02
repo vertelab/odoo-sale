@@ -220,6 +220,9 @@ class SaleOrder(models.Model):
         """This is the function of the approve button also
         updates the approval table values according to the
         approval of the users"""
+        _logger.warning("sale_approve"*99)
+        _logger.warning(f"{self=}")
+        _logger.warning(f"{self.approval_ids=}")
         current_user = self.env.uid
         # if not self.env["ir.attachment"].search([
         #     ("res_model", "=", "sale.order"),
@@ -228,12 +231,14 @@ class SaleOrder(models.Model):
         #     ]):
         #     self.generate_sale_pdf()
         for approval_id in self.approval_ids:
+            _logger.warning(f"{approval_id=}, {current_user=}")
             if current_user == approval_id.approver_id.id:
                 signport = self.env.ref("rest_signport.api_signport")
                 data = json.loads(request.httprequest.data)
                 _logger.warning("data" * 999)
                 _logger.warning(f"{data=}")
                 access_token = data.get("params", {}).get("access_token")
+                _logger.warning("calling post_sign"*99)
                 res = signport.sudo().post_sign_sale_order(
                     ssn=self.env.user.partner_id.social_sec_nr and self.env.user.partner_id.social_sec_nr.replace("-",
                                                                                                                   "") or False,
@@ -337,7 +342,7 @@ class RestApiSignport(models.Model):
             document_content = self.env['sale.order'].browse(order_id).signed_document.decode()
         else:
             document_content = document.datas.decode()
-
+        _logger.warning(f"{document_content=}")
         headers = {
             "accept": "application/json",
             "Content-Type": "application/json; charset=utf8",
