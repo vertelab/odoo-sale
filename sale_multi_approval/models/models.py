@@ -224,9 +224,9 @@ class SaleOrder(models.Model):
         """This is the function of the approve button also
         updates the approval table values according to the
         approval of the users"""
-        _logger.warning("sale_approve"*99)
-        _logger.warning(f"{self=}")
-        _logger.warning(f"{self.approval_ids=}")
+       # _logger.warning("sale_approve"*99)
+       # _logger.warning(f"{self=}")
+       # _logger.warning(f"{self.approval_ids=}")
         current_user = self.env.uid
         # if not self.env["ir.attachment"].search([
         #     ("res_model", "=", "sale.order"),
@@ -238,11 +238,14 @@ class SaleOrder(models.Model):
             _logger.warning(f"{approval_id=}, {current_user=}")
             if current_user == approval_id.approver_id.id:
                 signport = self.env.ref("rest_signport.api_signport")
+                _logger.warning("request.httprequest.data === %s" % request.httprequest.data)
                 data = json.loads(request.httprequest.data)
+                _logger.warning("data data data === %s" % data)
                 _logger.warning("data" * 999)
                 _logger.warning(f"{data=}")
                 access_token = data.get("params", {}).get("access_token")
-                _logger.warning("calling post_sign"*99)
+                #access_token = self.get_portal_url().split(f"/my/orders/{self.id}?access_token=")[-1]
+                _logger.warning("calling post_sign access_token ----%s" % access_token)
                 res = signport.sudo().post_sign_sale_order(
                     ssn=self.env.user.partner_id.social_sec_nr and self.env.user.partner_id.social_sec_nr.replace("-",
                                                                                                                   "") or False,
@@ -252,7 +255,7 @@ class SaleOrder(models.Model):
                     sign_type="employee",
                     approval_id=approval_id.id
                 )
-                _logger.warning(f"sale_approve res: {res}")
+                #_logger.warning(f"sale_approve res: {res}")
                 base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
                 signport_request = self.env["signport.request"].sudo().create({
                     'relay_state': res['relayState'],
@@ -260,7 +263,7 @@ class SaleOrder(models.Model):
                     'binding': res['binding'],
                     'signing_service_url': res['signingServiceUrl']
                 })
-                _logger.warning(f"returning the view, signport request: {signport_request}")
+                #_logger.warning(f"returning the view, signport request: {signport_request}")
                 return {
                     'type': 'ir.actions.act_url',
                     'target': 'self',
@@ -355,7 +358,7 @@ class RestApiSignport(models.Model):
             document_content = self.env['sale.order'].browse(order_id).signed_xml_document.datas.decode()
         else:
             document_content = document.datas.decode()
-        _logger.warning(f"{document_content=}")
+        #_logger.warning(f"{document_content=}")
         headers = {
             "accept": "application/json",
             "Content-Type": "application/json; charset=utf8",
@@ -387,7 +390,7 @@ class RestApiSignport(models.Model):
             headers=headers,
             data_vals=add_signature_page_vals,
         )
-        _logger.warning(f"res: {res}")
+        #_logger.warning(f"res: {res}")
         document_content = res['documents'][0]['content']
         get_sign_request_vals = {
             "username": f"{self.user}",
@@ -447,7 +450,7 @@ class RestApiSignport(models.Model):
             headers=headers,
             data_vals=get_sign_request_vals,
         )
-        _logger.warning(f"getsignrequest res: {res}")
+        #_logger.warning(f"getsignrequest res: {res}")
         return res
 
     def signport_post(self, data_vals={}, order_id=False, endpoint=False, sign_type="customer"):
