@@ -370,7 +370,7 @@ class RestApiSignport(models.Model):
             response_url = f"{base_url}/my/orders/{order_id}/sign_complete?access_token={access_token}"
         elif sign_type == "employee":
             role = self.employee_string
-            response_url = f"{base_url}/web/{order_id}/{approval_id}/sign_complete?access_token={access_token}"
+            response_url = f"{base_url}/web/{order_id}/{approval_id}/sign_complete"
         _logger.warning("add signature page")
         guid = str(uuid.uuid1())
         add_signature_page_vals = {
