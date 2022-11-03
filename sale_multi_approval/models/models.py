@@ -211,10 +211,12 @@ class SaleOrder(models.Model):
         for signature in self.approval_ids:
             signature.write(
                 {'approval_status': False, 'signed_xml_document': None, 'signer_ca': None, 'assertion': None,
-                 'relay_state': None})
+                 'relay_state': None, 'signed_on': False})
+        _logger.warning(f"{self.name=}")
+        _logger.warning(f"{self.env['ir.attachment'].search([('name', '=', f'Offert {self.name}'), ('res_model', '=', 'sale.order'), ('res_id', '=', self.id)])=}")
+        
         self.env["ir.attachment"].search(
-            [('name', '=', f'{self.name}.pdf'), ('res_model', '=', 'sale.order'), ('res_id', '=', self.id)],
-            limit=1).unlink()
+            [('name', '=', f'Offert {self.name}'), ('res_model', '=', 'sale.order'), ('res_id', '=', self.id)]).unlink()
 
     def sale_approve(self, **kwargs):
         if not self and kwargs:
@@ -349,8 +351,8 @@ class RestApiSignport(models.Model):
         _logger.warning(f"{access_token=}")
         # document = self.env['sale.order'].browse(order_id).latest_xml_export
         document = self.env['sale.order'].browse(order_id).latest_pdf_export
-        if self.env['sale.order'].browse(order_id).signed_document:
-            document_content = self.env['sale.order'].browse(order_id).signed_document.decode()
+        if self.env['sale.order'].browse(order_id).signed_xml_document:
+            document_content = self.env['sale.order'].browse(order_id).signed_xml_document.datas.decode()
         else:
             document_content = document.datas.decode()
         _logger.warning(f"{document_content=}")
