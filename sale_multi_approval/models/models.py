@@ -300,6 +300,15 @@ class SaleOrder(models.Model):
 
     latest_pdf_export = fields.Many2one("ir.attachment", string="Latest PDF Export")
 
+    def access_token_sale_order(self, **kwargs):
+        if not self and kwargs:
+            self = self.env['sale.order'].browse(int(kwargs.get('order_id')))
+        return {
+            'type': 'ir.actions.act_url',
+            'target': 'self',
+            'url': self.get_portal_url(),
+        }
+
 
 class Attachment(models.Model):
     _inherit = "ir.attachment"
