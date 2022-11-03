@@ -370,14 +370,14 @@ class RestApiSignport(models.Model):
             ]
         }
 
-        # res = self.call_endpoint(
-        #     method="POST",
-        #     endpoint_url="/AddSignaturePage",
-        #     headers=headers,
-        #     data_vals=add_signature_page_vals,
-        # )
-        # _logger.warning(f"res: {res}")
-        # document_content = res['documents'][0]['content']
+        res = self.call_endpoint(
+            method="POST",
+            endpoint_url="/AddSignaturePage",
+            headers=headers,
+            data_vals=add_signature_page_vals,
+        )
+        _logger.warning(f"res: {res}")
+        document_content = res['documents'][0]['content']
         get_sign_request_vals = {
             "username": f"{self.user}",
             "password": f"{self.password}",
@@ -478,7 +478,7 @@ class RestApiSignport(models.Model):
 
         attachment = self.env['ir.attachment'].create(
             {
-                'mimetype': 'application/xml',
+                'mimetype': 'application/pdf',
                 'datas': res["document"][0]["content"],
                 'name': res["document"][0]['fileName']
             }
