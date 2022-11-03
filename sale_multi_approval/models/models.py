@@ -136,32 +136,6 @@ class SaleOrder(models.Model):
                 record.write({'approval_ids': [(4, line.id, 0)]})
         return records
 
-    # def generate_sale_pdf(self):
-    #     report_name = self.name
-    #     report = self.env.ref("sale.action_report_saleorder")
-    #     report_service = report.report_name
-
-    #     if report.report_type in ['qweb-html', 'qweb-pdf']:
-    #         result, format = report._render_qweb_pdf([self.id])
-    #     else:
-    #         res = report._render([self.id])
-    #         result, format = res
-
-    #     # TODO in trunk, change return format to binary to match message_post expected format
-    #     result = base64.b64encode(result)
-    #     ext = "." + format
-    #     if not report_name.endswith(ext):
-    #         report_name += ext
-    #     attachment = (report_name, result)
-    #     data_attach = {
-    #         'name': attachment[0],
-    #         'datas': attachment[1],
-    #         'res_model': 'sale.order',
-    #         'res_id': self.id,
-    #         'type': 'binary',  # override default_type from context, possibly meant for another model!
-    #     }
-    #     self.env["ir.attachment"].create(data_attach)
-
     @api.depends('approval_ids')
     def _compute_page_visibility(self):
         """Compute function for making the approval page visible/invisible"""
@@ -169,22 +143,6 @@ class SaleOrder(models.Model):
             self.page_visibility = True
         else:
             self.page_visibility = False
-
-    # @api.onchange('partner_id')
-    # def _onchange_partner_id(self):
-    #     """This is the onchange function of the partner which loads the
-    #     persons for the approval to the approver table of the account.move"""
-    #     # sale_approval_id = self.env['sale.approval'].search([])
-    #     # self.approval_ids = None
-    #     # if sale_approval_id.approve_customer_sale:
-    #     _logger.warning(f"SET APROVER IDS"*99)
-    #     vals = {
-    #         'approver_id': self.user_id.id,
-    #         'sale_order_id': self.id
-    #     }
-    #     line = self.env["approval.line"].sudo().create(vals)
-    #     self.write({'approval_ids': [(4, line, 0)]})
-    #     _logger.warning(f"line: {line}")
 
     @api.depends('approval_ids.approver_id')
     def _compute_check_approve_ability(self):
@@ -224,28 +182,18 @@ class SaleOrder(models.Model):
         """This is the function of the approve button also
         updates the approval table values according to the
         approval of the users"""
-       # _logger.warning("sale_approve"*99)
-       # _logger.warning(f"{self=}")
-       # _logger.warning(f"{self.approval_ids=}")
+
         current_user = self.env.uid
-        # if not self.env["ir.attachment"].search([
-        #     ("res_model", "=", "sale.order"),
-        #     ("res_id", "=", self.id),
-        #     ("name", "=", f"{self.name}.pdf"),
-        #     ]):
-        #     self.generate_sale_pdf()
+
         for approval_id in self.approval_ids:
             _logger.warning(f"{approval_id=}, {current_user=}")
             if current_user == approval_id.approver_id.id:
                 signport = self.env.ref("rest_signport.api_signport")
-                _logger.warning("request.httprequest.data === %s" % request.httprequest.data)
                 data = json.loads(request.httprequest.data)
                 _logger.warning("data data data === %s" % data)
                 _logger.warning("data" * 999)
                 _logger.warning(f"{data=}")
                 access_token = data.get("params", {}).get("access_token")
-                #access_token = self.get_portal_url().split(f"/my/orders/{self.id}?access_token=")[-1]
-                _logger.warning("calling post_sign access_token ----%s" % access_token)
                 res = signport.sudo().post_sign_sale_order(
                     ssn=self.env.user.partner_id.social_sec_nr and self.env.user.partner_id.social_sec_nr.replace("-",
                                                                                                                   "") or False,
