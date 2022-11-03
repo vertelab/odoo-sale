@@ -17,7 +17,6 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
             }
             this.sale_order_id = this.model.get(this.handle);
             this.sale_order_data = this.model.get(this.handle).data;
-            console.log(this.sale_order_data)
 
             if (this.sale_order_data.check_approve_ability == false || this.sale_order_data.document_fully_approved == true || this.sale_order_data.is_approved == true) {
                 this.$buttons.find('.oe_download_button').addClass("o_invisible_modifier")
