@@ -298,7 +298,7 @@ class SaleOrder(models.Model):
         else:
             self.document_fully_approved = False
 
-    latest_pdf_export = fields.Many2one("ir.attachment", string="Latest PDF Export")
+    latest_pdf_export = fields.Many2one("ir.attachment", string="Latest PDF Export", copy=False)
 
     def access_token_sale_order(self, **kwargs):
         if not self and kwargs:

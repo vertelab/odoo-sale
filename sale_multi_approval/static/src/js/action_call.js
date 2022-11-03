@@ -15,16 +15,23 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
             if (this.$buttons) {
                 this.$buttons.find('.oe_download_button').click(this.proxy('action_sign')) ;
             }
-            this.sale_order_id = this.model.get(this.handle);
-            this.sale_order_data = this.model.get(this.handle).data;
+
+            this.get_sale_order_info()
 
             if (this.sale_order_data.check_approve_ability == false || this.sale_order_data.document_fully_approved == true || this.sale_order_data.is_approved == true) {
                 this.$buttons.find('.oe_download_button').addClass("o_invisible_modifier")
             }
         },
 
+        get_sale_order_info: function () {
+            this.sale_order_id = this.model.get(this.handle);
+            this.sale_order_data = this.model.get(this.handle).data;
+        },
+
         action_sign: async function () {
             var self = this;
+            self.get_sale_order_info()
+
             await self._rpc({
                 model: 'sale.order',
                 method: 'access_token_sale_order',
@@ -41,11 +48,13 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
                 if (this.sale_order_data.signed_xml_document == false) {
                     const [opt, element, title] = self.serialize_data(dom_data)
                     html2pdf().set(opt).from(element).outputPdf().then(async(pdf) => {
-                        return await self.create_pdf_attachment(title, this.sale_order_id, pdf)
+                        await self.create_pdf_attachment(title, this.sale_order_id, pdf)
                     })
                 }
-                var def_data = await self.tigger_sign_action()
-                window.location.href = def_data.url
+                else {
+                    var def_data = await self.tigger_sign_action()
+                    window.location.href = def_data.url
+                }
             })
         },
 
@@ -122,6 +131,8 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
                     'mimetype': 'application/pdf'
                 }
            })
+           var def_data = await self.tigger_sign_action()
+            window.location.href = def_data.url
         },
 
         tigger_sign_action: async function () {
