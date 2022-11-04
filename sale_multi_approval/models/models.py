@@ -107,6 +107,11 @@ class ApprovalLine(models.Model):
     relay_state = fields.Binary(string='Relay State', readonly=1)
     signed_on = fields.Datetime(string='Signed on')
 
+    def unlink(self):
+        if self.signed_document or self.signed_xml_document or self.approval_status or self.signed_on:
+            raise UserError(_("You are not allowed to remove this approval line"))
+        return super(ApprovalLine, self).unlink()
+
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
