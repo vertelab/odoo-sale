@@ -253,7 +253,7 @@ class SaleOrder(models.Model):
                     access_token=access_token,
                     message="Signering av offert",
                     sign_type="employee",
-                    approval_id=approval_id.id
+                    approval_id=approval_id.id,
                 )
                 _logger.warning(f"sale_approve res: {res}")
                 base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
@@ -370,7 +370,7 @@ class RestApiSignport(models.Model):
             response_url = f"{base_url}/my/orders/{order_id}/sign_complete?access_token={access_token}"
         elif sign_type == "employee":
             role = self.employee_string
-            response_url = f"{base_url}/web/{order_id}/{approval_id}/sign_complete?access_token={access_token}"
+            response_url = f"{base_url}/web/{order_id}/{approval_id}/sign_complete"
         _logger.warning("add signature page")
         guid = str(uuid.uuid1())
         add_signature_page_vals = {
@@ -390,7 +390,7 @@ class RestApiSignport(models.Model):
             headers=headers,
             data_vals=add_signature_page_vals,
         )
-        _logger.warning(f"res: {res}")
+        _logger.warning(f" add page res: {res}")
         document_content = res['documents'][0]['content']
         get_sign_request_vals = {
             "username": f"{self.user}",
@@ -414,9 +414,9 @@ class RestApiSignport(models.Model):
                 {
                     "mimeType": 'application/pdf',  # document.mimetype,  # TODO: check mime type
                     "content": document_content,  # TODO: include document to sign
-                    "fileName": document.display_name,  # TODO: add filename
+                    "fileName": document.display_name + 'Signed',  # TODO: add filename
                     # "encoding": False  # TODO: should we use this?
-                    "documentName": document.display_name,  # TODO: what is this used for?
+                    "documentName": document.display_name + 'Signed',  # TODO: what is this used for?
                     "adesType": "bes",  # TODO: what is "ades"? "bes" or "none"
                 }
             ],
@@ -494,7 +494,9 @@ class RestApiSignport(models.Model):
             {
                 'mimetype': 'application/pdf',
                 'datas': res["document"][0]["content"],
-                'name': res["document"][0]['fileName']
+                'name': res["document"][0]['fileName'],
+                'res_model': 'sale.order',
+                'res_id': order_id
             }
         )
 

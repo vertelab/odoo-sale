@@ -48,7 +48,9 @@
                 <form>
                     <field name="sale_order"/>
                     <field name="user_id"/>
-                    <button name="set_approver" type="object" string="Add Approver" class="btn-primary"/>
+                    <footer>
+                        <button name="set_approver" type="object" string="Add Approver" class="btn-primary"/>
+                    </footer>
                 </form>
             </field>
         </record>
