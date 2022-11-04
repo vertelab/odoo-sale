@@ -147,34 +147,6 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
                 kwargs: {'order_id': this.sale_order_id.res_id}
             })
         },
-
-        saveRecord: async function () {
-            console.log("save record")
-            const changedFields = await this._super(...arguments);
-            // the title could have been changed
-            this._updateControlPanel();
-
-            if (_t.database.multi_lang && changedFields.length) {
-                // need to make sure changed fields that should be translated
-                // are displayed with an alert
-                var fields = this.renderer.state.fields;
-                var data = this.renderer.state.data;
-                var alertFields = {};
-                for (var k = 0; k < changedFields.length; k++) {
-                    var field = fields[changedFields[k]];
-                    var fieldData = data[changedFields[k]];
-                    if (field.translate && fieldData && fieldData !== '<p><br></p>') {
-                        alertFields[changedFields[k]] = field;
-                    }
-                }
-                if (!_.isEmpty(alertFields)) {
-                    this.renderer.updateAlertFields(alertFields);
-                }
-            }
-            core.bus.trigger('DOM_updated');
-//            this.trigger_up('reload');
-            return changedFields;
-        },
     };
     FormController.include(includeDict);
 
