@@ -176,8 +176,9 @@ class SaleOrder(models.Model):
                 {'approval_status': False, 'signed_xml_document': None, 'signer_ca': None, 'assertion': None,
                  'relay_state': None, 'signed_on': False})
         _logger.warning(f"{self.name=}")
-        _logger.warning(f"{self.env['ir.attachment'].search([('name', '=', f'Offert {self.name}'), ('res_model', '=', 'sale.order'), ('res_id', '=', self.id)])=}")
-        
+        _logger.warning(
+            f"{self.env['ir.attachment'].search([('name', '=', f'Offert {self.name}'), ('res_model', '=', 'sale.order'), ('res_id', '=', self.id)])=}")
+
         self.env["ir.attachment"].search(
             [('name', '=', f'Offert {self.name}'), ('res_model', '=', 'sale.order'), ('res_id', '=', self.id)]).unlink()
 
@@ -195,13 +196,11 @@ class SaleOrder(models.Model):
             if current_user == approval_id.approver_id.id:
                 signport = self.env.ref("rest_signport.api_signport")
                 data = json.loads(request.httprequest.data)
-                _logger.warning("data data data === %s" % data)
                 _logger.warning("data" * 999)
                 _logger.warning(f"{data=}")
                 access_token = data.get("params", {}).get("access_token")
                 res = signport.sudo().post_sign_sale_order(
-                    ssn=self.env.user.partner_id.social_sec_nr and self.env.user.partner_id.social_sec_nr.replace("-",
-                                                                                                                  "") or False,
+                    ssn=self.env.user.partner_id.social_sec_nr and self.env.user.partner_id.social_sec_nr.replace("-", "") or False,
                     order_id=self.id,
                     access_token=access_token,
                     message="Signering av offert",
@@ -311,7 +310,7 @@ class RestApiSignport(models.Model):
             document_content = self.env['sale.order'].browse(order_id).signed_xml_document.datas.decode()
         else:
             document_content = document.datas.decode()
-        #_logger.warning(f"{document_content=}")
+        # _logger.warning(f"{document_content=}")
         headers = {
             "accept": "application/json",
             "Content-Type": "application/json; charset=utf8",
