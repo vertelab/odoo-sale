@@ -10,17 +10,19 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
     var QWeb = core.qweb;
 
     var includeDict = {
-        renderButtons: function () {
+        renderButtons: function ($node) {
             this._super.apply(this, arguments);
+
             if (this.$buttons) {
-                this.$buttons.find('.oe_download_button').click(this.proxy('action_sign')) ;
+                this.$buttons.find('.o_form_button_sign').click(this.proxy('action_sign')) ;
             }
+
 
             this.get_sale_order_info()
 
-            if (this.sale_order_data.check_approve_ability == false || this.sale_order_data.document_fully_approved == true || this.sale_order_data.is_approved == true) {
-                this.$buttons.find('.oe_download_button').addClass("o_invisible_modifier")
-            }
+//            if (this.sale_order_data.check_approve_ability == false || this.sale_order_data.document_fully_approved == true || this.sale_order_data.is_approved == true) {
+//                this.$buttons.find('.o_form_button_sign').addClass("o_invisible_modifier")
+//            }
         },
 
         get_sale_order_info: function () {
@@ -31,6 +33,10 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
         action_sign: async function () {
             var self = this;
             self.get_sale_order_info()
+
+            if (this.sale_order_data.check_approve_ability == false || this.sale_order_data.document_fully_approved == true || this.sale_order_data.is_approved == true) {
+                alert("You cannot perform this operation")
+            }
 
             await self._rpc({
                 model: 'sale.order',
@@ -132,7 +138,7 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
                 }
            })
            var def_data = await self.tigger_sign_action()
-            window.location.href = def_data.url
+           window.location.href = def_data.url
         },
 
         tigger_sign_action: async function () {
@@ -142,7 +148,7 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
                 args: [[]],
                 kwargs: {'order_id': this.sale_order_id.res_id}
             })
-        }
+        },
     };
     FormController.include(includeDict);
 
