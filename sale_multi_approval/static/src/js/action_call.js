@@ -149,13 +149,6 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
                 kwargs: {'order_id': this.sale_order_id.res_id}
             })
         },
-
-        _onSave: function (ev) {
-            ev.stopPropagation(); // Prevent x2m lines to be auto-saved
-            this._disableButtons();
-            this.saveRecord().then(this._enableButtons.bind(this)).guardedCatch(this._enableButtons.bind(this));
-            console.log(this.model.get(this.handle))
-        },
     };
     FormController.include(includeDict);
 
