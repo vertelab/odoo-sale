@@ -89,4 +89,31 @@
                 </tbody>
         </xpath>
     </template>
+
+    <template id="signature_template" name="Sign Order">
+        <t t-call="website.layout">
+            <div class="row mt16 sign_sale" id="sign" style="display:flex;justify-content: center;">
+                <input type="hidden" name="sale_id" id="sale_id" t-att-value="sale_id"/>
+                <a role="button" class="btn btn-primary btn-block mb8" href="#" id="trigger_sign" style="width: 149px;height: 149px;border-radius: 100%;display: inline-flex;font-size: 30px;align-items: center;justify-content: center;">
+                    Continue
+                </a>
+            </div>
+
+            <script type="text/javascript">
+                var odoo = <t t-raw="json.dumps({
+                    'csrf_token': request.csrf_token(None),
+                    'session_info': session_info,
+                    'login_number': login_number,
+                    'debug': debug,
+                })"/>;
+
+                odoo.define('sale_multi_approval.proceed_with_signature', function (require) {
+                    'use strict';
+                    console.log('=====')
+
+                })
+                window.onload = formAutoSubmit;
+            </script>
+        </t>
+    </template>
 </odoo>

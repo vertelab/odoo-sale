@@ -83,3 +83,14 @@ class SaleCustomerPortal(CustomerPortal):
             content_disposition(order_sudo.name),
         ]
         return request.make_response(filecontent, [content_type, disposition_content])
+
+    @http.route(["/trigger/signature/<int:order_id>"], type="http", auth="public", website=True,)
+    def trigger_doc_signature(self, order_id, access_token=None, **kw):
+        access_token = access_token or request.httprequest.args.get('access_token')
+        try:
+            order_sudo = self._document_check_access('sale.order', order_id, access_token=access_token)
+            print(order_sudo)
+        except (AccessError, MissingError):
+            return request.redirect('/web')
+        return request.render("sale_multi_approval.signature_template", {'sale_id': order_sudo.id})
+

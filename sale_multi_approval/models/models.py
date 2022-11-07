@@ -128,6 +128,18 @@ class SaleOrder(models.Model):
     assertion = fields.Binary(string='Assertion', readonly=1)
     relay_state = fields.Binary(string='Relay State', readonly=1)
 
+    @api.depends('partner_id')
+    def _compute_user_group(self):
+        for rec in self:
+            logged_in_user = self.env.user
+            print(logged_in_user.name)
+            if logged_in_user.has_group('res_user_groups_skogsstyrelsen.group_sks_saljare'):
+                rec.has_sign_group = True
+            else:
+                rec.has_sign_group = False
+
+    has_sign_group = fields.Boolean(string="Has Sign Group", compute=_compute_user_group)
+
     @api.model_create_multi
     def create(self, vals):
         records = super().create(vals)
@@ -196,18 +208,18 @@ class SaleOrder(models.Model):
             if current_user == approval_id.approver_id.id:
                 signport = self.env.ref("rest_signport.api_signport")
                 data = json.loads(request.httprequest.data)
-                _logger.warning("data" * 999)
-                _logger.warning(f"{data=}")
+                # _logger.warning(f"{data=}")
                 access_token = data.get("params", {}).get("access_token")
                 res = signport.sudo().post_sign_sale_order(
-                    ssn=self.env.user.partner_id.social_sec_nr and self.env.user.partner_id.social_sec_nr.replace("-", "") or False,
+                    ssn=self.env.user.partner_id.social_sec_nr and self.env.user.partner_id.social_sec_nr.replace("-",
+                                                                                                                  "") or False,
                     order_id=self.id,
                     access_token=access_token,
                     message="Signering av offert",
                     sign_type="employee",
                     approval_id=approval_id.id
                 )
-                _logger.warning(f"sale_approve res: {res}")
+                # _logger.warning(f"sale_approve res: {res}")
                 base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
                 signport_request = self.env["signport.request"].sudo().create({
                     'relay_state': res['relayState'],
@@ -263,10 +275,18 @@ class SaleOrder(models.Model):
     def access_token_sale_order(self, **kwargs):
         if not self and kwargs:
             self = self.env['sale.order'].browse(int(kwargs.get('order_id')))
+        web_base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         return {
             'type': 'ir.actions.act_url',
             'target': 'self',
-            'url': self.get_portal_url(),
+            'url': f"{web_base_url}{self.get_portal_url()}",
+        }
+
+    def action_sign_order(self):
+        return {
+            'type': 'ir.actions.act_url',
+            'target': 'self',
+            'url': f"/trigger/signature/{self.id}",
         }
 
 
