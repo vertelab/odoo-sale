@@ -20,9 +20,9 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
 
             this.get_sale_order_info()
 
-            if (this.sale_order_data.check_approve_ability == false || this.sale_order_data.document_fully_approved == true || this.sale_order_data.is_approved == true) {
-                this.$buttons.find('.o_form_button_sign').addClass("o_invisible_modifier")
-            }
+//            if (this.sale_order_data.check_approve_ability == false || this.sale_order_data.document_fully_approved == true || this.sale_order_data.is_approved == true) {
+//                this.$buttons.find('.o_form_button_sign').addClass("o_invisible_modifier")
+//            }
         },
 
         get_sale_order_info: function () {
@@ -34,7 +34,9 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
             var self = this;
             self.get_sale_order_info()
 
-            console.log(this.sale_order_data)
+            if (this.sale_order_data.check_approve_ability == false || this.sale_order_data.document_fully_approved == true || this.sale_order_data.is_approved == true) {
+                alert("You cannot perform this operation")
+            }
 
             await self._rpc({
                 model: 'sale.order',
@@ -146,6 +148,13 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
                 args: [[]],
                 kwargs: {'order_id': this.sale_order_id.res_id}
             })
+        },
+
+        _onSave: function (ev) {
+            ev.stopPropagation(); // Prevent x2m lines to be auto-saved
+            this._disableButtons();
+            this.saveRecord().then(this._enableButtons.bind(this)).guardedCatch(this._enableButtons.bind(this));
+            console.log(this.model.get(this.handle))
         },
     };
     FormController.include(includeDict);
