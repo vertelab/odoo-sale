@@ -297,8 +297,12 @@ class Attachment(models.Model):
     _inherit = "ir.attachment"
 
     def create_attachment(self, **kwargs):
-        attachment_id = self.create(kwargs)
+        _logger.warning(f"self-----{self}")
+        # self = self.env['sale.order']
+        attachment_id = self.env['ir.attachment'].create(kwargs)
+        _logger.warning(f"attachment_id-----{attachment_id}")
         sale_id = self.env[attachment_id.res_model].browse(attachment_id.res_id)
+        _logger.warning(f"sale_id-----{sale_id}")
         sale_id.write({'latest_pdf_export': attachment_id.id})
 
 
