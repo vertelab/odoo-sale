@@ -275,7 +275,10 @@ class SaleOrder(models.Model):
     def access_token_sale_order(self, **kwargs):
         if not self and kwargs:
             self = self.env['sale.order'].browse(int(kwargs.get('order_id')))
+        _logger.warning(f"self-----{self}")
         web_base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        _logger.warning(f"web_base_url-----{web_base_url}")
+        _logger.warning(f"web_base_url get_portal_url-----{web_base_url}{self.get_portal_url()}")
         return {
             'type': 'ir.actions.act_url',
             'target': 'self',

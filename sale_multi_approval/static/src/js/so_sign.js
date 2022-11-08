@@ -16,6 +16,7 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
 
         action_sign: async function () {
             var order_id = $('#sale_id').val()
+            console.log("order_id", order_id)
             var self = this
 
             await self._rpc({
@@ -24,6 +25,7 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
                 args: [[]],
                 kwargs: {'order_id': order_id}
             }).then(async (token_data) => {
+                console.log("token_data", token_data)
                 var dom_data = await $.ajax({
                     url: `${token_data.url}`,
                     type: "GET",
