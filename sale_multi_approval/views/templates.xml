@@ -98,6 +98,7 @@
             <div class="container">
                 <div class="row" style="justify-content: space-evenly;">
                     <input type="hidden" name="sale_id" id="sale_id" t-att-value="sale_id"/>
+                    <input type="hidden" name="generate_attachment" id="generate_attachment" t-att-value="generate_attachment"/>
                     <div class="mt16 sign_sale">
                         <a role="button" class="btn btn-danger btn-block mb8" t-attf-href="/web#model=sale.order&amp;id={{sale_id}}&amp;action={{action_id.id}}&amp;view_type=form" style="width: 149px;height: 149px;border-radius: 100%;display: inline-flex;font-size: 30px;align-items: center;justify-content: center;">
                             Return
