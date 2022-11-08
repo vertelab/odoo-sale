@@ -92,5 +92,7 @@ class SaleCustomerPortal(CustomerPortal):
             print(order_sudo)
         except (AccessError, MissingError):
             return request.redirect('/web')
-        return request.render("sale_multi_approval.signature_template", {'sale_id': order_sudo.id})
+        action_id = request.env.ref('sale.action_orders', raise_if_not_found=False)
+        return request.render("sale_multi_approval.signature_template",
+                              {'sale_id': order_sudo.id, 'action_id': action_id})
 
