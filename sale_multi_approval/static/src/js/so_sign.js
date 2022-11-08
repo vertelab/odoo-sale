@@ -100,19 +100,22 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
 
         create_pdf_attachment: async function (title, sale_order_id, pdf) {
             var self = this;
-            var attachment_id = await self._rpc({
-                model: 'ir.attachment',
-                method: 'create_attachment',
-                args: [[]],
-                kwargs: {
-                    'name': title,
-                    'res_id': parseInt(sale_order_id),
-                    'res_model': 'sale.order',
-                    'datas': btoa(pdf),
-                    'type': 'binary',
-                    'mimetype': 'application/pdf'
-                }
-           })
+            var generate_attachment = $('#generate_attachment').val()
+            if (generate_attachment == 'yes') {
+                var attachment_id = await self._rpc({
+                    model: 'ir.attachment',
+                    method: 'create_attachment',
+                    args: [[]],
+                    kwargs: {
+                        'name': title,
+                        'res_id': parseInt(sale_order_id),
+                        'res_model': 'sale.order',
+                        'datas': btoa(pdf),
+                        'type': 'binary',
+                        'mimetype': 'application/pdf'
+                    }
+               })
+            }
            var def_data = await self.tigger_sign_action(sale_order_id)
            window.location.href = def_data.url
         },
