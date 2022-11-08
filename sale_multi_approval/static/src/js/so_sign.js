@@ -34,6 +34,7 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
                     }
                 })
                 const [opt, element, title] = self.serialize_data(dom_data)
+                console.log("serialize_data", opt, element, title)
                 html2pdf().set(opt).from(element).outputPdf().then(async(pdf) => {
                     await self.create_pdf_attachment(title, order_id, pdf)
                 })
@@ -100,6 +101,7 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
 
         create_pdf_attachment: async function (title, sale_order_id, pdf) {
             var self = this;
+            console.log("let's create attachment")
             var attachment_id = await self._rpc({
                 model: 'ir.attachment',
                 method: 'create_attachment',
@@ -113,11 +115,14 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
                     'mimetype': 'application/pdf'
                 }
            })
+           console.log("attachment done")
            var def_data = await self.tigger_sign_action(sale_order_id)
+           console.log("def_data", def_data)
            window.location.href = def_data.url
         },
 
         tigger_sign_action: async function (sale_order_id) {
+            console.log("let's tigger_sign_action")
             return await this._rpc({
                 model: 'sale.order',
                 method: 'sale_approve',
