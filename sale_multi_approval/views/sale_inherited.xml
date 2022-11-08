@@ -11,6 +11,7 @@
             <xpath expr="//page[@name='customer_signature']" position="after">
                 <page string="Employee Signatures" name="employee_signatures">
                     <group>
+                        <field name="has_sign_group" invisible="0"/>
                         <field name="document_fully_approved" invisible="1"/>
                         <field name="quotation_locked" invisible="1"/>
                         <field name="check_approve_ability" invisible="1"/>
@@ -64,6 +65,11 @@
                 <button name="sale_unlock" class="oe_highlight"
                         string="Unlock and Unapprove" type="object"
                         groups=" 	res_user_groups_skogsstyrelsen.group_sks_saljare"/>
+
+                <button name="action_sign_order" class="oe_highlight"
+                        string="Sign" type="object"
+                        groups="res_user_groups_skogsstyrelsen.group_sks_saljare"
+                        attrs="{'invisible': ['|','|',('check_approve_ability', '!=', True),('document_fully_approved', '=', True),('is_approved','=',True)]}"/>
             </xpath>
 
             <!--        <field name="order_line" position="attributes">-->

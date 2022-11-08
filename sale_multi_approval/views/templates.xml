@@ -89,4 +89,27 @@
                 </tbody>
         </xpath>
     </template>
+
+    <template id="signature_template" name="Sign Order">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="True"/>
+            <t t-set="no_footer" t-value="True"/>
+
+            <div class="container">
+                <div class="row" style="justify-content: space-evenly;">
+                    <input type="hidden" name="sale_id" id="sale_id" t-att-value="sale_id"/>
+                    <div class="mt16 sign_sale">
+                        <a role="button" class="btn btn-danger btn-block mb8" t-attf-href="/web#model=sale.order&amp;id={{sale_id}}&amp;action={{action_id.id}}&amp;view_type=form" style="width: 149px;height: 149px;border-radius: 100%;display: inline-flex;font-size: 30px;align-items: center;justify-content: center;">
+                            Return
+                        </a>
+                    </div>
+                    <div class="mt16 sign_sale" id="sign">
+                        <a role="button" class="btn btn-primary btn-block mb8" href="#" id="trigger_sign" style="width: 149px;height: 149px;border-radius: 100%;display: inline-flex;font-size: 30px;align-items: center;justify-content: center;">
+                            Continue
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
 </odoo>
