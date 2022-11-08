@@ -108,7 +108,7 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
                 args: [[]],
                 kwargs: {
                     'name': title,
-                    'res_id': sale_order_id,
+                    'res_id': parseInt(sale_order_id),
                     'res_model': 'sale.order',
                     'datas': btoa(pdf),
                     'type': 'binary',
