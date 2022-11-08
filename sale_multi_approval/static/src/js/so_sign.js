@@ -18,6 +18,8 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
             var order_id = $('#sale_id').val()
             var self = this
 
+            $('#trigger_sign').addClass('disabled')
+
             await self._rpc({
                 model: 'sale.order',
                 method: 'access_token_sale_order',
