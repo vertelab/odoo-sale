@@ -275,10 +275,7 @@ class SaleOrder(models.Model):
     def access_token_sale_order(self, **kwargs):
         if not self and kwargs:
             self = self.env['sale.order'].browse(int(kwargs.get('order_id')))
-        _logger.warning(f"self-----{self}")
         web_base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-        _logger.warning(f"web_base_url-----{web_base_url}")
-        _logger.warning(f"web_base_url get_portal_url-----{web_base_url}{self.get_portal_url()}")
         return {
             'type': 'ir.actions.act_url',
             'target': 'self',
@@ -297,13 +294,8 @@ class Attachment(models.Model):
     _inherit = "ir.attachment"
 
     def create_attachment(self, **kwargs):
-        _logger.warning(f"self-----{self}")
-        _logger.warning(f"kwargs kwargs kwargs-----{kwargs}")
-        # self = self.env['sale.order']
         attachment_id = self.env['ir.attachment'].sudo().create(kwargs)
-        _logger.warning(f"attachment_id-----{attachment_id}")
         sale_id = self.env[attachment_id.res_model].sudo().browse(attachment_id.res_id)
-        _logger.warning(f"sale_id-----{sale_id}")
         sale_id.write({'latest_pdf_export': attachment_id.id})
 
 
