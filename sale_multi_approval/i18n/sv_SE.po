@@ -4,18 +4,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0-20211230\n"
+"Project-Id-Version: Odoo Server 14.0-20221010\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-25 11:39+0000\n"
-"PO-Revision-Date: 2022-08-25 13:51+0200\n"
+"POT-Creation-Date: 2022-11-11 10:46+0000\n"
+"PO-Revision-Date: 2022-11-11 10:46+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-"Language: sv\n"
-"X-Generator: Poedit 2.3\n"
 
 #. module: sale_multi_approval
 #: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_portal_template_signed_info
@@ -33,8 +31,7 @@ msgid ""
 "                                        <span style=\"font-weight: bold;\">on behalf of: </span>"
 msgstr ""
 "<br/>\n"
-"                                        <span style=\"font-weight: bold;\">på uppdrag av: </"
-"span>"
+"                                        <span style=\"font-weight: bold;\">på uppdrag av: </span>"
 
 #. module: sale_multi_approval
 #: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_portal_template_signed_info
@@ -92,17 +89,17 @@ msgstr "Aktiviteter"
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_exception_decoration
 msgid "Activity Exception Decoration"
-msgstr ""
+msgstr "Aktivitet undantagsdekoration"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_state
 msgid "Activity State"
-msgstr ""
+msgstr "Aktivitetsstatus"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_type_icon
 msgid "Activity Type Icon"
-msgstr ""
+msgstr "Aktivitetstyp ikon"
 
 #. module: sale_multi_approval
 #: model:ir.actions.act_window,name:sale_multi_approval.add_approver_action
@@ -147,11 +144,6 @@ msgid "Approve Manager"
 msgstr "Signeringschef"
 
 #. module: sale_multi_approval
-#: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_approval_inherited
-msgid "Approve and Lock"
-msgstr "Signera och lås"
-
-#. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__approver_id
 msgid "Approver"
 msgstr "Signerare"
@@ -173,9 +165,14 @@ msgid "Assertion"
 msgstr ""
 
 #. module: sale_multi_approval
+#: model:ir.model,name:sale_multi_approval.model_ir_attachment
+msgid "Attachment"
+msgstr "Bilaga"
+
+#. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_attachment_count
 msgid "Attachment Count"
-msgstr ""
+msgstr "Antal bilagor"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__binding
@@ -185,12 +182,17 @@ msgstr ""
 #. module: sale_multi_approval
 #: model:ir.model,name:sale_multi_approval.model_rest_api
 msgid "Centralized model to make REST calls from Odoo."
-msgstr "Centraliserad model för att göra REST anrop från Odoo."
+msgstr "Centralicerad model för att göra REST anrop från Odoo"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__check_approve_ability
 msgid "Check Approve Ability"
 msgstr "Testa signeringsförmåga"
+
+#. module: sale_multi_approval
+#: model_terms:ir.ui.view,arch_db:sale_multi_approval.signature_template
+msgid "Continue"
+msgstr "Fortsätt"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__create_uid
@@ -222,10 +224,12 @@ msgstr "Digital signering avbruten"
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__display_name
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approver_add_wizard__display_name
+#: model:ir.model.fields,field_description:sale_multi_approval.field_ir_attachment__display_name
 #: model:ir.model.fields,field_description:sale_multi_approval.field_mail_compose_message__display_name
 #: model:ir.model.fields,field_description:sale_multi_approval.field_rest_api__display_name
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__display_name
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__display_name
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order_line__display_name
 #: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__display_name
 msgid "Display Name"
 msgstr "Visningsnamn"
@@ -283,15 +287,22 @@ msgstr "Följare (Kontakter)"
 #. module: sale_multi_approval
 #: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
-msgstr ""
+msgstr "awesome typsnittsikon, t.ex. fa-tasks"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__has_sign_group
+msgid "Has Sign Group"
+msgstr "Har signeringsgrupp"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__id
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approver_add_wizard__id
+#: model:ir.model.fields,field_description:sale_multi_approval.field_ir_attachment__id
 #: model:ir.model.fields,field_description:sale_multi_approval.field_mail_compose_message__id
 #: model:ir.model.fields,field_description:sale_multi_approval.field_rest_api__id
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__id
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__id
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order_line__id
 #: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__id
 msgid "ID"
 msgstr ""
@@ -299,33 +310,33 @@ msgstr ""
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_exception_icon
 msgid "Icon"
-msgstr ""
+msgstr "Ikon"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__activity_exception_icon
 msgid "Icon to indicate an exception activity."
-msgstr ""
+msgstr "Ikon för indikering av undantagsaktivitet"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__message_needaction
 #: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__message_unread
 msgid "If checked, new messages require your attention."
-msgstr ""
+msgstr "Om ikryssad så kräver nya meddelande åtgärd"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__message_has_error
 #: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
-msgstr ""
+msgstr "Om ikryssad så har vissa meddelanden ett leveransfel."
 
 #. module: sale_multi_approval
 #: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_edit_warning
 msgid ""
-"If you save these changes, the current signatures will be deleted, and the document will need "
-"to be signed again."
+"If you save these changes, the current signatures will be deleted, and the "
+"document will need to be signed again."
 msgstr ""
-"Om du sparar dessa ändringar, så kommer alla signaturer försvinna, och signeringsprocessen "
-"måste börjas om"
+"Om du sparar dessa ändringar, så kommer alla signaturer försvinna, och "
+"signeringsprocessen måste börjas om"
 
 #. module: sale_multi_approval
 #: code:addons/sale_multi_approval/models/models.py:0
@@ -346,10 +357,12 @@ msgstr "Är följare"
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line____last_update
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approver_add_wizard____last_update
+#: model:ir.model.fields,field_description:sale_multi_approval.field_ir_attachment____last_update
 #: model:ir.model.fields,field_description:sale_multi_approval.field_mail_compose_message____last_update
 #: model:ir.model.fields,field_description:sale_multi_approval.field_rest_api____last_update
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval____last_update
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order____last_update
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order_line____last_update
 #: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request____last_update
 msgid "Last Modified on"
 msgstr "Senast redigerad"
@@ -371,79 +384,89 @@ msgid "Last Updated on"
 msgstr "Senast Uppdaterad den"
 
 #. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__latest_pdf_export
+msgid "Latest PDF Export"
+msgstr "Senaste PDF Export"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order_line__quotation_locked
+msgid "Lock Quotation"
+msgstr "Lås offert"
+
+#. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_main_attachment_id
 msgid "Main Attachment"
-msgstr ""
+msgstr "Huvudbilaga"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_has_error
 msgid "Message Delivery error"
-msgstr ""
+msgstr "Meddelande leveransfel"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_ids
 msgid "Messages"
-msgstr ""
+msgstr "Meddelanden"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__my_activity_date_deadline
 msgid "My Activity Deadline"
-msgstr ""
+msgstr "Min aktivitetsdeadline"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__name
 msgid "Name"
-msgstr ""
+msgstr "Namn"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_date_deadline
 msgid "Next Activity Deadline"
-msgstr ""
+msgstr "Nästa aktivitetsdeadline"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_summary
 msgid "Next Activity Summary"
-msgstr ""
+msgstr "Nästa aktivitetssammanfattning"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__activity_type_id
 msgid "Next Activity Type"
-msgstr ""
+msgstr "Nästa aktivitetstyp"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_needaction_counter
 msgid "Number of Actions"
-msgstr ""
+msgstr "Antal åtgärder"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_has_error_counter
 msgid "Number of errors"
-msgstr ""
+msgstr "Antal fel"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__message_needaction_counter
 msgid "Number of messages which requires an action"
-msgstr ""
+msgstr "Antal meddelande som kräver åtgärd"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr ""
+msgstr "Antal meddelanden med leveransfel"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__message_unread_counter
 msgid "Number of unread messages"
-msgstr ""
+msgstr "Antal olästa meddelanden"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__page_visibility
 msgid "Page Visibility"
-msgstr ""
+msgstr "Sid-synlighet"
 
 #. module: sale_multi_approval
 #: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_portal_template_sign_form
 msgid "Print"
-msgstr ""
+msgstr "Skriv ut"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__quotation_locked
@@ -463,6 +486,11 @@ msgid "Responsible User"
 msgstr "Ansvarig användare"
 
 #. module: sale_multi_approval
+#: model_terms:ir.ui.view,arch_db:sale_multi_approval.signature_template
+msgid "Return"
+msgstr "Tillbaka"
+
+#. module: sale_multi_approval
 #: code:addons/sale_multi_approval/models/models.py:0
 #, python-format
 msgid "Role"
@@ -471,7 +499,7 @@ msgstr "Roll"
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_has_sms_error
 msgid "SMS Delivery error"
-msgstr ""
+msgstr "SMS leveransfel"
 
 #. module: sale_multi_approval
 #: model:ir.module.category,name:sale_multi_approval.group_sale_multi_approval
@@ -482,7 +510,7 @@ msgstr "Offertsignering"
 #. module: sale_multi_approval
 #: model:ir.actions.act_window,name:sale_multi_approval.approval_sub_menu_action
 msgid "Sale Multi Approval"
-msgstr ""
+msgstr "Försäljning multigodkännande"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__sale_order_id
@@ -493,12 +521,25 @@ msgstr "Säljorder"
 #. module: sale_multi_approval
 #: model:ir.model,name:sale_multi_approval.model_sale_approval
 msgid "Sale Order Multi Approval"
-msgstr ""
+msgstr "Säljorder multigodkännande"
 
 #. module: sale_multi_approval
 #: model:ir.model,name:sale_multi_approval.model_sale_order
 msgid "Sales Order"
 msgstr "Offert"
+
+#. module: sale_multi_approval
+#: model:ir.model,name:sale_multi_approval.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Orderrad"
+
+#. module: sale_multi_approval
+#. openerp-web
+#: code:addons/sale_multi_approval/static/src/xml/form_buttons.xml:0
+#: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_approval_inherited
+#, python-format
+msgid "Sign"
+msgstr "Signera"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__signed_document
@@ -537,6 +578,10 @@ msgid ""
 "Today: Activity date is today\n"
 "Planned: Future activities."
 msgstr ""
+"Status baserad på aktiviteter\n"
+"Försenad: Förfallodatumet har redan passerat\n"
+"Idag: Aktivitetens datum är idag\n"
+"Planerad: Framtida aktiviteter."
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__threshold
@@ -546,7 +591,7 @@ msgstr "Gräns för dubbelsignering"
 #. module: sale_multi_approval
 #: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__activity_exception_decoration
 msgid "Type of the exception activity on record."
-msgstr ""
+msgstr "Typ av undantagsaktivitet"
 
 #. module: sale_multi_approval
 #: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_approval_inherited
@@ -561,17 +606,23 @@ msgstr "Olästa medellanden"
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_unread_counter
 msgid "Unread Messages Counter"
-msgstr ""
+msgstr "Antal olästa meddelanden"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__website_message_ids
 msgid "Website Messages"
-msgstr ""
+msgstr "Webbplats meddelanden"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,help:sale_multi_approval.field_sale_approval__website_message_ids
 msgid "Website communication history"
-msgstr ""
+msgstr "Webbplats kommunikationshistorik"
+
+#. module: sale_multi_approval
+#: code:addons/sale_multi_approval/models/models.py:0
+#, python-format
+msgid "You are not allowed to remove this approval line"
+msgstr "Du tillåts inte ta bort den här signeringsraden"
 
 #. module: sale_multi_approval
 #: model:ir.model,name:sale_multi_approval.model_approver_add_wizard
