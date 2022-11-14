@@ -105,6 +105,18 @@
                 <attribute name="attrs">{'readonly': ['|',('state', 'in', ['done','cancel']), ('quotation_locked', '=', True)]}</attribute>
             </xpath>
 
+            <xpath expr="//field[@name='order_line']/tree/field[@name='qty_delivered']" position="replace">
+                <field
+                    name="qty_delivered"
+                    decoration-info="(not display_type and invoice_status == 'to invoice')" decoration-bf="(not display_type and invoice_status == 'to invoice')"
+                    string="Delivered"
+                    attrs="{
+                        'column_invisible': [('parent.state', 'not in', ['sale', 'done'])]
+                    }"
+                    optional="show"
+                />
+            </xpath>
+
             <field name="note" position="attributes">
                 <attribute name="attrs">{'readonly': [('quotation_locked', '=', True)]}</attribute>
             </field>
