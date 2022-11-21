@@ -67,7 +67,7 @@
                         groups=" 	res_user_groups_skogsstyrelsen.group_sks_saljare"/>
 
                 <button name="action_sign_order" class="oe_highlight"
-                        string="Sign" type="object"
+                        string="Sign and Lock" type="object"
                         groups="res_user_groups_skogsstyrelsen.group_sks_saljare"
                         attrs="{'invisible': ['|','|',('check_approve_ability', '!=', True),('document_fully_approved', '=', True),('is_approved','=',True)]}"/>
             </xpath>
