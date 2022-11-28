@@ -77,12 +77,12 @@ class SaleCustomerPortal(CustomerPortal):
             return request.redirect('/my')
 
         filecontent = base64.b64decode(order_sudo.signed_xml_document.datas)
-        content_type = ["Content-Type", "application/xml"]
-        disposition_content = [
-            "Content-Disposition",
-            content_disposition(order_sudo.name),
-        ]
-        return request.make_response(filecontent, [content_type, disposition_content])
+        pdfhttpheaders = [
+            ('Content-Type', 'application/pdf'),
+            ('Content-Length', len(filecontent)),
+            ('Content-Disposition', content_disposition('%s.pdf' % order_sudo.name))]
+
+        return request.make_response(filecontent, headers=pdfhttpheaders)
 
     @http.route(["/trigger/signature/<int:order_id>"], type="http", auth="public", website=True,)
     def trigger_doc_signature(self, order_id, **kw):
