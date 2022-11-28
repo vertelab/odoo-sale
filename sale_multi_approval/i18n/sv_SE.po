@@ -538,16 +538,20 @@ msgstr "Orderrad"
 #: code:addons/sale_multi_approval/static/src/xml/form_buttons.xml:0
 #: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_approval_inherited
 #, python-format
-msgid "Sign"
-msgstr "Signera"
+msgid "Sign and Lock"
+msgstr "Signera och lås"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__signed_document
-#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__signed_xml_document
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__signed_document
+msgid "Is Document Signed"
+msgstr "Är Dokument Signerat"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__signed_xml_document
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__signed_xml_document
 msgid "Signed Document"
-msgstr "Signerat dokument"
+msgstr "Signerat Dokument"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__signed_on
