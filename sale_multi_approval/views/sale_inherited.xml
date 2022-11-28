@@ -11,13 +11,13 @@
             <xpath expr="//page[@name='customer_signature']" position="after">
                 <page string="Employee Signatures" name="employee_signatures">
                     <group>
-                        <field name="has_sign_group" invisible="0"/>
+                        <field name="has_sign_group" invisible="1"/>
                         <field name="document_fully_approved" invisible="1"/>
                         <field name="quotation_locked" invisible="1"/>
                         <field name="check_approve_ability" invisible="1"/>
                         <field name="is_approved" invisible="1"/>
                         <field name="page_visibility" invisible="1"/>
-                        <field name="latest_pdf_export" invisible="0"/>
+                        <field name="latest_pdf_export" invisible="1"/>
                         <field name="signed_xml_document"/>
                     </group>
                     <group>
@@ -181,14 +181,14 @@
             -->
 
 
-            <!--        <xpath expr="//button[@name='action_confirm'][1]" position="attributes">-->
-            <!--            <attribute name="attrs">{'invisible': ['|', ('require_signature', '==',True), ('state', 'not in', ['sent'])]}-->
-            <!--            </attribute>-->
-            <!--        </xpath>-->
-            <!--        <xpath expr="//button[@name='action_confirm'][2]" position="attributes">-->
-            <!--            <attribute name="attrs">{'invisible': ['|', ('require_signature', '==',True), ('state', 'not in', ['draft'])]}-->
-            <!--            </attribute>-->
-            <!--        </xpath> -->
+            <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+                <attribute name="attrs">{'invisible': ['|', ('require_signature', '==',True), ('state', 'not in', ['sent'])]}
+                </attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_confirm'][2]" position="attributes">-->
+                <attribute name="attrs">{'invisible': ['|', ('require_signature', '==',True), ('state', 'not in', ['draft'])]}
+                </attribute>
+            </xpath>
 
         </field>
     </record>
