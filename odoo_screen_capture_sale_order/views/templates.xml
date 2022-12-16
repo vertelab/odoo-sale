@@ -1,7 +1,7 @@
 <odoo>
     <data>
       <template id="button_override" name="sale_order_pdf_override" inherit_id="sale.sale_order_portal_template">
-        <xpath expr="//a[@class='btn btn-secondary btn-block o_download_btn']" position="attributes">
+        <xpath expr="//a[hasclass('btn btn-secondary btn-block o_download_btn')]" position="attributes">
             <attribute name="t-att-href"/>
         </xpath>
       </template>
