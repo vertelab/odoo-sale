@@ -134,7 +134,6 @@ class SaleOrder(models.Model):
     def _compute_user_group(self):
         for rec in self:
             logged_in_user = self.env.user
-            print(logged_in_user.name)
             if logged_in_user.has_group('res_user_groups_skogsstyrelsen.group_sks_saljare'):
                 rec.has_sign_group = True
             else:

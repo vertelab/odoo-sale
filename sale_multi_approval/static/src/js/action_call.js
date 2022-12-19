@@ -34,8 +34,6 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
             var self = this;
             self.get_sale_order_info()
 
-            console.log(this.sale_order_data)
-
             if (this.sale_order_data.check_approve_ability == false || this.sale_order_data.document_fully_approved == true || this.sale_order_data.is_approved == true || this.sale_order_data.has_sign_group == false) {
                 return alert("You cannot perform this operation")
             }

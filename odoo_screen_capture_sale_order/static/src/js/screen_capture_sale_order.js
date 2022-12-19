@@ -6,7 +6,7 @@ odoo.define("odoo_screen_capture_sale_order.screen_capture_sale_order", function
     publicWidget.registry.screenCaptureSaleOrder = publicWidget.Widget.extend({
         selector: '#wrapwrap',
         read_events: {
-            'click .o_download_btn': '_fetch_pdf',
+            'click .no_existing_doc': '_fetch_pdf',
         },
 
         _fetch_pdf: function () {
@@ -47,7 +47,7 @@ odoo.define("odoo_screen_capture_sale_order.screen_capture_sale_order", function
             });
 
             const element = document.querySelector('#portal_sale_content')
-            
+
 
             let title = ""
             let formatted_title = title_element.textContent.trim().split('\n')

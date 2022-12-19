@@ -34,19 +34,19 @@
     #'sequence': '1',
     'author': 'Vertel AB',
     'website': 'https://vertel.se/apps/odoo-sale/odoo_screen_capture_sale_order',
-    'images': ['static/description/banner.png'], # 560x280 px.
+    'images': ['static/description/banner.png'],  # 560x280 px.
     'license': 'AGPL-3',
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-sale',
-    'depends': ['base', 'website', 'odoo_screen_capture','sale'],
+    'depends': ['base', 'website', 'odoo_screen_capture', 'sale'],
      #"external_dependencies": {
      #   "bin": ["openssl",], 
      #   "python": ["acme_tiny", "IPy",],
      #},
     'data': [
         'views/assets.xml',
-        'views/templates.xml'
+        # 'views/templates.xml'
     ],
     'demo': [],
     'application': False,
