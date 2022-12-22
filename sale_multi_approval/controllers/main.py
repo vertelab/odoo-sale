@@ -16,18 +16,13 @@ from odoo.addons.portal.controllers.portal import (
 )
 from odoo.addons.sale.controllers.portal import CustomerPortal
 
-
 _logger = logging.getLogger(__name__)
 
 
 class SaleMultiApproval(http.Controller):
 
-    @http.route(['/web/signport_form/<int:order_id>/<int:signport_id>/start_sign'],
-        type='http',
-        auth="none",
-    )
+    @http.route(['/web/signport_form/<int:order_id>/<int:signport_id>/start_sign'], type='http', auth="none",)
     def start_sign(self, order_id, signport_id, **kw):
-
         signport_request = request.env["signport.request"].sudo().browse(signport_id)
         values = {
             'relay_state': signport_request.relay_state,
@@ -47,6 +42,8 @@ class SaleMultiApproval(http.Controller):
     )
     def complete_signing(self, order_id, approval_id, **res):
         _logger.warning(f"complete_signing first res: {res}")
+        user_id = request.env['res.users'].browse(request.uid)
+        _logger.warning(f"returning user: {user_id.name}")
         data = {
             "relayState": res["RelayState"],
             "eidSignResponse": res["EidSignResponse"],
@@ -84,7 +81,7 @@ class SaleCustomerPortal(CustomerPortal):
 
         return request.make_response(filecontent, headers=pdfhttpheaders)
 
-    @http.route(["/trigger/signature/<int:order_id>"], type="http", auth="public", website=True,)
+    @http.route(["/trigger/signature/<int:order_id>"], type="http", auth="public", website=True, )
     def trigger_doc_signature(self, order_id, **kw):
         order_sudo = request.env['sale.order'].sudo().browse(int(order_id))
         action_id = request.env.ref('sale.action_orders', raise_if_not_found=False)
@@ -92,4 +89,3 @@ class SaleCustomerPortal(CustomerPortal):
         if order_sudo.latest_pdf_export or order_sudo.signed_xml_document:
             vals.update({'generate_attachment': 'no'})
         return request.render("sale_multi_approval.signature_template", vals)
-

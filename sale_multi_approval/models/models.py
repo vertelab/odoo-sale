@@ -124,11 +124,11 @@ class SaleOrder(models.Model):
     is_approved = fields.Boolean(compute='_compute_is_approved')
     page_visibility = fields.Boolean(compute='_compute_page_visibility')
     quotation_locked = fields.Boolean()
-    signed_document = fields.Binary(string='Is Document Signed', readonly=1)
-    signed_xml_document = fields.Many2one("ir.attachment", "Signed XML Document", readonly=1)
-    signer_ca = fields.Binary(string='Signer Ca', readonly=1)
-    assertion = fields.Binary(string='Assertion', readonly=1)
-    relay_state = fields.Binary(string='Relay State', readonly=1)
+    signed_document = fields.Binary(string='Is Document Signed', readonly=1, copy=False)
+    signed_xml_document = fields.Many2one("ir.attachment", "Signed XML Document", readonly=1, copy=False)
+    signer_ca = fields.Binary(string='Signer Ca', readonly=1, copy=False)
+    assertion = fields.Binary(string='Assertion', readonly=1, copy=False)
+    relay_state = fields.Binary(string='Relay State', readonly=1, copy=False)
 
     @api.depends('partner_id')
     def _compute_user_group(self):
