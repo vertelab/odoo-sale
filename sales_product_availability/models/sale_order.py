@@ -55,3 +55,11 @@ class SaleOrderLine(models.Model):
             return False
         else:
             return True
+
+
+class StockPicking(models.Model):
+    _inherit = "stock.picking"
+
+    def list_location_stock_move(self):
+        move_ids = self.env['stock.move'].search([('location_dest_id', '=', self.location_id.id)])
+        self.write({'move_ids_without_package': [(6, 0, move_ids.ids)]})
