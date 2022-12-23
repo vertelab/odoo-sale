@@ -1,0 +1,19 @@
+<odoo>
+    <data>
+<!--        <record id="model_list_location_stock_move" model="ir.actions.server">-->
+<!--            <field name="name">List all moves in stock move - New</field>-->
+<!--            <field name="model_id" ref="stock.model_stock_picking"/>-->
+<!--            <field name="binding_model_id" ref="stock.model_stock_picking"/>-->
+<!--            <field name="state">code</field>-->
+<!--            <field name="code">records.list_location_stock_move()</field>-->
+<!--        </record>-->
+<!--        -->
+        <record id="model_list_products_stock_warehouse" model="ir.actions.server">
+            <field name="name">List all products in warehouse/location</field>
+            <field name="model_id" ref="stock.model_stock_warehouse"/>
+            <field name="binding_model_id" ref="stock.model_stock_warehouse"/>
+            <field name="state">code</field>
+            <field name="code">records.list_location_stock_wh()</field>
+        </record>
+    </data>
+</odoo>
