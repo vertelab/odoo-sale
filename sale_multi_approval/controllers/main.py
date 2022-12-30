@@ -39,6 +39,7 @@ class SaleMultiApproval(http.Controller):
         methods=["POST", "GET"],
         csrf=False,
         website=True,
+        save_session=False
     )
     def complete_signing(self, order_id, approval_id, **res):
         _logger.warning(f"complete_signing first res: {res}")
