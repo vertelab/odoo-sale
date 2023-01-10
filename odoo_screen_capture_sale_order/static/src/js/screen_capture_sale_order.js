@@ -61,7 +61,7 @@ odoo.define("odoo_screen_capture_sale_order.screen_capture_sale_order", function
             }
 
             const opt = {
-                margin: [5, 5, 10, 5], //top, left, buttom, right
+                margin: [5, 5, 10, 5], //top, left, bottom, right
                 filename: title,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2, logging: true, dpi: 192, letterRendering: true},
