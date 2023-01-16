@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0-20221010\n"
+"Project-Id-Version: Odoo Server 14.0-20221014\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 10:46+0000\n"
-"PO-Revision-Date: 2022-11-11 10:46+0000\n"
+"POT-Creation-Date: 2023-01-16 08:47+0000\n"
+"PO-Revision-Date: 2023-01-16 08:47+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -62,11 +62,6 @@ msgid "<i class=\"fa fa-download\"/> Download PDF"
 msgstr "<i class=\"fa fa-download\"/> Ladda ner PDF"
 
 #. module: sale_multi_approval
-#: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_portal_template_sign_form
-msgid "<i class=\"fa fa-print\"/> Print"
-msgstr "<i class=\"fa fa-print\"/> Skriv ut"
-
-#. module: sale_multi_approval
 #: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_portal_template_signed_info
 msgid "<span style=\"font-weight: bold;\">Signed electronically: \t  </span>"
 msgstr "<span style=\"font-weight: bold;\">Elektroniskt signerat: \t  </span>"
@@ -117,6 +112,11 @@ msgstr "Applikera"
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__approval_ids
 msgid "Approval"
 msgstr "Signering"
+
+#. module: sale_multi_approval
+#: model:ir.model,name:sale_multi_approval.model_approver_add_wizard
+msgid "Approval Wizard"
+msgstr ""
 
 #. module: sale_multi_approval
 #: model:ir.model,name:sale_multi_approval.model_approval_line
@@ -214,6 +214,11 @@ msgstr "Skapad den"
 #: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_approval_form_view
 msgid "Customer Configuration"
 msgstr "Kundkonfigurering"
+
+#. module: sale_multi_approval
+#: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_approval_inherited
+msgid "Delivered"
+msgstr "Levererad"
 
 #. module: sale_multi_approval
 #: code:addons/sale_multi_approval/models/models.py:0
@@ -350,6 +355,12 @@ msgid "Is Approved"
 msgstr "Är signerat"
 
 #. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__signed_document
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__signed_document
+msgid "Is Document Signed"
+msgstr "Är dokument signerat"
+
+#. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_is_follower
 msgid "Is Follower"
 msgstr "Är följare"
@@ -464,11 +475,6 @@ msgid "Page Visibility"
 msgstr "Sid-synlighet"
 
 #. module: sale_multi_approval
-#: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_portal_template_sign_form
-msgid "Print"
-msgstr "Skriv ut"
-
-#. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__quotation_locked
 msgid "Quotation Locked"
 msgstr "Offert låst"
@@ -536,22 +542,24 @@ msgstr "Orderrad"
 #. module: sale_multi_approval
 #. openerp-web
 #: code:addons/sale_multi_approval/static/src/xml/form_buttons.xml:0
-#: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_approval_inherited
 #, python-format
+msgid "Sign"
+msgstr "Signera"
+
+#. module: sale_multi_approval
+#: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_approval_inherited
 msgid "Sign and Lock"
 msgstr "Signera och lås"
 
 #. module: sale_multi_approval
-#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__signed_document
-#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__signed_document
-msgid "Is Document Signed"
-msgstr "Är Dokument Signerat"
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__signed_xml_document
+msgid "Signed Document"
+msgstr "Signerat dokument"
 
 #. module: sale_multi_approval
-#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__signed_xml_document
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__signed_xml_document
-msgid "Signed Document"
-msgstr "Signerat Dokument"
+msgid "Signed XML Document"
+msgstr ""
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__signed_on
@@ -568,6 +576,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__signing_service_url
 msgid "Signing Service Url"
 msgstr "Signeringstjänst Url"
+
+#. module: sale_multi_approval
+#: model:ir.model,name:sale_multi_approval.model_signport_request
+msgid "SingPort Request"
+msgstr ""
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__approval_status
@@ -627,13 +640,3 @@ msgstr "Webbplats kommunikationshistorik"
 #, python-format
 msgid "You are not allowed to remove this approval line"
 msgstr "Du tillåts inte ta bort den här signeringsraden"
-
-#. module: sale_multi_approval
-#: model:ir.model,name:sale_multi_approval.model_approver_add_wizard
-msgid "approver.add.wizard"
-msgstr ""
-
-#. module: sale_multi_approval
-#: model:ir.model,name:sale_multi_approval.model_signport_request
-msgid "signport.request"
-msgstr ""
