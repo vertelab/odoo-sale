@@ -5,4 +5,24 @@
             <field name="approve_customer_sale">True</field>
         </record>
     </data>
+
+    <data>
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'sale')]" />
+            </function>
+            <value eval="{'noupdate': False}" />
+        </function>
+
+        <record id="sale.mail_template_sale_confirmation" model="mail.template">
+            <field name="report_template" eval="False"/>
+        </record>
+
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'sale')]" />
+            </function>
+            <value eval="{'noupdate': True}" />
+        </function>
+    </data>
 </odoo>
