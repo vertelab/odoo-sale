@@ -476,6 +476,7 @@ class RestApiSignport(models.Model):
         username = self.env.user.name
         if sign_type == "employee":
             _logger.warning("employee" * 999)
+            _logger.warning(f"self.env.uid: {self.env.user}")
             self.env['sale.order'].browse(order_id).signed_xml_document = attachment
 
             approval_line = self.env["approval.line"].search(
@@ -500,7 +501,9 @@ class RestApiSignport(models.Model):
                     "signed_on": datetime.now(),
                 }
             )
+            _logger.warning('Before confirm'*99)
             sale_order.action_confirm()
+            _logger.warning('After confirm'*99)
         return res
 
 

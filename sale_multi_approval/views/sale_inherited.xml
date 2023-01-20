@@ -62,9 +62,9 @@
                         string="Approve and Lock" type="object"
                         groups="res_user_groups_skogsstyrelsen.group_sks_saljare"
                         attrs="{'invisible': ['|','|',('check_approve_ability', '!=', True),('document_fully_approved', '=', True),('is_approved','=',True)]}"/> -->
-                <button name="sale_unlock" class="oe_highlight"
+                <button name="sale_unlock"
                         string="Unlock and Unapprove" type="object"
-                        groups=" 	res_user_groups_skogsstyrelsen.group_sks_saljare"/>
+                        groups="res_user_groups_skogsstyrelsen.group_sks_saljare"/>
 
                 <button name="action_sign_order" class="oe_highlight"
                         string="Sign and Lock" type="object"

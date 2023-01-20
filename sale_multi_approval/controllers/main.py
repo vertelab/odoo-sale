@@ -21,7 +21,7 @@ _logger = logging.getLogger(__name__)
 
 class SaleMultiApproval(http.Controller):
 
-    @http.route(['/web/signport_form/<int:order_id>/<int:signport_id>/start_sign'], type='http', auth="none",)
+    @http.route(['/web/signport_form/<int:order_id>/<int:signport_id>/start_sign'], type='http', auth="user",)
     def start_sign(self, order_id, signport_id, **kw):
         signport_request = request.env["signport.request"].sudo().browse(signport_id)
         values = {
@@ -35,7 +35,7 @@ class SaleMultiApproval(http.Controller):
     @http.route(
         ["/web/<int:order_id>/<int:approval_id>/sign_complete"],
         type="http",
-        auth="public",
+        auth="user",
         methods=["POST", "GET"],
         csrf=False,
         website=True,
@@ -45,6 +45,7 @@ class SaleMultiApproval(http.Controller):
         _logger.warning(f"complete_signing first res: {res}")
         user_id = request.env['res.users'].browse(request.uid)
         _logger.warning(f"returning user: {user_id.name}")
+        _logger.warning(f"{request.env.user=}")
         data = {
             "relayState": res["RelayState"],
             "eidSignResponse": res["EidSignResponse"],
