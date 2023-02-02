@@ -36,10 +36,7 @@
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-sale',
-    'depends': [
-        'base_company_fiscal_position',
-        'sale'
-    ],
+    'depends': ['base_company_fiscal_position', 'sale'],
     'data': [
         'report/sale_report_templates.xml',
     ],
