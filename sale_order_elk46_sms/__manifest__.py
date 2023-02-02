@@ -36,12 +36,7 @@
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-sale',
-    'depends': [
-        'sale',
-        'sale_management',
-        'sale_order_phone_number',
-        'elk46_send_sms',
-    ],
+    'depends': ['sale','sale_management','sale_order_phone_number','elk46_send_sms' ],
     'data': [
         'security/ir.model.access.csv',
         'views/sale_order_sms_view.xml',
