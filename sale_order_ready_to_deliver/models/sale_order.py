@@ -155,7 +155,7 @@ class SaleOrderLine(models.Model):
             uom=self.product_uom.id
         )
 
-        vals.update(name=self.with_context(lang=lang).get_sale_order_line_multiline_description_sale(product))
+        # vals.update(name=self.with_context(lang=lang).get_sale_order_line_multiline_description_sale(product))
 
         self._compute_tax_id()
 
