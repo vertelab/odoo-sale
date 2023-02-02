@@ -36,7 +36,7 @@
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-sale',
-    "depends": ["sale"],
+    'depends': ['sale'],
     "data": [
         "views/license_view.xml",
         "views/agreement_view.xml",
