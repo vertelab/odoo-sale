@@ -1,0 +1,13 @@
+<odoo>
+    <template id="button_render_js" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script src="sale_multi_approval/static/src/js/action_call.js" type="text/javascript"/>
+        </xpath>
+    </template>
+
+    <template id="assets_frontend" inherit_id="web.assets_frontend">
+        <xpath expr="//script[last()]" position="after">
+            <script src="sale_multi_approval/static/src/js/so_sign.js" type="text/javascript"/>
+        </xpath>
+    </template>
+</odoo>

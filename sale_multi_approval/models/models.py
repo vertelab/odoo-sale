@@ -13,10 +13,13 @@ from odoo.exceptions import UserError
 from datetime import datetime
 import uuid
 import re
+from bs4 import BeautifulSoup
+import requests
 
 
 class AddApproverWizard(models.TransientModel):
     _name = "approver.add.wizard"
+    _description = "Approval Wizard"
 
     def _get_sale_order(self):
         sale_order = self.env["sale.order"].browse(self.env.context.get('active_ids'))
@@ -64,6 +67,7 @@ class MailComposer(models.TransientModel):
 
 class SignportRequest(models.TransientModel):
     _name = 'signport.request'
+    _description = 'SingPort Request'
 
     relay_state = fields.Char()
     eid_sign_request = fields.Char()
@@ -98,12 +102,17 @@ class ApprovalLine(models.Model):
     sale_order_id = fields.Many2one('sale.order', readonly=0)
     approver_id = fields.Many2one('res.users', string='Approver', readonly=1)
     approval_status = fields.Boolean(string='Status', readonly=1)
-    signed_document = fields.Binary(string='Signed Document', readonly=1)
+    signed_document = fields.Binary(string='Is Document Signed', readonly=1)
     signed_xml_document = fields.Many2one("ir.attachment", "Signed Document", readonly=1)
     signer_ca = fields.Binary(string='Signer Ca', readonly=1)
     assertion = fields.Binary(string='Assertion', readonly=1)
     relay_state = fields.Binary(string='Relay State', readonly=1)
     signed_on = fields.Datetime(string='Signed on')
+
+    def unlink(self):
+        if self.signed_document or self.signed_xml_document or self.approval_status or self.signed_on:
+            raise UserError(_("You are not allowed to remove this approval line"))
+        return super(ApprovalLine, self).unlink()
 
 
 class SaleOrder(models.Model):
@@ -115,11 +124,22 @@ class SaleOrder(models.Model):
     is_approved = fields.Boolean(compute='_compute_is_approved')
     page_visibility = fields.Boolean(compute='_compute_page_visibility')
     quotation_locked = fields.Boolean()
-    signed_document = fields.Binary(string='Signed Document', readonly=1)
-    signed_xml_document = fields.Many2one("ir.attachment", "Signed Document", readonly=1)
-    signer_ca = fields.Binary(string='Signer Ca', readonly=1)
-    assertion = fields.Binary(string='Assertion', readonly=1)
-    relay_state = fields.Binary(string='Relay State', readonly=1)
+    signed_document = fields.Binary(string='Is Document Signed', readonly=1, copy=False)
+    signed_xml_document = fields.Many2one("ir.attachment", "Signed XML Document", readonly=1, copy=False)
+    signer_ca = fields.Binary(string='Signer Ca', readonly=1, copy=False)
+    assertion = fields.Binary(string='Assertion', readonly=1, copy=False)
+    relay_state = fields.Binary(string='Relay State', readonly=1, copy=False)
+
+    @api.depends('partner_id')
+    def _compute_user_group(self):
+        for rec in self:
+            logged_in_user = self.env.user
+            if logged_in_user.has_group('res_user_groups_skogsstyrelsen.group_sks_saljare'):
+                rec.has_sign_group = True
+            else:
+                rec.has_sign_group = False
+
+    has_sign_group = fields.Boolean(string="Has Sign Group", compute=_compute_user_group)
 
     @api.model_create_multi
     def create(self, vals):
@@ -134,32 +154,6 @@ class SaleOrder(models.Model):
                 record.write({'approval_ids': [(4, line.id, 0)]})
         return records
 
-    # def generate_sale_pdf(self):
-    #     report_name = self.name
-    #     report = self.env.ref("sale.action_report_saleorder")
-    #     report_service = report.report_name
-
-    #     if report.report_type in ['qweb-html', 'qweb-pdf']:
-    #         result, format = report._render_qweb_pdf([self.id])
-    #     else:
-    #         res = report._render([self.id])
-    #         result, format = res
-
-    #     # TODO in trunk, change return format to binary to match message_post expected format
-    #     result = base64.b64encode(result)
-    #     ext = "." + format
-    #     if not report_name.endswith(ext):
-    #         report_name += ext
-    #     attachment = (report_name, result)
-    #     data_attach = {
-    #         'name': attachment[0],
-    #         'datas': attachment[1],
-    #         'res_model': 'sale.order',
-    #         'res_id': self.id,
-    #         'type': 'binary',  # override default_type from context, possibly meant for another model!
-    #     }
-    #     self.env["ir.attachment"].create(data_attach)
-
     @api.depends('approval_ids')
     def _compute_page_visibility(self):
         """Compute function for making the approval page visible/invisible"""
@@ -167,22 +161,6 @@ class SaleOrder(models.Model):
             self.page_visibility = True
         else:
             self.page_visibility = False
-
-    # @api.onchange('partner_id')
-    # def _onchange_partner_id(self):
-    #     """This is the onchange function of the partner which loads the
-    #     persons for the approval to the approver table of the account.move"""
-    #     # sale_approval_id = self.env['sale.approval'].search([])
-    #     # self.approval_ids = None
-    #     # if sale_approval_id.approve_customer_sale:
-    #     _logger.warning(f"SET APROVER IDS"*99)
-    #     vals = {
-    #         'approver_id': self.user_id.id,
-    #         'sale_order_id': self.id
-    #     }
-    #     line = self.env["approval.line"].sudo().create(vals)
-    #     self.write({'approval_ids': [(4, line, 0)]})
-    #     _logger.warning(f"line: {line}")
 
     @api.depends('approval_ids.approver_id')
     def _compute_check_approve_ability(self):
@@ -209,29 +187,29 @@ class SaleOrder(models.Model):
         for signature in self.approval_ids:
             signature.write(
                 {'approval_status': False, 'signed_xml_document': None, 'signer_ca': None, 'assertion': None,
-                 'relay_state': None})
-        self.env["ir.attachment"].search(
-            [('name', '=', f'{self.name}.pdf'), ('res_model', '=', 'sale.order'), ('res_id', '=', self.id)],
-            limit=1).unlink()
+                 'relay_state': None, 'signed_on': False})
+        _logger.warning(f"{self.name=}")
+        _logger.warning(
+            f"{self.env['ir.attachment'].search([('name', '=', f'Offert {self.name}'), ('res_model', '=', 'sale.order'), ('res_id', '=', self.id)])=}")
 
-    def sale_approve(self):
+        self.env["ir.attachment"].search(
+            [('name', '=', f'Offert {self.name}'), ('res_model', '=', 'sale.order'), ('res_id', '=', self.id)]).unlink()
+
+    def sale_approve(self, **kwargs):
+        if not self and kwargs:
+            self = self.env['sale.order'].browse(int(kwargs.get('order_id')))
         """This is the function of the approve button also
         updates the approval table values according to the
         approval of the users"""
-        self.ensure_one()
+
         current_user = self.env.uid
-        # if not self.env["ir.attachment"].search([
-        #     ("res_model", "=", "sale.order"),
-        #     ("res_id", "=", self.id),
-        #     ("name", "=", f"{self.name}.pdf"),
-        #     ]):
-        #     self.generate_sale_pdf()
+
         for approval_id in self.approval_ids:
+            _logger.warning(f"{approval_id=}, {current_user=}")
             if current_user == approval_id.approver_id.id:
                 signport = self.env.ref("rest_signport.api_signport")
                 data = json.loads(request.httprequest.data)
-                _logger.warning("data" * 999)
-                _logger.warning(f"{data=}")
+                # _logger.warning(f"{data=}")
                 access_token = data.get("params", {}).get("access_token")
                 res = signport.sudo().post_sign_sale_order(
                     ssn=self.env.user.partner_id.social_sec_nr and self.env.user.partner_id.social_sec_nr.replace("-",
@@ -240,9 +218,9 @@ class SaleOrder(models.Model):
                     access_token=access_token,
                     message="Signering av offert",
                     sign_type="employee",
-                    approval_id=approval_id.id
+                    approval_id=approval_id.id,
                 )
-                _logger.warning(f"sale_approve res: {res}")
+                # _logger.warning(f"sale_approve res: {res}")
                 base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
                 signport_request = self.env["signport.request"].sudo().create({
                     'relay_state': res['relayState'],
@@ -293,6 +271,34 @@ class SaleOrder(models.Model):
         else:
             self.document_fully_approved = False
 
+    latest_pdf_export = fields.Many2one("ir.attachment", string="Latest PDF Export", copy=False)
+
+    def access_token_sale_order(self, **kwargs):
+        if not self and kwargs:
+            self = self.env['sale.order'].browse(int(kwargs.get('order_id')))
+        web_base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        return {
+            'type': 'ir.actions.act_url',
+            'target': 'self',
+            'url': f"{web_base_url}{self.get_portal_url()}",
+        }
+
+    def action_sign_order(self):
+        return {
+            'type': 'ir.actions.act_url',
+            'target': 'self',
+            'url': f"/trigger/signature/{self.id}",
+        }
+
+
+class Attachment(models.Model):
+    _inherit = "ir.attachment"
+
+    def create_attachment(self, **kwargs):
+        attachment_id = self.env['ir.attachment'].sudo().create(kwargs)
+        sale_id = self.env[attachment_id.res_model].sudo().browse(attachment_id.res_id)
+        sale_id.write({'latest_pdf_export': attachment_id.id})
+
 
 class RestApiSignport(models.Model):
     _inherit = "rest.api"
@@ -319,12 +325,13 @@ class RestApiSignport(models.Model):
         # # TODO: attach pdf or xml of order to the request
         _logger.warning("access_token" * 999)
         _logger.warning(f"{access_token=}")
-        document = self.env['sale.order'].browse(order_id).latest_xml_export
-        if self.env['sale.order'].browse(order_id).signed_document:
-            document_content = self.env['sale.order'].browse(order_id).signed_document.decode()
+        # document = self.env['sale.order'].browse(order_id).latest_xml_export
+        document = self.env['sale.order'].browse(order_id).latest_pdf_export
+        if self.env['sale.order'].browse(order_id).signed_xml_document:
+            document_content = self.env['sale.order'].browse(order_id).signed_xml_document.datas.decode()
         else:
             document_content = document.datas.decode()
-
+        # _logger.warning(f"{document_content=}")
         headers = {
             "accept": "application/json",
             "Content-Type": "application/json; charset=utf8",
@@ -336,7 +343,7 @@ class RestApiSignport(models.Model):
             response_url = f"{base_url}/my/orders/{order_id}/sign_complete?access_token={access_token}"
         elif sign_type == "employee":
             role = self.employee_string
-            response_url = f"{base_url}/web/{order_id}/{approval_id}/sign_complete?access_token={access_token}"
+            response_url = f"{base_url}/web/{order_id}/{approval_id}/sign_complete"
         _logger.warning("add signature page")
         guid = str(uuid.uuid1())
         add_signature_page_vals = {
@@ -350,14 +357,14 @@ class RestApiSignport(models.Model):
             ]
         }
 
-        # res = self.call_endpoint(
-        #     method="POST",
-        #     endpoint_url="/AddSignaturePage",
-        #     headers=headers,
-        #     data_vals=add_signature_page_vals,
-        # )
-        # _logger.warning(f"res: {res}")
-        # document_content = res['documents'][0]['content']
+        res = self.call_endpoint(
+            method="POST",
+            endpoint_url="/AddSignaturePage",
+            headers=headers,
+            data_vals=add_signature_page_vals,
+        )
+        _logger.warning(f" add page res: {res}")
+        document_content = res['documents'][0]['content']
         get_sign_request_vals = {
             "username": f"{self.user}",
             "password": f"{self.password}",
@@ -378,11 +385,11 @@ class RestApiSignport(models.Model):
             },
             "document": [
                 {
-                    "mimeType": 'application/xml',  # document.mimetype,  # TODO: check mime type
+                    "mimeType": 'application/pdf',  # document.mimetype,  # TODO: check mime type
                     "content": document_content,  # TODO: include document to sign
-                    "fileName": document.display_name,  # TODO: add filename
+                    "fileName": document.display_name + 'Signed',  # TODO: add filename
                     # "encoding": False  # TODO: should we use this?
-                    "documentName": document.display_name,  # TODO: what is this used for?
+                    "documentName": document.display_name + 'Signed',  # TODO: what is this used for?
                     "adesType": "bes",  # TODO: what is "ades"? "bes" or "none"
                 }
             ],
@@ -458,15 +465,18 @@ class RestApiSignport(models.Model):
 
         attachment = self.env['ir.attachment'].create(
             {
-                'mimetype': 'application/xml',
+                'mimetype': 'application/pdf',
                 'datas': res["document"][0]["content"],
-                'name': res["document"][0]['fileName']
+                'name': res["document"][0]['fileName'],
+                'res_model': 'sale.order',
+                'res_id': order_id
             }
         )
 
         username = self.env.user.name
         if sign_type == "employee":
             _logger.warning("employee" * 999)
+            _logger.warning(f"self.env.uid: {self.env.user}")
             self.env['sale.order'].browse(order_id).signed_xml_document = attachment
 
             approval_line = self.env["approval.line"].search(
@@ -491,7 +501,9 @@ class RestApiSignport(models.Model):
                     "signed_on": datetime.now(),
                 }
             )
+            _logger.warning('Before confirm'*99)
             sale_order.action_confirm()
+            _logger.warning('After confirm'*99)
         return res
 
 

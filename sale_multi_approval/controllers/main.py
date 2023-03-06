@@ -1,4 +1,4 @@
-from odoo import fields, http, _
+from odoo import fields, http, _, SUPERUSER_ID
 from odoo.http import request
 import json
 import logging
@@ -16,19 +16,13 @@ from odoo.addons.portal.controllers.portal import (
 )
 from odoo.addons.sale.controllers.portal import CustomerPortal
 
-
-
 _logger = logging.getLogger(__name__)
 
 
 class SaleMultiApproval(http.Controller):
 
-    @http.route(['/web/signport_form/<int:order_id>/<int:signport_id>/start_sign'], 
-        type='http', 
-        auth="none",
-    )
+    @http.route(['/web/signport_form/<int:order_id>/<int:signport_id>/start_sign'], type='http', auth="user",)
     def start_sign(self, order_id, signport_id, **kw):
-
         signport_request = request.env["signport.request"].sudo().browse(signport_id)
         values = {
             'relay_state': signport_request.relay_state,
@@ -41,13 +35,17 @@ class SaleMultiApproval(http.Controller):
     @http.route(
         ["/web/<int:order_id>/<int:approval_id>/sign_complete"],
         type="http",
-        auth="public",
+        auth="user",
         methods=["POST", "GET"],
         csrf=False,
         website=True,
+        save_session=False
     )
     def complete_signing(self, order_id, approval_id, **res):
         _logger.warning(f"complete_signing first res: {res}")
+        user_id = request.env['res.users'].browse(request.uid)
+        _logger.warning(f"returning user: {user_id.name}")
+        _logger.warning(f"{request.env.user=}")
         data = {
             "relayState": res["RelayState"],
             "eidSignResponse": res["EidSignResponse"],
@@ -78,9 +76,18 @@ class SaleCustomerPortal(CustomerPortal):
             return request.redirect('/my')
 
         filecontent = base64.b64decode(order_sudo.signed_xml_document.datas)
-        content_type = ["Content-Type", "application/xml"]
-        disposition_content = [
-            "Content-Disposition",
-            content_disposition(order_sudo.name),
-        ]
-        return request.make_response(filecontent, [content_type, disposition_content])
+        pdfhttpheaders = [
+            ('Content-Type', 'application/pdf'),
+            ('Content-Length', len(filecontent)),
+            ('Content-Disposition', content_disposition('%s.pdf' % order_sudo.name))]
+
+        return request.make_response(filecontent, headers=pdfhttpheaders)
+
+    @http.route(["/trigger/signature/<int:order_id>"], type="http", auth="public", website=True, )
+    def trigger_doc_signature(self, order_id, **kw):
+        order_sudo = request.env['sale.order'].sudo().browse(int(order_id))
+        action_id = request.env.ref('sale.action_orders', raise_if_not_found=False)
+        vals = {'sale_id': order_sudo.id, 'action_id': action_id, 'generate_attachment': 'yes'}
+        if order_sudo.latest_pdf_export or order_sudo.signed_xml_document:
+            vals.update({'generate_attachment': 'no'})
+        return request.render("sale_multi_approval.signature_template", vals)

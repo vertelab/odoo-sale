@@ -67,8 +67,10 @@ class SaleOrder(models.Model):
                 order.other_analytic_ids = []
             order.other_analytic_count = len(order.timesheet_ids)
 
-    other_analytic_ids = fields.Many2many('account.analytic.line', compute='_compute_other_analytic_ids', string='Timesheet activities associated to this sale')
-    other_analytic_count = fields.Float(string='Timesheet activities', compute='_compute_other_analytic_ids', groups="hr_timesheet.group_hr_timesheet_user")
+    other_analytic_ids = fields.Many2many('account.analytic.line', compute='_compute_other_analytic_ids',
+                                          string='Other Timesheet activities associated to this sale')
+    other_analytic_count = fields.Float(string='Timesheet activities ', compute='_compute_other_analytic_ids',
+                                        groups="hr_timesheet.group_hr_timesheet_user")
 
     def action_view_other_analytic_lines(self):
         self.ensure_one()

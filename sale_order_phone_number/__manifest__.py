@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Odoo SA, Open Source Management Solution, third party addon
-#    Copyright (C) 2021- Vertel AB (<https://vertel.se>).
+#    Copyright (C) 2022- Vertel AB (<https://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,18 +20,18 @@
 ##############################################################################
 
 {
-    'name': 'Sale Order Phone Number',
-    'version': '14.0.0.0.0',
+    'name': 'Sale: Order Phone Number',
+    'version': '14.0.0.1.0',
     # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
-    'summary': 'Sale Order Phone Number',
-    'category': 'Marketing',
+    'summary': 'This module adds phone number to sale order.',
+    'category': 'Sales',
     'description': """
-This module adds phone number to sale order.
+    This module adds phone number to sale order.
     """,
-    #'sequence': '1'
-    #'images': ['images/main_screenshot.png']
+    #'sequence': '1',
     'author': 'Vertel AB',
-    'website': 'https://vertel.se/apps/',
+    'website': 'https://vertel.se/apps/odoo-sale/sale_order_phone_number',
+    'images': ['static/description/banner.png'], # 560x280 px.
     'license': 'AGPL-3',
     'contributor': '',
     'maintainer': 'Vertel AB',
@@ -44,3 +44,4 @@ This module adds phone number to sale order.
     'auto_install': False,
     'license': 'LGPL-3',
 }
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
