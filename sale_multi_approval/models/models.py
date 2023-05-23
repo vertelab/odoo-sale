@@ -108,6 +108,7 @@ class ApprovalLine(models.Model):
     assertion = fields.Binary(string='Assertion', readonly=1)
     relay_state = fields.Binary(string='Relay State', readonly=1)
     signed_on = fields.Datetime(string='Signed on')
+    # sks_ssn = fields.Char(string="SSN of the SKS signee", readonly=True)
 
     def unlink(self):
         if self.signed_document or self.signed_xml_document or self.approval_status or self.signed_on:
@@ -124,6 +125,7 @@ class SaleOrder(models.Model):
     is_approved = fields.Boolean(compute='_compute_is_approved')
     page_visibility = fields.Boolean(compute='_compute_page_visibility')
     quotation_locked = fields.Boolean()
+    # customer_ssn = fields.Char(string="SSN of the customer signee", readonly=True)
     signed_document = fields.Binary(string='Is Document Signed', readonly=1, copy=False)
     signed_xml_document = fields.Many2one("ir.attachment", "Signed XML Document", readonly=1, copy=False)
     signer_ca = fields.Binary(string='Signer Ca', readonly=1, copy=False)
@@ -240,17 +242,24 @@ class SaleOrder(models.Model):
         is approved/not approved by the current logged in user"""
         current_user = self.env.uid
         if self.order_line and self.approval_ids:
+            #_logger.warning(f"HELLO 1 {self.order_line=} {self.approval_ids=}") #HERE
             for approval_id in self.approval_ids:
+                #_logger.warning(f"HELLO 2 {approval_id=}") #HERE
                 if current_user == approval_id.approver_id.id:
+                    #_logger.warning(f"HELLO 3 {current_user=} {approval_id.approver_id.id=} {approval_id.approver_id.display_name=}") #HERE
                     if approval_id.approval_status:
+                        #_logger.warning(f"HELLO 4 {approval_id.approval_status=}") #HERE
                         self.is_approved = True
                         break
                     else:
                         self.is_approved = False
+                        #_logger.warning(f"HELLO first else") #HERE
                 else:
                     self.is_approved = False
+                    #_logger.warning(f"HELLO second else") #HERE
         else:
             self.is_approved = False
+            #_logger.warning(f"HELLO 2") #HERE
 
     @api.depends('approval_ids')
     def _compute_document_fully_approved(self):
@@ -303,6 +312,13 @@ class Attachment(models.Model):
 class RestApiSignport(models.Model):
     _inherit = "rest.api"
 
+    def get_keys(self, dl, keys_list):
+        if isinstance(dl, dict):
+            keys_list += dl.keys()
+            map(lambda x: get_keys(x, keys_list), dl.values())
+        elif isinstance(dl, list):
+            map(lambda x: get_keys(x, keys_list), dl)
+
     def post_sign_sale_order(self, ssn, order_id, access_token, message=False, sign_type="customer", approval_id=False):
         # export_wizard = self.env['xml.export'].with_context({'active_model': 'sale.order', 'active_ids': order_id}).create({})
         # action = export_wizard.download_xml_export()
@@ -323,7 +339,7 @@ class RestApiSignport(models.Model):
         # if not document:
         #     return False
         # # TODO: attach pdf or xml of order to the request
-        _logger.warning("access_token" * 999)
+        _logger.warning("access_token" * 50)
         _logger.warning(f"{access_token=}")
         # document = self.env['sale.order'].browse(order_id).latest_xml_export
         document = self.env['sale.order'].browse(order_id).latest_pdf_export
@@ -363,8 +379,20 @@ class RestApiSignport(models.Model):
             headers=headers,
             data_vals=add_signature_page_vals,
         )
-        _logger.warning(f" add page res: {res}")
+        #_logger.warning(f" add page res: {res}") HERE
         document_content = res['documents'][0]['content']
+        #_logger.warning(f"TESTTEST2 {keys_result_array}") #HERE
+        #_logger.warning(f"addpage res 2: {document_content}") #HERE
+        #_logger.warning("Loggin"*100) #HERE
+        #_logger.warning(f"BABA {self.env.user=}, {self.env.user.name=}, {self.env.user.firstname=}, {self.env.user.lastname=} {ssn}") HERE
+        displayname = False
+        if self.env.user.firstname:
+             displayname = self.env.user.firstname
+        if self.env.user.lastname:
+             if displayname:
+                displayname = displayname +" "+ self.env.user.lastname
+             else:
+                displayname = self.env.user.lastname
         get_sign_request_vals = {
             "username": f"{self.user}",
             "password": f"{self.password}",
@@ -410,9 +438,9 @@ class RestApiSignport(models.Model):
                         "value": role
                     },
                     {
-                        "label": "Namn",
-                        "value": self.env.user.name
-                    }
+                        "label": "Kontonamn",
+                        "value": displayname,
+                    },
                 ],
                 "signatureTitle": "Signerad av",
             },
@@ -423,7 +451,15 @@ class RestApiSignport(models.Model):
             headers=headers,
             data_vals=get_sign_request_vals,
         )
-        _logger.warning(f"getsignrequest res: {res}")
+        #_logger.warning(f"getsignrequest res: {res}") HERE
+        #if sign_type == "customer":
+        #    order = self.env['sale.order'].browse(order_id)
+        #    order.write(
+        #        {
+        #            'customer_ssn': str(ssn),
+        #        }
+        #    )
+
         return res
 
     def signport_post(self, data_vals={}, order_id=False, endpoint=False, sign_type="customer"):
@@ -441,7 +477,7 @@ class RestApiSignport(models.Model):
             headers=headers,
             data_vals=data_vals,
         )
-        _logger.warning(f"res: {res}")
+        #_logger.warning(f"res: {res}") HERE
         if not res['status']['success']:
             if 'not valid personal number' in res['status']['statusCodeDescription']:
                 raise UserError(_('Invalid Personal number, please format it like "YYYYMMDDXXXX"'))
@@ -458,7 +494,7 @@ class RestApiSignport(models.Model):
                 if not match:
                     match = re.search("Message.*\'(.)+\'", res['status']['statusCodeDescription'])
                 if match:
-                    _logger.warning(f"res statuss description: {res['status']['statusCodeDescription']} match: {match}")
+                    #_logger.warning(f"res statuss description: {res['status']['statusCodeDescription']} match: {match}") HERE
                     raise UserError(match[0])
                 else:
                     raise UserError(res['status']['statusCodeDescription'])
@@ -475,7 +511,7 @@ class RestApiSignport(models.Model):
 
         username = self.env.user.name
         if sign_type == "employee":
-            _logger.warning("employee" * 999)
+            _logger.warning("employee" * 20)
             _logger.warning(f"self.env.uid: {self.env.user}")
             self.env['sale.order'].browse(order_id).signed_xml_document = attachment
 
@@ -483,11 +519,16 @@ class RestApiSignport(models.Model):
                 [("sale_order_id", "=", order_id), ("approver_id", "=", self.env.uid)], limit=1)
             approval_line.approval_status = True
             approval_line.signed_xml_document = attachment
+            #try: 
+            #    sks_ssn = self.env.user.partner_id.social_sec_nr
+            #    approval_line.sks_ssn = sks_ssn.replace('-', '')
+            #except: 
+            #    raise UserError('Employee needs an SSN in its res.partner contact page')
             approval_line.signer_ca = res["signerCa"]
             approval_line.assertion = res["assertion"]
             approval_line.relay_state = base64.b64encode(res["relayState"].encode())
             approval_line.signed_on = fields.Datetime.now()
-            _logger.warning("after employee" * 999)
+            _logger.warning("after employee" * 20)
         elif sign_type == "customer":
             sale_order = self.env["sale.order"].sudo().browse(order_id)
 
@@ -501,9 +542,9 @@ class RestApiSignport(models.Model):
                     "signed_on": datetime.now(),
                 }
             )
-            _logger.warning('Before confirm'*99)
+            _logger.warning('Before confirm'*20)
             sale_order.action_confirm()
-            _logger.warning('After confirm'*99)
+            _logger.warning('After confirm'*20)
         return res
 
 

@@ -50,9 +50,9 @@
                                             t-esc="approval.signed_on"
                                             t-options="{'widget': 'datetime'}"
                                         />
-                                        
+
                                     <br/>
-                                        <span style="font-weight: bold;">by:&#160;</span> <span t-esc="approval.approver_id.name" />
+                                        <span style="font-weight: bold;">av kontonamn:&#160;</span> <span t-esc="approval.approver_id.name" />
                                     <br/>
                                         <span style="font-weight: bold;">on behalf of:&#160;</span>
                                         <span t-esc="sale_order.user_id.company_id.name" />
@@ -73,7 +73,7 @@
                                 />
                                 
                             <br/>
-                                <span style="font-weight: bold;">by:&#160;</span> <span t-esc="sale_order.signed_by" />
+                                <span style="font-weight: bold;">av kontonamn:&#160;</span> <span t-esc="sale_order.signed_by" />
                             <br/>
                                 <span style="font-weight: bold;">on behalf of:&#160;</span>
                                 <span t-esc="sale_order.partner_id.name" />
