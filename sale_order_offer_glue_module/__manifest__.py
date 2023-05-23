@@ -20,25 +20,26 @@
 ##############################################################################
 
 {
-    'name': 'Sale: Order Pivot Report',
-    'version': '14.0.0.1.0',
-    'summary': ' This module add more sale order fields to sales order pivot view.',
+    'name': 'Sale: Order Offer Glue Module',
+    'version': '14.0.0.0.0',
+    # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
+    'summary': 'Adds a new field to a offer that teels if the costumer is a company or a person.',
     'category': 'Sales',
     'description': """
-        This module add more sale order fields to sales order pivot view
+    Adds a new field to a offer that teels if the costumer is a company or a person.
     """,
+    #'sequence': '1',
     'author': 'Vertel AB',
-    'website': 'https://vertel.se/apps/odoo-sale/sale_order_pivot_report',
-    'images': ['static/description/banner.png'],
+    'website': 'https://vertel.se/apps/odoo-sale/sale_order_offer_glue_module',
+    'images': ['static/description/banner.png'], # 560x280 px.
     'license': 'AGPL-3',
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-sale',
-    'depends': ['sale', 'sale_stock'],
-    'data': [
-        'views/sale_report_view.xml'
-    ],
-    'installable': True,
-    'auto_install': False,
+    # any module necessary for this one to work correctly
+    'depends': ["sale"],
+    'data': ["views/sale_order_offer_views.xml"]
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+
+
