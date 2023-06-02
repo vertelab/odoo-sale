@@ -36,7 +36,7 @@
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-sale',
-    'depends': ['report_glabels','sale'],
+    'depends': ['report_glabels','sale', 'sale_project'],
     'external_dependencies': {
        
     },
