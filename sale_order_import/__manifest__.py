@@ -33,7 +33,7 @@ Generic Sale order imports from Excel
 """,
     #'sequence': '1',
     'author': 'Vertel AB',
-    'website': 'https://vertel.se/apps/odoo-sale/sale_order_glabel_barcode',
+    'website': 'https://vertel.se/apps/odoo-sale/sale_order_import',
     'images': ['static/description/banner.png'], # 560x280 px.
     'license': 'AGPL-3',
     'contributor': '',

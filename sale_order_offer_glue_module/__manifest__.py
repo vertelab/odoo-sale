@@ -20,29 +20,26 @@
 ##############################################################################
 
 {
-    'name': 'Sale: Order gLabel Barcode',
-    'version': '14.0.1.0',
+    'name': 'Sale: Order Offer Glue Module',
+    'version': '14.0.0.0.0',
     # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
-    'summary': '',
+    'summary': 'Adds a new field to a offer that teels if the costumer is a company or a person.',
     'category': 'Sales',
     'description': """
-    
+    Adds a new field to a offer that teels if the costumer is a company or a person.
     """,
     #'sequence': '1',
     'author': 'Vertel AB',
-    'website': 'https://vertel.se/apps/odoo-sale/sale_order_glabel_barcode',
+    'website': 'https://vertel.se/apps/odoo-sale/sale_order_offer_glue_module',
     'images': ['static/description/banner.png'], # 560x280 px.
     'license': 'AGPL-3',
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-sale',
-    'depends': ['report_glabels','sale', 'sale_project'],
-    'external_dependencies': {
-       
-    },
-    'data': ['data/sale_order_glabel.xml',
-    ],
-    'installable': 'True',
-    'application': 'False',
+    # any module necessary for this one to work correctly
+    'depends': ["sale"],
+    'data': ["views/sale_order_offer_views.xml"]
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+
+

@@ -20,7 +20,7 @@
 ##############################################################################
 
 {
-    'name': 'Sale: Sale Order Pivot Report',
+    'name': 'Sale: Order Pivot Report',
     'version': '14.0.0.1.0',
     'summary': ' This module add more sale order fields to sales order pivot view.',
     'category': 'Sales',
@@ -28,7 +28,7 @@
         This module add more sale order fields to sales order pivot view
     """,
     'author': 'Vertel AB',
-    'website': 'https://vertel.se/apps/odoo-sale/sale_order_print_template',
+    'website': 'https://vertel.se/apps/odoo-sale/sale_order_pivot_report',
     'images': ['static/description/banner.png'],
     'license': 'AGPL-3',
     'contributor': '',
