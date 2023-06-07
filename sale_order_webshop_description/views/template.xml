@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_frontend" inherit_id="website_sale.assets_frontend">
+        <xpath expr="script[last()]" position="after">
+            <script type="text/javascript" src="/sale_order_webshop_description/static/src/js/website_sale.js"></script>
+        </xpath>
+    </template>
+
+    <template id="product" inherit_id="website_sale.product">
+        <xpath expr="//t[@t-call='website.layout']/div[@id='wrap']/section[@id='product_detail']/div[2]/div[@id='product_details']/form[@t-if='product._is_add_to_cart_possible()']/div[hasclass('js_main_product')]/a[@id='add_to_cart']" position="before">
+            <div style="margin-top:10px;">
+<!--                <h5>Description</h5>-->
+                <textarea class="form-control" name="product_description" id="product_description" rows="5" required="1"/>
+            </div>
+
+        </xpath>
+    </template>
+
+</odoo>
