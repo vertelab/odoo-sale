@@ -1,0 +1,68 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sale_order_webshop_description
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0-20220428\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-14 11:20+0000\n"
+"PO-Revision-Date: 2023-06-14 11:20+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_order_webshop_description
+#: model:ir.model.fields,field_description:sale_order_webshop_description.field_sale_order__display_name
+#: model:ir.model.fields,field_description:sale_order_webshop_description.field_sale_order_line__display_name
+msgid "Display Name"
+msgstr "Visningsnamn"
+
+#. module: sale_order_webshop_description
+#: model:ir.model.fields,field_description:sale_order_webshop_description.field_sale_order__id
+#: model:ir.model.fields,field_description:sale_order_webshop_description.field_sale_order_line__id
+msgid "ID"
+msgstr ""
+
+#. module: sale_order_webshop_description
+#: code:addons/sale_order_webshop_description/models/sale_order.py:0
+#, python-format
+msgid "It is forbidden to modify a sales order which is not in draft status."
+msgstr "Det är förbjudet att ändra en faktura som inte befinner sig i utkast."
+
+#. module: sale_order_webshop_description
+#: model:ir.model.fields,field_description:sale_order_webshop_description.field_sale_order____last_update
+#: model:ir.model.fields,field_description:sale_order_webshop_description.field_sale_order_line____last_update
+msgid "Last Modified on"
+msgstr "Senast redigerad"
+
+#. module: sale_order_webshop_description
+#: model_terms:ir.ui.view,arch_db:sale_order_webshop_description.product
+msgid "Product description"
+msgstr "Produktbeskrivning"
+
+#. module: sale_order_webshop_description
+#: model:ir.model,name:sale_order_webshop_description.model_sale_order
+msgid "Sales Order"
+msgstr "Kundorder"
+
+#. module: sale_order_webshop_description
+#: model:ir.model,name:sale_order_webshop_description.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Orderrad"
+
+#. module: sale_order_webshop_description
+#: code:addons/sale_order_webshop_description/models/sale_order.py:0
+#, python-format
+msgid ""
+"The given combination does not exist therefore it cannot be added to cart."
+msgstr "Den angivna kombinationen existerar inte och kan därför inte läggas till i kundkorgen."
+
+#. module: sale_order_webshop_description
+#: code:addons/sale_order_webshop_description/models/sale_order.py:0
+#, python-format
+msgid "The given product does not exist therefore it cannot be added to cart."
+msgstr "The angivna produkten existerar inte och kan därför inte läggas till i kundkorgen."
