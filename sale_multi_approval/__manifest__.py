@@ -37,15 +37,13 @@
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-sale',
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale', 'rest_base', 'rest_signport', 'res_user_groups_skogsstyrelsen', "partner_ssn"],
+    'depends': ['base', 'sale', 'rest_base', 'rest_signport', 'partner_ssn', 'website'],
 
     # 1. always loaded
     # sale_multi_approval:
     # This module depends on a third party project.
     # git clone -b 14.0 git@github.com:vertelab/odoo-rest.git
-    # 2. sale_multi_approval:
-    # This module depends on a third party project.
-    # git clone -b 14.0 git@git.vertel.se:vertelab/odooext-skogsstyrelsen.git
+
     'data': [
         'data/data.xml',
         'security/groups.xml',

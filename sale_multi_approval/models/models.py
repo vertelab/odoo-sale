@@ -30,7 +30,7 @@ class AddApproverWizard(models.TransientModel):
         group_ids = []
         group_ids.append(self.env.ref('sale_multi_approval.group_approve_manager').id)
         group_ids.append(self.env.ref('sale_multi_approval.group_approver').id)
-        group_ids.append(self.env.ref('res_user_groups_skogsstyrelsen.group_sks_saljare').id)
+        #group_ids.append(self.env.ref('res_user_groups_skogsstyrelsen.group_sks_saljare').id)
         offlimit_ids = [i.id for i in self.env["sale.order"].browse(self.env.context.get('active_ids')).approval_ids]
         # offlimit_ids.append(self.env.uid)
         return [('groups_id', 'in', group_ids), ('id', 'not in', offlimit_ids)]
@@ -108,7 +108,6 @@ class ApprovalLine(models.Model):
     assertion = fields.Binary(string='Assertion', readonly=1)
     relay_state = fields.Binary(string='Relay State', readonly=1)
     signed_on = fields.Datetime(string='Signed on')
-    # sks_ssn = fields.Char(string="SSN of the SKS signee", readonly=True)
 
     def unlink(self):
         if self.signed_document or self.signed_xml_document or self.approval_status or self.signed_on:
@@ -125,7 +124,6 @@ class SaleOrder(models.Model):
     is_approved = fields.Boolean(compute='_compute_is_approved')
     page_visibility = fields.Boolean(compute='_compute_page_visibility')
     quotation_locked = fields.Boolean()
-    # customer_ssn = fields.Char(string="SSN of the customer signee", readonly=True)
     signed_document = fields.Binary(string='Is Document Signed', readonly=1, copy=False)
     signed_xml_document = fields.Many2one("ir.attachment", "Signed XML Document", readonly=1, copy=False)
     signer_ca = fields.Binary(string='Signer Ca', readonly=1, copy=False)
@@ -136,7 +134,8 @@ class SaleOrder(models.Model):
     def _compute_user_group(self):
         for rec in self:
             logged_in_user = self.env.user
-            if logged_in_user.has_group('res_user_groups_skogsstyrelsen.group_sks_saljare'):
+            # ~ if logged_in_user.has_group('res_user_groups_skogsstyrelsen.group_sks_saljare'):
+            if logged_in_user.has_group('sale_multi_approval.group_approver') or logged_in_user.has_group('sale_multi_approval.group_approve_manager'):
                 rec.has_sign_group = True
             else:
                 rec.has_sign_group = False
@@ -519,11 +518,6 @@ class RestApiSignport(models.Model):
                 [("sale_order_id", "=", order_id), ("approver_id", "=", self.env.uid)], limit=1)
             approval_line.approval_status = True
             approval_line.signed_xml_document = attachment
-            #try: 
-            #    sks_ssn = self.env.user.partner_id.social_sec_nr
-            #    approval_line.sks_ssn = sks_ssn.replace('-', '')
-            #except: 
-            #    raise UserError('Employee needs an SSN in its res.partner contact page')
             approval_line.signer_ca = res["signerCa"]
             approval_line.assertion = res["assertion"]
             approval_line.relay_state = base64.b64encode(res["relayState"].encode())

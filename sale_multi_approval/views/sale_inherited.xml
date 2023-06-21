@@ -58,24 +58,15 @@
                 </attribute>
             </xpath>
             <xpath expr="//button[@name='action_confirm']" position="before">
-                <!-- <button name="sale_approve" class="oe_highlight"
-                        string="Approve and Lock" type="object"
-                        groups="res_user_groups_skogsstyrelsen.group_sks_saljare"
-                        attrs="{'invisible': ['|','|',('check_approve_ability', '!=', True),('document_fully_approved', '=', True),('is_approved','=',True)]}"/> -->
                 <button name="sale_unlock"
                         string="Unlock and Unapprove" type="object"
-                        groups="res_user_groups_skogsstyrelsen.group_sks_saljare"/>
+                        groups="sale_multi_approval.group_approver"/>
 
                 <button name="action_sign_order" class="oe_highlight"
                         string="Sign and Lock" type="object"
-                        groups="res_user_groups_skogsstyrelsen.group_sks_saljare"
+                        groups="sale_multi_approval.group_approver"
                         attrs="{'invisible': ['|','|',('check_approve_ability', '!=', True),('document_fully_approved', '=', True),('is_approved','=',True)]}"/>
             </xpath>
-
-            <!--        <field name="order_line" position="attributes">-->
-            <!--          <attribute name="attrs">{'readonly': ['|',('state', 'in', ['done','cancel']), ('quotation_locked', '=', True)]}</attribute>-->
-            <!--        </field>-->
-
 
             <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="after">
                 <field name="quotation_locked" invisible="1"/>
