@@ -1,3 +1,1 @@
 # odoo-sale
-
-Test
