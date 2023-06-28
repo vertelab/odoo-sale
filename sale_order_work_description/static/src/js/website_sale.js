@@ -1,4 +1,4 @@
-odoo.define('sale_order_webshop_description.website_sale', function (require) {
+odoo.define('sale_order_work_description.website_sale_work_description', function (require) {
     'use strict';
 
     var ajax = require('web.ajax');
@@ -36,8 +36,15 @@ odoo.define('sale_order_webshop_description.website_sale', function (require) {
                     product_custom_attribute_values: self.getCustomVariantValues($form.find('.js_product')),
                     variant_values: self.getSelectedVariantValues($form.find('.js_product')),
                     no_variant_attribute_values: self.getNoVariantAttributeValues($form.find('.js_product')),
-                    work_description: $form.find('textarea[name="work_description"]').val()
                 };
+
+                 if ($form.find('textarea[name="product_description"]').length) {
+                    self.rootProduct['product_description'] = $form.find('textarea[name="product_description"]').val()
+                 }
+
+                 if ($form.find('textarea[name="work_description"]').length) {
+                    self.rootProduct['work_description'] = $form.find('textarea[name="work_description"]').val()
+                 }
 
                 return self._onProductReady();
             });
@@ -54,7 +61,11 @@ odoo.define('sale_order_webshop_description.website_sale', function (require) {
                 params.express = true;
             }
 
-            if( params.work_description.trim().length === 0 ) {
+            if( ('product_description' in params) && (params.product_description.trim().length === 0 )) {
+                return alert("Enter Product Description")
+            }
+
+            if( ('work_description' in params) && (params.work_description.trim().length === 0 )) {
                 return alert("Enter Work Description")
             }
 
@@ -62,6 +73,5 @@ odoo.define('sale_order_webshop_description.website_sale', function (require) {
         },
 
     })
-
 
 })

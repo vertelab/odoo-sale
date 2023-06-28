@@ -99,9 +99,18 @@ class SaleOrder(models.Model):
                 }) for custom_value in custom_values]
 
             # create the line
-            if kwargs.get("work_description"):
+            if product.type == "service":
+                if kwargs.get("product_description"):
+                    values.update({
+                        "name": kwargs.get("product_description")
+                    })
+                if kwargs.get("work_description"):
+                    values.update({
+                        "work_description": kwargs.get("work_description")
+                    })
+            else:
                 values.update({
-                    "work_description": kwargs.get("work_description")
+                    "name": product.description_sale or product.name
                 })
 
             order_line = SaleOrderLineSudo.create(values)
@@ -127,6 +136,7 @@ class SaleOrder(models.Model):
             if linked_line:
                 # update description of the parent
                 linked_product = product_with_context.browse(linked_line.product_id.id)
+                linked_line.name = linked_line.get_sale_order_line_multiline_description_sale(linked_product)
                 linked_line.work_description = linked_line.get_sale_order_line_multiline_description_sale(linked_product)
         else:
             # update line
@@ -147,9 +157,18 @@ class SaleOrder(models.Model):
                 order.company_id.id)
             product = product_with_context.browse(product_id)
 
-            if kwargs.get("work_description"):
+            if product.type == "service":
+                if kwargs.get("product_description"):
+                    values.update({
+                        "name": kwargs.get("product_description")
+                    })
+                if kwargs.get("work_description"):
+                    values.update({
+                        "work_description": kwargs.get("work_description")
+                    })
+            else:
                 values.update({
-                    "work_description": kwargs.get("work_description")
+                    "name": product.description_sale or product.name
                 })
 
             order_line.write(values)
@@ -162,18 +181,27 @@ class SaleOrder(models.Model):
                 })
                 linked_product = product_with_context.browse(linked_line.product_id.id)
 
-                if kwargs.get("work_description"):
-                    linked_line.work_description = kwargs.get("work_description")
+                if product.type == "service":
+                    if kwargs.get("product_description"):
+                        linked_line.name = kwargs.get("product_description")
+                    if kwargs.get("work_description"):
+                        linked_line.work_description = kwargs.get("work_description")
                 else:
-                    linked_line.work_description = linked_line.get_sale_order_line_multiline_description_sale(linked_product)
+                    linked_line.work_description = linked_line.get_sale_order_line_multiline_description_sale(
+                        linked_product
+                    )
+
             # Generate the description with everything. This is done after
             # creating because the following related fields have to be set:
             # - product_no_variant_attribute_value_ids
             # - product_custom_attribute_value_ids
             # - linked_line_id
 
-            if kwargs.get("work_description"):
-                order_line.work_description = kwargs.get("work_description")
+            if product.type == "service":
+                if kwargs.get("product_description"):
+                    order_line.name = kwargs.get("product_description")
+                if kwargs.get("work_description"):
+                    order_line.work_description = kwargs.get("work_description")
             else:
                 order_line.work_description = order_line.get_sale_order_line_multiline_description_sale(product)
 
@@ -186,7 +214,8 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     def get_sale_order_line_multiline_description_sale(self, product):
+        if self.name:
+            return self.name
         if self.work_description:
             return self.work_description
-        else:
-            return super(SaleOrderLine, self).get_sale_order_line_multiline_description_sale(product)
+        return super(SaleOrderLine, self).get_sale_order_line_multiline_description_sale(product)

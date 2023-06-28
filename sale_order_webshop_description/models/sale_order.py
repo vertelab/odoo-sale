@@ -99,9 +99,13 @@ class SaleOrder(models.Model):
                 }) for custom_value in custom_values]
 
             # create the line
-            if kwargs.get("product_description"):
+            if product.type == "service" and kwargs.get("product_description"):
                 values.update({
                     "name": kwargs.get("product_description")
+                })
+            else:
+                values.update({
+                    "name": product.description_sale or product.name
                 })
 
             order_line = SaleOrderLineSudo.create(values)
@@ -147,7 +151,7 @@ class SaleOrder(models.Model):
                 order.company_id.id)
             product = product_with_context.browse(product_id)
 
-            if kwargs.get("product_description"):
+            if product.type == "service" and kwargs.get("product_description"):
                 values.update({
                     "name": kwargs.get("product_description")
                 })
@@ -162,7 +166,7 @@ class SaleOrder(models.Model):
                 })
                 linked_product = product_with_context.browse(linked_line.product_id.id)
 
-                if kwargs.get("product_description"):
+                if product.type == "service" and kwargs.get("product_description"):
                     linked_line.name = kwargs.get("product_description")
                 else:
                     linked_line.name = linked_line.get_sale_order_line_multiline_description_sale(linked_product)
@@ -172,7 +176,7 @@ class SaleOrder(models.Model):
             # - product_custom_attribute_value_ids
             # - linked_line_id
 
-            if kwargs.get("product_description"):
+            if product.type == "service" and kwargs.get("product_description"):
                 order_line.name = kwargs.get("product_description")
             else:
                 order_line.name = order_line.get_sale_order_line_multiline_description_sale(product)
