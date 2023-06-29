@@ -62,11 +62,11 @@ odoo.define('sale_order_work_description.website_sale_work_description', functio
             }
 
             if( ('product_description' in params) && (params.product_description.trim().length === 0 )) {
-                return alert("Enter Product Description")
+                return alert("Skriv in en Objektsbeskrivning")
             }
 
             if( ('work_description' in params) && (params.work_description.trim().length === 0 )) {
-                return alert("Enter Work Description")
+                return alert("Skriv in en Arbetsbeskrivning")
             }
 
             return wUtils.sendRequest('/shop/cart/update', params);
