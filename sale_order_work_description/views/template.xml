@@ -10,11 +10,39 @@
         <xpath expr="//t[@t-call='website.layout']/div[@id='wrap']/section[@id='product_detail']/div[2]/div[@id='product_details']/form[@t-if='product._is_add_to_cart_possible()']/div[hasclass('js_main_product')]/a[@id='add_to_cart']" position="before">
             <div style="margin-top:10px;" t-if="product.type == 'service'">
                 <label>Product Description</label>
-                <textarea class="form-control" name="product_description" id="product_description" rows="5" required="1" style="border: 1px solid #dfe2e6"/>
+                <textarea class="form-control" name="product_description" id="product_description" rows="1" required="1" style="border: 1px solid #dfe2e6" placeholder="Enter, for example: brand, size, color"/>
             </div>
             <div style="margin-top:10px;" t-if="product.type == 'service'">
                 <label>Work Description</label>
-                <textarea class="form-control" name="work_description" id="work_description" rows="5" required="1" style="border: 1px solid #dfe2e6"/>
+                <textarea class="form-control" name="work_description" id="work_description" rows="1" required="1" style="border: 1px solid #dfe2e6" placeholder="Shortly write what you want us to fix"/>
+            </div>
+        </xpath>
+
+        <xpath expr="//t[@t-call='website.layout']/div[@id='wrap']/section[@id='product_detail']/div[2]/div[@id='product_details']/hr[@t-if='product.description_sale']" position="attributes">
+            <attribute name="style">display:none !important</attribute>
+        </xpath>
+
+        <xpath expr="//t[@t-call='website.layout']/div[@id='wrap']/section[@id='product_detail']/div[2]/div[@id='product_details']/div[1]" position="attributes">
+            <attribute name="style">display:none !important</attribute>
+        </xpath>
+
+        <xpath expr="//t[@t-call='website.layout']/div[@id='wrap']/section[@id='product_detail']/div[2]/div[@id='product_details']/h1[1]" position="after">
+            <div>
+                <hr t-if="product.description_sale" />
+                <p t-field="product.description_sale" class="text-muted mt-3" placeholder="A short description that will also appear on documents." />
+                <div id="product_attributes_simple">
+                    <hr t-if="sum([(1 if len(l.value_ids)==1 else 0) for l in product.attribute_line_ids])"/>
+                    <p class="text-muted">
+                        <t t-set="single_value_attributes" t-value="product.valid_product_template_attribute_line_ids._prepare_single_value_for_display()"/>
+                        <t t-foreach="single_value_attributes" t-as="attribute">
+                            <span t-field="attribute.name"/>:
+                            <t t-foreach="single_value_attributes[attribute]" t-as="ptal">
+                                <span t-field="ptal.product_template_value_ids._only_active().name"/><t t-if="not ptal_last">, </t>
+                            </t>
+                            <br/>
+                        </t>
+                    </p>
+                </div>
             </div>
         </xpath>
     </template>

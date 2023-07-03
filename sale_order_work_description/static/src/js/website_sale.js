@@ -62,10 +62,12 @@ odoo.define('sale_order_work_description.website_sale_work_description', functio
             }
 
             if( ('product_description' in params) && (params.product_description.trim().length === 0 )) {
+                $('#add_to_cart').removeClass('disabled')
                 return alert("Enter Product Description")
             }
 
             if( ('work_description' in params) && (params.work_description.trim().length === 0 )) {
+                $('#add_to_cart').removeClass('disabled')
                 return alert("Enter Work Description")
             }
 
