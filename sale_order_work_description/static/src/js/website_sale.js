@@ -62,13 +62,13 @@ odoo.define('sale_order_work_description.website_sale_work_description', functio
             }
 
             if( ('product_description' in params) && (params.product_description.trim().length === 0 )) {
-                $('#add_to_cart').removeClass('disabled')
-                return alert("Skriv in en Objektsbeskrivning")
+                alert("Skriv in en Objektsbeskrivning")
+                return location.reload()
             }
 
             if( ('work_description' in params) && (params.work_description.trim().length === 0 )) {
-                $('#add_to_cart').removeClass('disabled')
-                return alert("Skriv in en Arbetsbeskrivning")
+                alert("Skriv in en Arbetsbeskrivning")
+                return location.reload()
             }
 
             return wUtils.sendRequest('/shop/cart/update', params);
