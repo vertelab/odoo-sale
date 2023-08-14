@@ -33,7 +33,8 @@ class ExtendWebsiteSale(WebsiteSale):
             set_qty=set_qty,
             product_custom_attribute_values=product_custom_attribute_values,
             no_variant_attribute_values=no_variant_attribute_values,
-            product_description=kw.get("product_description")
+            product_description=kw.get("product_description"),
+            work_description=kw.get("work_description")
         )
 
         if kw.get('express'):
@@ -58,7 +59,8 @@ class ExtendWebsiteSale(WebsiteSale):
             line_id=line_id.id,
             add_qty=add_qty,
             set_qty=set_qty,
-            product_description=line_id.name if line_id else False
+            product_description=line_id.name if line_id else False,
+            work_description=line_id.work_description if line_id else False
         )
 
         if not order.cart_quantity:

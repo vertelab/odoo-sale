@@ -1,4 +1,4 @@
-odoo.define('sale_order_webshop_description.website_sale', function (require) {
+odoo.define('sale_order_webshop_description.website_sale_description', function (require) {
     'use strict';
 
     var ajax = require('web.ajax');
@@ -36,8 +36,11 @@ odoo.define('sale_order_webshop_description.website_sale', function (require) {
                     product_custom_attribute_values: self.getCustomVariantValues($form.find('.js_product')),
                     variant_values: self.getSelectedVariantValues($form.find('.js_product')),
                     no_variant_attribute_values: self.getNoVariantAttributeValues($form.find('.js_product')),
-                    product_description: $form.find('textarea[name="product_description"]').val()
                 };
+
+                if ($form.find('textarea[name="product_description"]').length) {
+                    self.rootProduct['product_description'] = $form.find('textarea[name="product_description"]').val()
+                }
 
                 return self._onProductReady();
             });
@@ -54,7 +57,7 @@ odoo.define('sale_order_webshop_description.website_sale', function (require) {
                 params.express = true;
             }
 
-            if( params.product_description.trim().length === 0 ) {
+            if( ('product_description' in params) && (params.product_description.trim().length === 0 )) {
                 return alert("Enter Product Description")
             }
 

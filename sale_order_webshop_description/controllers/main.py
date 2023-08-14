@@ -27,6 +27,8 @@ class ExtendWebsiteSale(WebsiteSale):
         if kw.get('no_variant_attribute_values'):
             no_variant_attribute_values = json.loads(kw.get('no_variant_attribute_values'))
 
+        product_product_id = request.env["product.product"].sudo().search([("id", "=", int(product_id))], limit=1)
+
         sale_order._cart_update(
             product_id=int(product_id),
             add_qty=add_qty,
