@@ -88,8 +88,8 @@ class SaleOrder(models.Model):
             if not record.partner_id.name:
                 _logger.warning(f"{record=}")
                 raise UserError(_('You can not write to a sale order that has a customer with no name'))
-            if not record.partner_id.phone and not record.partner_id.mobile:
-                raise UserError(_('You can not write to a sale order that has a customer with no phone and mobile number'))
+            #if not record.partner_id.phone and not record.partner_id.mobile:
+            #    raise UserError(_('You can not write to a sale order that has a customer with no phone and mobile number'))
         return res
     
     @api.model
@@ -98,8 +98,8 @@ class SaleOrder(models.Model):
         res = super(SaleOrder,self).create(values)
         if not res.partner_id.name:
             raise UserError(_('You can not create a sale order with a customer that has no name'))
-        if not res.partner_id.phone and not res.partner_id.mobile:
-            raise UserError(_('You can not create a sale order with a customer that has no phone and mobile number'))
+        #if not res.partner_id.phone and not res.partner_id.mobile:
+        #    raise UserError(_('You can not create a sale order with a customer that has no phone and mobile number'))
         if values.get('date_deadline'):
             res.commitment_date = values.get('date_deadline')
         return res

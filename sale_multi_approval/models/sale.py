@@ -4,6 +4,12 @@ from odoo import models, fields, api, _
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
+    order_line = fields.One2many(
+        'sale.order.line',
+        'order_id',
+        string='Order Lines',
+        states={'cancel': [('readonly', True)], 'done': [('readonly', False)]}, copy=True, auto_join=True)
+
     def action_quotation_send(self):
         ''' Opens a wizard to compose an email, with relevant mail template loaded by default '''
         self.ensure_one()
