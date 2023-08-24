@@ -18,10 +18,19 @@ class SaleOrder(models.Model):
         template = self.env['mail.template'].browse(template_id)
 
         #  assign the signed document to the email template
+        #	NOTE: This appears to be a poor solution, that causes follow on permission problems,
+       	#		where a user needs persmission to WRITE in email.templates. This is non-desirable, 
+       	#		and aught not be required. This requires further testing, so this is left in here,
+	#		in case future problemes appears related to this.
+        #if self.signed_xml_document:
+        #    template.attachment_ids = [(6, 0, [self.signed_xml_document.id])]
+        #else:
+        #    template.attachment_ids = False
+
+        #  assign the signed document to the email-wizard
+        signed_doc = []
         if self.signed_xml_document:
-            template.attachment_ids = [(6, 0, [self.signed_xml_document.id])]
-        else:
-            template.attachment_ids = False
+            signed_doc.append(self.signed_xml_document.id)
 
         if template.lang:
             lang = template._render_lang(self.ids)[self.id]
@@ -36,6 +45,8 @@ class SaleOrder(models.Model):
             'proforma': self.env.context.get('proforma', False),
             'force_email': True,
             'model_description': self.with_context(lang=lang).type_name,
+            #  continiuation of assign the signed document to the email-wizard
+            'default_attachment_ids': signed_doc,
         }
 
         return {
