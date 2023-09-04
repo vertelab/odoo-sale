@@ -11,13 +11,11 @@ class SaleOrderLine(models.Model):
     
     @api.depends('product_id.type')
     def _compute_is_service(self):
-        _logger.warning("_compute_is_service OVERRIDDEN "*100)
         for so_line in self:
             so_line.is_service = so_line.product_id.type in ['service','consu']
 
     @api.depends('product_id.type')
     def _compute_product_updatable(self):
-        _logger.warning("_compute_product_updatable OVERRIDDEN "*100)
         for line in self:
             if line.product_id.type in ['service','consu'] and line.state == 'sale':
                 line.product_updatable = False
