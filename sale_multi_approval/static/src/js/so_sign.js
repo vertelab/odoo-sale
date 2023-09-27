@@ -2,6 +2,11 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
     "use strict";
 
     var publicWidget = require('web.public.widget')
+    var session = require('web.session');
+
+    var core = require('web.core');
+    var _t = core._t;
+    var QWeb = core.qweb;
 
     publicWidget.registry.sign = publicWidget.Widget.extend({
         selector: '#sign',
