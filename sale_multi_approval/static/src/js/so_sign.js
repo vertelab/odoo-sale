@@ -2,11 +2,6 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
     "use strict";
 
     var publicWidget = require('web.public.widget')
-    var session = require('web.session');
-
-    var core = require('web.core');
-    var _t = core._t;
-    var QWeb = core.qweb;
 
     publicWidget.registry.sign = publicWidget.Widget.extend({
         selector: '#sign',
@@ -15,10 +10,10 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
         },
 
         action_sign: async function () {
-            var order_id = $('#sale_id').val()
+            var order_id = this.$('#sale_id').val()
             var self = this
 
-            $('#trigger_sign').addClass('disabled')
+            this.$('#trigger_sign').addClass('disabled')
 
             await self._rpc({
                 model: 'sale.order',
@@ -26,8 +21,8 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
                 args: [[]],
                 kwargs: {'order_id': order_id}
             }).then(async (token_data) => {
-                var dom_data = await $.ajax({
-                    url: `${token_data.url}`,
+                var dom_data = await this.$.ajax({
+                    url: `this.${token_data.url}`,
                     type: "GET",
                     success: function(res) {
                         return res
@@ -100,7 +95,7 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
 
         create_pdf_attachment: async function (title, sale_order_id, pdf) {
             var self = this;
-            var generate_attachment = $('#generate_attachment').val()
+            var generate_attachment = this.$('#generate_attachment').val()
             if (generate_attachment == 'yes') {
                 var attachment_id = await self._rpc({
                     model: 'ir.attachment',
