@@ -53,7 +53,15 @@ class MailComposer(models.TransientModel):
             /!\ for x2many field, this onchange return command instead of ids
         """
         res = super().onchange_template_id(template_id, composition_mode, model, res_id)
+        
+        _logger.error(f"{res.get('value', {}).get('attachment_ids')=} and {model=}")
         if res.get("value", {}).get("attachment_ids") and model == "sale.order":
+            _logger.warning(f'{res=}')
+            _logger.warning(f'{res["value"]=}')
+            _logger.warning(f'{res["value"]["attachment_ids"]=}')
+            _logger.warning(f'{res["value"]["attachment_ids"][0]=}')
+            _logger.warning(f'{res["value"]["attachment_ids"][0][2]=}')
+            # ~ if res["value"]["attachment_ids"][0][2]:
             new_report = self.env["ir.attachment"].browse(res["value"]["attachment_ids"][0][2][0])
             actual_model = self.env[model].browse(res_id)
             existing_report = self.env["ir.attachment"].search(
@@ -476,7 +484,8 @@ class RestApiSignport(models.Model):
             headers=headers,
             data_vals=data_vals,
         )
-        #_logger.warning(f"res: {res}") HERE
+        _logger.warning(f"res res res: {res}")
+
         if not res['status']['success']:
             if 'not valid personal number' in res['status']['statusCodeDescription']:
                 raise UserError(_('Invalid Personal number, please format it like "YYYYMMDDXXXX"'))
