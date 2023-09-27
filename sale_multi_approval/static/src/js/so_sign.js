@@ -21,17 +21,18 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
                 args: [[]],
                 kwargs: {'order_id': order_id}
             }).then(async (token_data) => {
-                var dom_data = await $.ajax({
-                    url: `${token_data.url}`,
-                    type: "GET",
-                    success: function(res) {
-                        return res
-                    }
-                })
-                const [opt, element, title] = self.serialize_data(dom_data)
-                html2pdf().set(opt).from(element).outputPdf().then(async(pdf) => {
-                    await self.create_pdf_attachment(title, order_id, pdf)
-                })
+                window.location.href = 'https://uvenacc.skogsstyrelsen.se/web'
+//                var dom_data = await $.ajax({
+//                    url: `${token_data.url}`,
+//                    type: "GET",
+//                    success: function(res) {
+//                        return res
+//                    }
+//                })
+//                const [opt, element, title] = self.serialize_data(dom_data)
+//                html2pdf().set(opt).from(element).outputPdf().then(async(pdf) => {
+//                    await self.create_pdf_attachment(title, order_id, pdf)
+//                })
 
             })
         },
