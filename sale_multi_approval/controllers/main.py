@@ -64,7 +64,7 @@ class SaleCustomerPortal(CustomerPortal):
     @http.route(
         ["/my/orders/<int:order_id>/download_signed_doc"],
         type="http",
-        auth="public",
+        auth="user",
         website=True,
     )
     def download_signed_order_doc(self, order_id, access_token=None, **kw):
@@ -83,7 +83,7 @@ class SaleCustomerPortal(CustomerPortal):
 
         return request.make_response(filecontent, headers=pdfhttpheaders)
 
-    @http.route(["/trigger/signature/<int:order_id>"], type="http", auth="public", website=True, )
+    @http.route(["/trigger/signature/<int:order_id>"], type="http", auth="user", website=True, )
     def trigger_doc_signature(self, order_id, **kw):
         order_sudo = request.env['sale.order'].sudo().browse(int(order_id))
         action_id = request.env.ref('sale.action_orders', raise_if_not_found=False)
