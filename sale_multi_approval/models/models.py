@@ -245,8 +245,8 @@ class SaleOrder(models.Model):
                 return {
                     'type': 'ir.actions.act_url',
                     'target': 'self',
-                    # 'url': f"{base_url}/web/signport_form/{self.id}/1/start_sign",
-                    'url': f"{base_url}/web#id={self.id}&model=sale.order&view_type=form"
+                    'url': f"{base_url}/web/signport_form/{self.id}/{signport_request.id}/start_sign",
+                    #'url': f"{base_url}/web#id={self.id}&model=sale.order&view_type=form"
 
                 }
 
