@@ -363,7 +363,9 @@ class RestApiSignport(models.Model):
         _logger.warning(f"sign_type sign_type sign_type: {sign_type}")
 
         role = self.employee_string
-        response_url = f"{base_url}/web/{order_id}/{approval_id}/sign_complete"
+        session_id = request.httprequest.cookies.get('session_id')
+        _logger.info(f"session_id: {session_id}")
+        response_url = f"{base_url}/web/{order_id}/{approval_id}/sign_complete?session_id={session_id}"
 
         if sign_type == "customer":
             role = self.customer_string
