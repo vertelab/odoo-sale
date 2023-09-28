@@ -21,7 +21,7 @@ _logger = logging.getLogger(__name__)
 
 class SaleMultiApproval(http.Controller):
 
-    @http.route(['/web/signport_form/<int:order_id>/<int:signport_id>/start_sign'], type='http', auth="user",)
+    @http.route(['/web/signport_form/<int:order_id>/<int:signport_id>/start_sign'], type='http', auth="user", website=True)
     def start_sign(self, order_id, signport_id, **kw):
         signport_request = request.env["signport.request"].sudo().browse(signport_id)
         values = {
@@ -37,8 +37,8 @@ class SaleMultiApproval(http.Controller):
         type="http",
         auth="user",
         methods=["POST", "GET"],
+	website=True,
         csrf=False,
-        website=True,
         save_session=False
     )
     def complete_signing(self, order_id, approval_id, **res):

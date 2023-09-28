@@ -509,8 +509,7 @@ class RestApiSignport(models.Model):
         )
 
         if sign_type == "employee":
-            _logger.warning("employee" * 20)
-            _logger.warning(f"self.env.uid: {self.env.user}")
+            _logger.warning(f"employee self.env.uid: {self.env.user}")
             self.env['sale.order'].browse(order_id).signed_xml_document = attachment
 
             approval_line = self.env["approval.line"].search(
@@ -522,7 +521,6 @@ class RestApiSignport(models.Model):
             approval_line.relay_state = base64.b64encode(res["relayState"].encode())
             approval_line.signed_on = fields.Datetime.now()
 
-            _logger.warning("after employee" * 20)
         elif sign_type == "customer":
             sale_order = self.env["sale.order"].sudo().browse(order_id)
 
@@ -536,9 +534,7 @@ class RestApiSignport(models.Model):
                     "signed_on": datetime.now(),
                 }
             )
-            _logger.warning('Before confirm' * 20)
             sale_order.action_confirm()
-            _logger.warning('After confirm' * 20)
         return res
 
 
