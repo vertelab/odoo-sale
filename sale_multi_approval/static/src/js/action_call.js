@@ -1,13 +1,9 @@
 odoo.define("sale_multi_approval.sale_action_button", function (require) {
     "use strict";
 
-
     var FormController = require("web.FormController");
-    var session = require('web.session');
 
-    var core = require('web.core');
-    var _t = core._t;
-    var QWeb = core.qweb;
+    var session = require('web.session');
 
     var includeDict = {
         renderButtons: function ($node) {
