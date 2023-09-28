@@ -30,7 +30,7 @@ class AddApproverWizard(models.TransientModel):
         group_ids = []
         group_ids.append(self.env.ref('sale_multi_approval.group_approve_manager').id)
         group_ids.append(self.env.ref('sale_multi_approval.group_approver').id)
-        #group_ids.append(self.env.ref('res_user_groups_skogsstyrelsen.group_sks_saljare').id)
+        # group_ids.append(self.env.ref('res_user_groups_skogsstyrelsen.group_sks_saljare').id)
         offlimit_ids = [i.id for i in self.env["sale.order"].browse(self.env.context.get('active_ids')).approval_ids]
         # offlimit_ids.append(self.env.uid)
         return [('groups_id', 'in', group_ids), ('id', 'not in', offlimit_ids)]
@@ -53,7 +53,7 @@ class MailComposer(models.TransientModel):
             /!\ for x2many field, this onchange return command instead of ids
         """
         res = super().onchange_template_id(template_id, composition_mode, model, res_id)
-        
+
         _logger.error(f"{res.get('value', {}).get('attachment_ids')=} and {model=}")
         if res.get("value", {}).get("attachment_ids") and model == "sale.order":
             _logger.warning(f'{res=}')
@@ -143,7 +143,8 @@ class SaleOrder(models.Model):
         for rec in self:
             logged_in_user = self.env.user
             # ~ if logged_in_user.has_group('res_user_groups_skogsstyrelsen.group_sks_saljare'):
-            if logged_in_user.has_group('sale_multi_approval.group_approver') or logged_in_user.has_group('sale_multi_approval.group_approve_manager'):
+            if logged_in_user.has_group('sale_multi_approval.group_approver') or logged_in_user.has_group(
+                    'sale_multi_approval.group_approve_manager'):
                 rec.has_sign_group = True
             else:
                 rec.has_sign_group = False
@@ -215,10 +216,10 @@ class SaleOrder(models.Model):
 
         for approval_id in self.approval_ids:
             _logger.warning(f"{approval_id=}, {current_user=}")
+
             if current_user == approval_id.approver_id.id:
                 signport = self.env.ref("rest_signport.api_signport")
                 data = json.loads(request.httprequest.data)
-                # _logger.warning(f"{data=}")
                 access_token = data.get("params", {}).get("access_token")
                 res = signport.sudo().post_sign_sale_order(
                     ssn=self.env.user.partner_id.social_sec_nr and self.env.user.partner_id.social_sec_nr.replace("-",
@@ -231,17 +232,22 @@ class SaleOrder(models.Model):
                 )
                 # _logger.warning(f"sale_approve res: {res}")
                 base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
-                signport_request = self.env["signport.request"].sudo().create({
-                    'relay_state': res['relayState'],
-                    'eid_sign_request': res['eidSignRequest'],
-                    'binding': res['binding'],
-                    'signing_service_url': res['signingServiceUrl']
-                })
-                _logger.warning(f"returning the view, signport request: {signport_request}")
+
+                if res.get('signingServiceUrl'):
+                    signport_request = self.env["signport.request"].sudo().create({
+                        'relay_state': res['relayState'],
+                        'eid_sign_request': res['eidSignRequest'],
+                        'binding': res['binding'],
+                        'signing_service_url': res['signingServiceUrl']
+                    })
+                    _logger.warning(f"returning the view, signport request: {signport_request}")
+                    print(f"{base_url}/web/signport_form/{self.id}/{signport_request.id}/start_sign")
                 return {
                     'type': 'ir.actions.act_url',
                     'target': 'self',
-                    'url': f"{base_url}/web/signport_form/{self.id}/{signport_request.id}/start_sign",
+                    # 'url': f"{base_url}/web/signport_form/{self.id}/1/start_sign",
+                    'url': f"{base_url}/web#id={self.id}&model=sale.order&view_type=form"
+
                 }
 
     def _compute_is_approved(self):
@@ -249,24 +255,17 @@ class SaleOrder(models.Model):
         is approved/not approved by the current logged in user"""
         current_user = self.env.uid
         if self.order_line and self.approval_ids:
-            #_logger.warning(f"HELLO 1 {self.order_line=} {self.approval_ids=}") #HERE
             for approval_id in self.approval_ids:
-                #_logger.warning(f"HELLO 2 {approval_id=}") #HERE
                 if current_user == approval_id.approver_id.id:
-                    #_logger.warning(f"HELLO 3 {current_user=} {approval_id.approver_id.id=} {approval_id.approver_id.display_name=}") #HERE
                     if approval_id.approval_status:
-                        #_logger.warning(f"HELLO 4 {approval_id.approval_status=}") #HERE
                         self.is_approved = True
                         break
                     else:
                         self.is_approved = False
-                        #_logger.warning(f"HELLO first else") #HERE
                 else:
                     self.is_approved = False
-                    #_logger.warning(f"HELLO second else") #HERE
         else:
             self.is_approved = False
-            #_logger.warning(f"HELLO 2") #HERE
 
     @api.depends('approval_ids')
     def _compute_document_fully_approved(self):
@@ -319,12 +318,12 @@ class Attachment(models.Model):
 class RestApiSignport(models.Model):
     _inherit = "rest.api"
 
-    def get_keys(self, dl, keys_list):
-        if isinstance(dl, dict):
-            keys_list += dl.keys()
-            map(lambda x: get_keys(x, keys_list), dl.values())
-        elif isinstance(dl, list):
-            map(lambda x: get_keys(x, keys_list), dl)
+    # def get_keys(self, dl, keys_list):
+    #     if isinstance(dl, dict):
+    #         keys_list += dl.keys()
+    #         map(lambda x: get_keys(x, keys_list), dl.values())
+    #     elif isinstance(dl, list):
+    #         map(lambda x: get_keys(x, keys_list), dl)
 
     def post_sign_sale_order(self, ssn, order_id, access_token, message=False, sign_type="customer", approval_id=False):
         # export_wizard = self.env['xml.export'].with_context({'active_model': 'sale.order', 'active_ids': order_id}).create({})
@@ -346,29 +345,32 @@ class RestApiSignport(models.Model):
         # if not document:
         #     return False
         # # TODO: attach pdf or xml of order to the request
-        _logger.warning("access_token" * 50)
-        _logger.warning(f"{access_token=}")
+
         # document = self.env['sale.order'].browse(order_id).latest_xml_export
         document = self.env['sale.order'].browse(order_id).latest_pdf_export
         if self.env['sale.order'].browse(order_id).signed_xml_document:
             document_content = self.env['sale.order'].browse(order_id).signed_xml_document.datas.decode()
         else:
             document_content = document.datas.decode()
-        # _logger.warning(f"{document_content=}")
+
         headers = {
             "accept": "application/json",
             "Content-Type": "application/json; charset=utf8",
         }
 
         base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+
+        _logger.warning(f"sign_type sign_type sign_type: {sign_type}")
+
+        role = self.employee_string
+        response_url = f"{base_url}/web/{order_id}/{approval_id}/sign_complete"
+
         if sign_type == "customer":
             role = self.customer_string
             response_url = f"{base_url}/my/orders/{order_id}/sign_complete?access_token={access_token}"
-        elif sign_type == "employee":
-            role = self.employee_string
-            response_url = f"{base_url}/web/{order_id}/{approval_id}/sign_complete"
-        _logger.warning("add signature page")
+
         guid = str(uuid.uuid1())
+
         add_signature_page_vals = {
             "clientCorrelationId": guid,
             "documents": [
@@ -386,31 +388,26 @@ class RestApiSignport(models.Model):
             headers=headers,
             data_vals=add_signature_page_vals,
         )
-        #_logger.warning(f" add page res: {res}") HERE
-        document_content = res['documents'][0]['content']
-        #_logger.warning(f"TESTTEST2 {keys_result_array}") #HERE
-        #_logger.warning(f"addpage res 2: {document_content}") #HERE
-        #_logger.warning("Loggin"*100) #HERE
-        #_logger.warning(f"BABA {self.env.user=}, {self.env.user.name=}, {self.env.user.firstname=}, {self.env.user.lastname=} {ssn}") HERE
+        # document_content = res.get('data')['documents'][0]['content']
+        document_content = json.loads(res.get('data'))['documents'][0]['content']
+
         displayname = False
         if self.env.user.firstname:
-             displayname = self.env.user.firstname
+            displayname = self.env.user.firstname
         if self.env.user.lastname:
-             if displayname:
-                displayname = displayname +" "+ self.env.user.lastname
-             else:
+            if displayname:
+                displayname = f"{displayname} {self.env.user.lastname}"
+            else:
                 displayname = self.env.user.lastname
+
         get_sign_request_vals = {
             "username": f"{self.user}",
             "password": f"{self.password}",
             "spEntityId": f"{self.sp_entity_id}",  # "https://serviceprovider.com/", # lägg som inställning på rest api
             "idpEntityId": f"{self.idp_entity_id}",
-            # "https://eid.test.legitimeringstjanst.se/sc/mobilt-bankid/",# lägg som inställning på rest api
             "signResponseUrl": response_url,
             "signatureAlgorithm": f"{self.signature_algorithm}",
-            # "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",# lägg som inställning på rest api
             "loa": f"{self.loa}",
-            # "http://id.swedenconnect.se/loa/1.0/uncertified-loa3",# lägg som inställning på rest api
             "certificateType": "PKC",
             "signingMessage": {
                 "body": f"{message}",
@@ -458,18 +455,13 @@ class RestApiSignport(models.Model):
             headers=headers,
             data_vals=get_sign_request_vals,
         )
-        #_logger.warning(f"getsignrequest res: {res}") HERE
-        #if sign_type == "customer":
-        #    order = self.env['sale.order'].browse(order_id)
-        #    order.write(
-        #        {
-        #            'customer_ssn': str(ssn),
-        #        }
-        #    )
 
         return res
 
-    def signport_post(self, data_vals={}, order_id=False, endpoint=False, sign_type="customer"):
+    def signport_post(self, data_vals=None, order_id=False, endpoint=False, sign_type="customer"):
+        if data_vals is None:
+            data_vals = {}
+
         headers = {
             "accept": "application/json",
             "Content-Type": "application/json; charset=utf8",
@@ -493,7 +485,8 @@ class RestApiSignport(models.Model):
                 raise UserError(_('Digital signing cancelled'))
             elif 'The request was canceled' in res['status']['statusCodeDescription']:
                 raise UserError('Digital signing cancelled')
-            elif 'The signer attributes in the sign request cannot be verified against the attributes of the authenticated user' in \
+            elif ('The signer attributes in the sign request cannot be verified against the attributes of the '
+                  'authenticated user') in \
                     res['status']['statusCodeDescription']:
                 raise UserError('Mismatching personal numbers')
 
@@ -502,7 +495,6 @@ class RestApiSignport(models.Model):
                 if not match:
                     match = re.search("Message.*\'(.)+\'", res['status']['statusCodeDescription'])
                 if match:
-                    #_logger.warning(f"res statuss description: {res['status']['statusCodeDescription']} match: {match}") HERE
                     raise UserError(match[0])
                 else:
                     raise UserError(res['status']['statusCodeDescription'])
@@ -517,7 +509,6 @@ class RestApiSignport(models.Model):
             }
         )
 
-        username = self.env.user.name
         if sign_type == "employee":
             _logger.warning("employee" * 20)
             _logger.warning(f"self.env.uid: {self.env.user}")
@@ -531,6 +522,7 @@ class RestApiSignport(models.Model):
             approval_line.assertion = res["assertion"]
             approval_line.relay_state = base64.b64encode(res["relayState"].encode())
             approval_line.signed_on = fields.Datetime.now()
+
             _logger.warning("after employee" * 20)
         elif sign_type == "customer":
             sale_order = self.env["sale.order"].sudo().browse(order_id)
@@ -545,9 +537,9 @@ class RestApiSignport(models.Model):
                     "signed_on": datetime.now(),
                 }
             )
-            _logger.warning('Before confirm'*20)
+            _logger.warning('Before confirm' * 20)
             sale_order.action_confirm()
-            _logger.warning('After confirm'*20)
+            _logger.warning('After confirm' * 20)
         return res
 
 

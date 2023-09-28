@@ -13,7 +13,7 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
             var order_id = $('#sale_id').val()
             var self = this
 
-            this.$('#trigger_sign').addClass('disabled')
+//            this.$('#trigger_sign').addClass('disabled')
 
             await self._rpc({
                 model: 'sale.order',
@@ -21,18 +21,17 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
                 args: [[]],
                 kwargs: {'order_id': order_id}
             }).then(async (token_data) => {
-                window.location.href = 'https://uvenacc.skogsstyrelsen.se/web'
-//                var dom_data = await $.ajax({
-//                    url: `${token_data.url}`,
-//                    type: "GET",
-//                    success: function(res) {
-//                        return res
-//                    }
-//                })
-//                const [opt, element, title] = self.serialize_data(dom_data)
-//                html2pdf().set(opt).from(element).outputPdf().then(async(pdf) => {
-//                    await self.create_pdf_attachment(title, order_id, pdf)
-//                })
+                var dom_data = await $.ajax({
+                    url: `${token_data.url}`,
+                    type: "GET",
+                    success: function(res) {
+                        return res
+                    }
+                })
+                const [opt, element, title] = self.serialize_data(dom_data)
+                html2pdf().set(opt).from(element).outputPdf().then(async(pdf) => {
+                    await self.create_pdf_attachment(title, order_id, pdf)
+                })
 
             })
         },
@@ -96,7 +95,7 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
 
         create_pdf_attachment: async function (title, sale_order_id, pdf) {
             var self = this;
-            var generate_attachment = this.$('#generate_attachment').val()
+            var generate_attachment = $('#generate_attachment').val()
             if (generate_attachment == 'yes') {
                 var attachment_id = await self._rpc({
                     model: 'ir.attachment',
@@ -124,7 +123,5 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
                 kwargs: {'order_id': sale_order_id}
             })
         },
-
     });
-
 });
