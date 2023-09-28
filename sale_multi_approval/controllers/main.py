@@ -53,7 +53,6 @@ class SaleMultiApproval(http.Controller):
 
         api_signport = request.env.ref("rest_signport.api_signport")
         res = api_signport.sudo().signport_post(data, order_id, "/CompleteSigning", sign_type="employee")
-        _logger.warning(f"complete_signing second res: {res}")
         base_url = request.env["ir.config_parameter"].sudo().get_param("web.base.url")
         return request.redirect(f"{base_url}/web#id={order_id}&model=sale.order&view_type=form")
 

@@ -476,7 +476,6 @@ class RestApiSignport(models.Model):
             headers=headers,
             data_vals=data_vals,
         )
-        _logger.warning(f"res res res: {res}")
 
         if not res['status']['success']:
             if 'not valid personal number' in res['status']['statusCodeDescription']:
