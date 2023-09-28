@@ -388,8 +388,8 @@ class RestApiSignport(models.Model):
             headers=headers,
             data_vals=add_signature_page_vals,
         )
-        # document_content = res.get('data')['documents'][0]['content']
-        document_content = json.loads(res.get('data'))['documents'][0]['content']
+        document_content = res['documents'][0]['content']
+        #document_content = json.loads(res.get('data'))['documents'][0]['content']
 
         displayname = False
         if self.env.user.firstname:

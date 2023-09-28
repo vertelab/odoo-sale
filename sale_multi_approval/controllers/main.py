@@ -42,7 +42,6 @@ class SaleMultiApproval(http.Controller):
         save_session=False
     )
     def complete_signing(self, order_id, approval_id, **res):
-        #_logger.warning(f"complete_signing first res: {res}") HERE
         user_id = request.env['res.users'].browse(request.uid)
         _logger.warning(f"returning user: {user_id.name}")
         _logger.warning(f"{request.env.user=}")
@@ -54,7 +53,7 @@ class SaleMultiApproval(http.Controller):
 
         api_signport = request.env.ref("rest_signport.api_signport")
         res = api_signport.sudo().signport_post(data, order_id, "/CompleteSigning", sign_type="employee")
-        #_logger.warning(f"complete_signing second res: {res}") HERE
+        _logger.warning(f"complete_signing second res: {res}")
         base_url = request.env["ir.config_parameter"].sudo().get_param("web.base.url")
         return request.redirect(f"{base_url}/web#id={order_id}&model=sale.order&view_type=form")
 
