@@ -49,30 +49,10 @@ class SaleOrder(models.Model):
 
     def action_set_to_delivery(self):
         self.state = 'delivered'
-
-        # archive timesheet
-        # ~ if self.tasks_ids.timesheet_ids:
-        # ~ for timesheet in self.tasks_ids.timesheet_ids:
-        # ~ timesheet.write({
-        # ~ 'active': False
-        # ~ })
-        # archive tasks
         for task in self.tasks_ids:
             task.write({
                 'active': False
             })
-
-    # ~ def action_draft(self):
-    # ~ _logger.warning("action_draft action_draft action_draft action_draft")
-    # ~ res = super(SaleOrder, self).action_draft()
-    # ~ _logger.warning(f"{self.tasks_ids}")
-    # ~ for task in self.tasks_ids:
-    # ~ _logger.warning(f"{task=}")
-    # ~ task.write({
-    # ~ 'active': True
-    # ~ })
-
-    # ~ return res
 
     def action_draft(self):
         orders = self.filtered(lambda s: s.state in ['cancel', 'sent'])
@@ -90,12 +70,6 @@ class SaleOrder(models.Model):
             'signed_on': False,
         })
 
-    # ~ def _action_cancel(self):
-    # ~ inv = self.invoice_ids.filtered(lambda inv: inv.state == 'draft')
-    # ~ inv.button_cancel()
-    # ~ self._action_unlink_tasks()
-    # ~ return self.write({'state': 'cancel'})
-
     def _action_unlink_tasks(self):
         # dissociate with the tasks
 
@@ -111,19 +85,45 @@ class SaleOrder(models.Model):
         # archive timesheet
         for task in self.tasks_ids:
             task.unlink()
+            
+            
+    # ~ @api.model
+    # ~ def create(self, vals):
+        # ~ result = super(SaleOrder, self).create(vals)
+        # ~ result.toggle_toggle_ready_to_deliver()
+        # ~ return result
 
+    # ~ @api.depends('order_line')
+    # ~ def toggle_toggle_ready_to_deliver(self):
+        # ~ for record in self:
+            # ~ for line in record.order_line:
+                # ~ line._toggle_ready_to_deliver()
+                
+                
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
     ready_to_deliver = fields.Boolean(string="Set Products to Ready to Deliver", default=False, copy=False)
+    
+    @api.model
+    def create(self, vals):
+        result = super(SaleOrderLine, self).create(vals)
+        result._toggle_ready_to_deliver()
+        return result
 
     @api.onchange('product_id')
     def _toggle_ready_to_deliver(self):
-        if self.product_id and self.product_id.type != 'service' and not self.project_id:
+        if self.product_id and self.product_id.service_tracking == 'no' and not self.project_id:
+            _logger.warning("_toggle_ready_to_deliver if case"*100)
             self.write({
                 'ready_to_deliver': True
             })
+        else:
+            self.write({
+                'ready_to_deliver': False
+            })
+            
 
     @api.onchange('product_id')
     def product_id_change(self):
