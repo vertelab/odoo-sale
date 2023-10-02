@@ -21,7 +21,7 @@ _logger = logging.getLogger(__name__)
 
 class SaleMultiApproval(http.Controller):
 
-    @http.route(['/web/signport_form/<int:order_id>/<int:signport_id>/start_sign'], type='http', auth="user",)
+    @http.route(['/web/signport_form/<int:order_id>/<int:signport_id>/start_sign'], type='http', auth="user", website=True)
     def start_sign(self, order_id, signport_id, **kw):
         signport_request = request.env["signport.request"].sudo().browse(signport_id)
         values = {
@@ -37,12 +37,11 @@ class SaleMultiApproval(http.Controller):
         type="http",
         auth="user",
         methods=["POST", "GET"],
+	website=True,
         csrf=False,
-        website=True,
         save_session=False
     )
     def complete_signing(self, order_id, approval_id, **res):
-        #_logger.warning(f"complete_signing first res: {res}") HERE
         user_id = request.env['res.users'].browse(request.uid)
         _logger.warning(f"returning user: {user_id.name}")
         _logger.warning(f"{request.env.user=}")
@@ -54,7 +53,6 @@ class SaleMultiApproval(http.Controller):
 
         api_signport = request.env.ref("rest_signport.api_signport")
         res = api_signport.sudo().signport_post(data, order_id, "/CompleteSigning", sign_type="employee")
-        #_logger.warning(f"complete_signing second res: {res}") HERE
         base_url = request.env["ir.config_parameter"].sudo().get_param("web.base.url")
         return request.redirect(f"{base_url}/web#id={order_id}&model=sale.order&view_type=form")
 
@@ -64,7 +62,7 @@ class SaleCustomerPortal(CustomerPortal):
     @http.route(
         ["/my/orders/<int:order_id>/download_signed_doc"],
         type="http",
-        auth="public",
+        auth="user",
         website=True,
     )
     def download_signed_order_doc(self, order_id, access_token=None, **kw):
@@ -83,7 +81,7 @@ class SaleCustomerPortal(CustomerPortal):
 
         return request.make_response(filecontent, headers=pdfhttpheaders)
 
-    @http.route(["/trigger/signature/<int:order_id>"], type="http", auth="public", website=True, )
+    @http.route(["/trigger/signature/<int:order_id>"], type="http", auth="user", website=True, )
     def trigger_doc_signature(self, order_id, **kw):
         order_sudo = request.env['sale.order'].sudo().browse(int(order_id))
         action_id = request.env.ref('sale.action_orders', raise_if_not_found=False)

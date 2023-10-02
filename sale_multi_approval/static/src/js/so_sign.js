@@ -2,11 +2,6 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
     "use strict";
 
     var publicWidget = require('web.public.widget')
-    var session = require('web.session');
-
-    var core = require('web.core');
-    var _t = core._t;
-    var QWeb = core.qweb;
 
     publicWidget.registry.sign = publicWidget.Widget.extend({
         selector: '#sign',
@@ -18,7 +13,7 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
             var order_id = $('#sale_id').val()
             var self = this
 
-            $('#trigger_sign').addClass('disabled')
+//            this.$('#trigger_sign').addClass('disabled')
 
             await self._rpc({
                 model: 'sale.order',
@@ -128,7 +123,5 @@ odoo.define("sale_multi_approval.proceed_with_signature", function (require) {
                 kwargs: {'order_id': sale_order_id}
             })
         },
-
     });
-
 });
