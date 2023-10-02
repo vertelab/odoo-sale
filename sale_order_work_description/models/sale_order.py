@@ -99,7 +99,7 @@ class SaleOrder(models.Model):
                 }) for custom_value in custom_values]
 
             # create the line
-            if product.type == "service":
+            if product.fill_work_and_product_description:
                 if kwargs.get("product_description"):
                     values.update({
                         "name": kwargs.get("product_description")
@@ -157,7 +157,7 @@ class SaleOrder(models.Model):
                 order.company_id.id)
             product = product_with_context.browse(product_id)
 
-            if product.type == "service":
+            if product.fill_work_and_product_description:
                 if kwargs.get("product_description"):
                     values.update({
                         "name": kwargs.get("product_description")
@@ -181,7 +181,7 @@ class SaleOrder(models.Model):
                 })
                 linked_product = product_with_context.browse(linked_line.product_id.id)
 
-                if product.type == "service":
+                if product.fill_work_and_product_description:
                     if kwargs.get("product_description"):
                         linked_line.name = kwargs.get("product_description")
                     if kwargs.get("work_description"):
@@ -197,7 +197,7 @@ class SaleOrder(models.Model):
             # - product_custom_attribute_value_ids
             # - linked_line_id
 
-            if product.type == "service":
+            if product.fill_work_and_product_description:
                 if kwargs.get("product_description"):
                     order_line.name = kwargs.get("product_description")
                 if kwargs.get("work_description"):

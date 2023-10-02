@@ -115,7 +115,6 @@ class SaleOrderLine(models.Model):
     @api.onchange('product_id')
     def _toggle_ready_to_deliver(self):
         if self.product_id and self.product_id.service_tracking == 'no' and not self.project_id:
-            _logger.warning("_toggle_ready_to_deliver if case"*100)
             self.write({
                 'ready_to_deliver': True
             })
