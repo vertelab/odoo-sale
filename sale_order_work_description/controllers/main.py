@@ -52,15 +52,15 @@ class ExtendWebsiteSale(WebsiteSale):
             return {}
 
         if line_id:
-            line_id = request.env["sale.order.line"].sudo().browse(line_id)
+            line_id_record = request.env["sale.order.line"].sudo().browse(line_id)
 
         value = order._cart_update(
             product_id=product_id,
-            line_id=line_id.id,
+            line_id=line_id,
             add_qty=add_qty,
             set_qty=set_qty,
-            product_description=line_id.name if line_id else False,
-            work_description=line_id.work_description if line_id else False
+            product_description=line_id_record.name if line_id else False,
+            work_description=line_id_record.work_description if line_id else False,
         )
 
         if not order.cart_quantity:
