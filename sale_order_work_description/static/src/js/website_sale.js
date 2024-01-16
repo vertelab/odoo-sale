@@ -66,10 +66,10 @@ odoo.define('sale_order_work_description.website_sale_work_description', functio
                 return location.reload()
             }
 
-            if( ('work_description' in params) && (params.work_description.trim().length === 0 )) {
-                alert("Skriv in en Arbetsbeskrivning")
-                return location.reload()
-            }
+            //if( ('work_description' in params) && (params.work_description.trim().length === 0 )) {
+            //    alert("Skriv in en Arbetsbeskrivning")
+            //    return location.reload()
+            //}
 
             return wUtils.sendRequest('/shop/cart/update', params);
         },
