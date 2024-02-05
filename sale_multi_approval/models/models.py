@@ -9,7 +9,7 @@ import werkzeug
 from odoo.http import request
 import json
 import base64
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from datetime import datetime
 import uuid
 import re
@@ -248,7 +248,7 @@ class SaleOrder(models.Model):
                     sign_type="employee",
                     approval_id=approval_id.id,
                 )
-                # _logger.warning(f"sale_approve res: {res}")
+                _logger.warning(f"sale_approve res: {res}")
                 base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
 
                 if res.get('signingServiceUrl'):
@@ -260,13 +260,18 @@ class SaleOrder(models.Model):
                     })
                     _logger.warning(f"returning the view, signport request: {signport_request}")
                     print(f"{base_url}/web/signport_form/{self.id}/{signport_request.id}/start_sign")
-                return {
-                    'type': 'ir.actions.act_url',
-                    'target': 'self',
-                    'url': f"{base_url}/web/signport_form/{self.id}/{signport_request.id}/start_sign",
-                    #'url': f"{base_url}/web#id={self.id}&model=sale.order&view_type=form"
-
-                }
+                    return {
+                        'type': 'ir.actions.act_url',
+                        'target': 'self',
+                        'url': f"{base_url}/web/signport_form/{self.id}/{signport_request.id}/start_sign",
+                        #'url': f"{base_url}/web#id={self.id}&model=sale.order&view_type=form"
+                        }
+                else:
+                    if res.get('status'):
+                        raise ValidationError(_("Singport returned a error.\n Please contact support for assistance.\n" +
+                                                "Technical information: " + f"{res}"))
+                                                
+                    raise ValidationError(_("Singport returned an unkown error.\n Please contact support for assistance."))
 
     def _compute_is_approved(self):
         """In this compute function we are verifying whether the document
@@ -490,6 +495,9 @@ class RestApiSignport(models.Model):
 
         data_vals["username"] = f"{self.user}"
         data_vals["password"] = f"{self.password}"
+        _logger.warning(f"{endpoint=}")
+        _logger.warning(f"{headers=}")
+        _logger.warning(f"{data_vals=}")
         res = self.call_endpoint(
             method="POST",
             endpoint_url=endpoint,

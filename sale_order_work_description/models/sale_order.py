@@ -99,7 +99,7 @@ class SaleOrder(models.Model):
                 }) for custom_value in custom_values]
 
             # create the line
-            if product.type == "service":
+            if product.fill_work_and_product_description:
                 if kwargs.get("product_description"):
                     values.update({
                         "name": kwargs.get("product_description")
@@ -157,7 +157,7 @@ class SaleOrder(models.Model):
                 order.company_id.id)
             product = product_with_context.browse(product_id)
 
-            if product.type == "service":
+            if product.fill_work_and_product_description:
                 if kwargs.get("product_description"):
                     values.update({
                         "name": kwargs.get("product_description")
@@ -181,7 +181,7 @@ class SaleOrder(models.Model):
                 })
                 linked_product = product_with_context.browse(linked_line.product_id.id)
 
-                if product.type == "service":
+                if product.fill_work_and_product_description:
                     if kwargs.get("product_description"):
                         linked_line.name = kwargs.get("product_description")
                     if kwargs.get("work_description"):
@@ -197,7 +197,7 @@ class SaleOrder(models.Model):
             # - product_custom_attribute_value_ids
             # - linked_line_id
 
-            if product.type == "service":
+            if product.fill_work_and_product_description:
                 if kwargs.get("product_description"):
                     order_line.name = kwargs.get("product_description")
                 if kwargs.get("work_description"):
@@ -209,6 +209,22 @@ class SaleOrder(models.Model):
 
         return {'line_id': order_line.id, 'quantity': quantity, 'option_ids': list(set(option_lines.ids))}
 
+    def _cart_accessories(self):
+        """ Suggest accessories based on 'Accessory Products' of products in cart """
+        for order in self:
+            products = order.website_order_line.mapped('product_id')
+            accessory_products = self.env['product.product']
+            for line in order.website_order_line.filtered(lambda l: l.product_id):
+                combination = line.product_id.product_template_attribute_value_ids + line.product_no_variant_attribute_value_ids
+                accessory_products |= line.product_id.accessory_product_ids.filtered(lambda product:
+                    product.website_published and
+                    product not in products and
+                    product._is_variant_possible(parent_combination=combination) and
+                    (product.company_id == line.company_id or not product.company_id) and not
+                    product.fill_work_and_product_description
+                )
+
+            return random.sample(accessory_products, len(accessory_products))
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"

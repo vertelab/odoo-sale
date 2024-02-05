@@ -39,7 +39,8 @@
     'depends': ['sale', 'website_sale'],
     'data': [
         'views/template.xml',
-        'views/sale_order_view.xml'
+        'views/sale_order_view.xml',
+        'views/product_view.xml',
     ],
     'installable': True,
     'auto_install': False,
