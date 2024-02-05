@@ -29,6 +29,7 @@
                                 <field name="approval_status"/>
                                 <field name="signed_xml_document"/>
                                 <field name="signed_on"/>
+                                <field name="color" invisible="1"/>
                                 <field name="signer_ca" groups="base.group_no_one"/>
                                 <field name="assertion" groups="base.group_no_one"/>
                                 <field name="relay_state" groups="base.group_no_one"/>
@@ -187,6 +188,19 @@
 
         </field>
     </record>
+
+    <record model="ir.ui.view" id="sale_order_approval_tree_inherited">
+        <field name="name">sale.order.tree.signport.inherited</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            <field name="state" position="after">
+                <field name="many_approval_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+            </field>
+        </field>
+    </record>
+
+
     <record model="ir.ui.view" id="sale_management_order_approval_inherited">
         <field name="name">sale.order.form.approval.inherited</field>
         <field name="model">sale.order</field>
@@ -230,6 +244,7 @@
             </field>
         </field>
     </record>
+
     <menuitem id="approval_main_menu" name="Approvals" parent="sale.menu_sale_config" sequence="10"/>
     <menuitem id="approval_sub_menu" name="Sale Approval" parent="approval_main_menu"
               action="approval_sub_menu_action" sequence="1"/>
