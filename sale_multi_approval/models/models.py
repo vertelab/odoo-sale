@@ -147,7 +147,7 @@ class SaleOrder(models.Model):
             else:
                 rec.many_approval_ids = False
 
-    many_approval_ids = fields.Many2many('approval.line', compute=_compute_approval_ids, String="Approvers")
+    many_approval_ids = fields.Many2many('approval.line', compute=_compute_approval_ids, string="Approvers")
     document_fully_approved = fields.Boolean(compute='_compute_document_fully_approved')
     check_approve_ability = fields.Boolean(compute='_compute_check_approve_ability')
     is_approved = fields.Boolean(compute='_compute_is_approved')
