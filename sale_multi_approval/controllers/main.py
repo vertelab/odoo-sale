@@ -85,6 +85,7 @@ class SaleCustomerPortal(CustomerPortal):
     def trigger_doc_signature(self, order_id, **kw):
         order_sudo = request.env['sale.order'].sudo().browse(int(order_id))
         action_id = request.env.ref('sale.action_orders', raise_if_not_found=False)
+        _logger.warning(f"trigger_doc_signature: {request.env.ref('sale.action_orders', raise_if_not_found=False)=}")
         vals = {'sale_id': order_sudo.id, 'action_id': action_id, 'generate_attachment': 'yes'}
         if order_sudo.latest_pdf_export or order_sudo.signed_xml_document:
             vals.update({'generate_attachment': 'no'})
