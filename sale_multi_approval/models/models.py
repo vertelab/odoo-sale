@@ -106,6 +106,7 @@ class SaleApproval(models.Model):
 class ApprovalLine(models.Model):
     _name = 'approval.line'
     _description = 'Approval line in Sale Order'
+    _rec_name = 'approver_id'
 
     sale_order_id = fields.Many2one('sale.order', readonly=0)
     approver_id = fields.Many2one('res.users', string='Approver', readonly=1)
@@ -117,6 +118,16 @@ class ApprovalLine(models.Model):
     relay_state = fields.Binary(string='Relay State', readonly=1)
     signed_on = fields.Datetime(string='Signed on')
 
+    @api.depends('approval_status')
+    def _compute_color(self):
+        for rec in self:
+            if rec.approval_status:
+                rec.color = 10
+            else:
+                rec.color = 1
+
+    color = fields.Integer(string="Color", compute=_compute_color)
+
     def unlink(self):
         if self.signed_document or self.signed_xml_document or self.approval_status or self.signed_on:
             raise UserError(_("You are not allowed to remove this approval line"))
@@ -127,6 +138,13 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     approval_ids = fields.One2many('approval.line', 'sale_order_id')
+
+    @api.depends('approval_ids')
+    def _compute_approval_ids(self):
+        for rec in self:
+            rec.many_approval_ids = rec.approval_ids
+
+    many_approval_ids = fields.Many2many('approval.line', compute=_compute_approval_ids, String="Approvers")
     document_fully_approved = fields.Boolean(compute='_compute_document_fully_approved')
     check_approve_ability = fields.Boolean(compute='_compute_check_approve_ability')
     is_approved = fields.Boolean(compute='_compute_is_approved')
