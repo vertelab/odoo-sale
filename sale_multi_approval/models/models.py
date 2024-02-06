@@ -142,7 +142,10 @@ class SaleOrder(models.Model):
     @api.depends('approval_ids')
     def _compute_approval_ids(self):
         for rec in self:
-            rec.many_approval_ids = rec.approval_ids
+            if rec.approval_ids:
+                rec.many_approval_ids = rec.approval_ids.filtered(lambda approval_line: approval_line.approval_id)
+            else:
+                rec.many_approval_ids = False
 
     many_approval_ids = fields.Many2many('approval.line', compute=_compute_approval_ids, String="Approvers")
     document_fully_approved = fields.Boolean(compute='_compute_document_fully_approved')
