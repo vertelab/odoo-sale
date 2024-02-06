@@ -143,7 +143,7 @@ class SaleOrder(models.Model):
     def _compute_approval_ids(self):
         for rec in self:
             if rec.approval_ids:
-                rec.many_approval_ids = rec.approval_ids.filtered(lambda approval_line: approval_line.approval_id)
+                rec.many_approval_ids = rec.approval_ids.filtered(lambda approval_line: approval_line.approver_id)
             else:
                 rec.many_approval_ids = False
 
