@@ -30,6 +30,7 @@
                 </form>
             </field>
         </record>
+
         <record id="approval_sub_menu_action" model="ir.actions.act_window">
             <field name="name">Sale Multi Approval</field>
             <field name="type">ir.actions.act_window</field>
@@ -38,8 +39,6 @@
             <field name="view_mode">form</field>
             <field name="target">inline</field>
         </record>
-
-
 
         <record id="add_approver_view" model="ir.ui.view">
             <field name="name">sale.add.approver.view</field>
@@ -54,13 +53,15 @@
                 </form>
             </field>
         </record>
+
         <record model="ir.actions.act_window" id="add_approver_action">
             <field name="name">Add Approver</field>
             <field name="res_model">approver.add.wizard</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>
-            <field name="view_id" ref="add_approver_view"/>
+            <field name="view_id" ref="sale_multi_approval.add_approver_view"/>
         </record>
+
         <record id="sale_order_edit_warning" model="ir.ui.view">
             <field name="name">sale.add.approver.view</field>
             <field name="model">approver.add.wizard</field>
