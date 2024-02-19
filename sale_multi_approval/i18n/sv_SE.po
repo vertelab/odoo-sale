@@ -4,25 +4,25 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0-20221014\n"
+"Project-Id-Version: Odoo Server 14.0-20221010\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-16 08:47+0000\n"
-"PO-Revision-Date: 2023-01-16 08:47+0000\n"
+"POT-Creation-Date: 2024-02-19 09:20+0000\n"
+"PO-Revision-Date: 2024-02-19 10:23+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: Poedit 3.0.1\n"
 
 #. module: sale_multi_approval
 #: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_portal_template_signed_info
 msgid ""
 "<br/>\n"
-"                                        <span style=\"font-weight: bold;\">by: </span>"
+"                                        <span style=\"font-weight: bold;\">av kontonamn: </span>"
 msgstr ""
-"<br/>\n"
-"                                        <span style=\"font-weight: bold;\">av: </span>"
 
 #. module: sale_multi_approval
 #: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_portal_template_signed_info
@@ -37,10 +37,8 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_portal_template_signed_info
 msgid ""
 "<br/>\n"
-"                                <span style=\"font-weight: bold;\">by: </span>"
+"                                <span style=\"font-weight: bold;\">av kontonamn: </span>"
 msgstr ""
-"<br/>\n"
-"                                <span style=\"font-weight: bold;\">av: </span>"
 
 #. module: sale_multi_approval
 #: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_portal_template_signed_info
@@ -63,8 +61,19 @@ msgstr "<i class=\"fa fa-download\"/> Ladda ner PDF"
 
 #. module: sale_multi_approval
 #: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_portal_template_signed_info
-msgid "<span style=\"font-weight: bold;\">Signed electronically: \t  </span>"
-msgstr "<span style=\"font-weight: bold;\">Elektroniskt signerat: \t  </span>"
+msgid ""
+"<span style=\"font-weight: bold; color: #cc601b;\"> Varning: </span> <span>Tidsstämpeln här i förhandsvyn "
+"och i det slutgiltiga dokumentet kan skilja sig åt</span>\n"
+"                                        <span style=\"font-weight: bold;\">Signed electronically: \t  </span>"
+msgstr ""
+
+#. module: sale_multi_approval
+#: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_portal_template_signed_info
+msgid ""
+"<span style=\"font-weight: bold; color: #cc601b;\"> Varning: </span> <span>Tidsstämpeln här i förhandsvyn "
+"och i det slutgiltiga dokumentet kan skilja sig åt</span>\n"
+"                                <span style=\"font-weight: bold;\">Signed electronically: \t  </span>"
+msgstr ""
 
 #. module: sale_multi_approval
 #: model:ir.module.category,description:sale_multi_approval.group_sale_multi_approval
@@ -190,6 +199,11 @@ msgid "Check Approve Ability"
 msgstr "Testa signeringsförmåga"
 
 #. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__color
+msgid "Color"
+msgstr "Färg"
+
+#. module: sale_multi_approval
 #: model_terms:ir.ui.view,arch_db:sale_multi_approval.signature_template
 msgid "Continue"
 msgstr "Fortsätt"
@@ -221,7 +235,7 @@ msgid "Delivered"
 msgstr "Levererad"
 
 #. module: sale_multi_approval
-#: code:addons/sale_multi_approval/models/models.py:0
+#: code:addons/sale_multi_approval/models/rest_api.py:0
 #, python-format
 msgid "Digital signing cancelled"
 msgstr "Digital signering avbruten"
@@ -337,17 +351,16 @@ msgstr "Om ikryssad så har vissa meddelanden ett leveransfel."
 #. module: sale_multi_approval
 #: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_edit_warning
 msgid ""
-"If you save these changes, the current signatures will be deleted, and the "
-"document will need to be signed again."
+"If you save these changes, the current signatures will be deleted, and the document will need to be signed "
+"again."
 msgstr ""
-"Om du sparar dessa ändringar, så kommer alla signaturer försvinna, och "
-"signeringsprocessen måste börjas om"
+"Om du sparar dessa ändringar, så kommer alla signaturer försvinna, och signeringsprocessen måste börjas om"
 
 #. module: sale_multi_approval
-#: code:addons/sale_multi_approval/models/models.py:0
+#: code:addons/sale_multi_approval/models/rest_api.py:0
 #, python-format
 msgid "Invalid Personal number, please format it like \"YYYYMMDDXXXX\""
-msgstr "Ogiltigt personnummer, var vänlig formatera enligt \"ÅÅÅÅMMDDXXXX\""
+msgstr "Icke korrekt personnummer, vänliga använd formatet \"ÅÅÅÅMMDDXXXX\""
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__is_approved
@@ -410,6 +423,11 @@ msgid "Main Attachment"
 msgstr "Huvudbilaga"
 
 #. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__many_approval_ids
+msgid "Many Approval"
+msgstr "Signatörer"
+
+#. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_approval__message_has_error
 msgid "Message Delivery error"
 msgstr "Meddelande leveransfel"
@@ -470,9 +488,19 @@ msgid "Number of unread messages"
 msgstr "Antal olästa meddelanden"
 
 #. module: sale_multi_approval
+#: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__order_line
+msgid "Order Lines"
+msgstr "Kundorderrader"
+
+#. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__page_visibility
 msgid "Page Visibility"
 msgstr "Sid-synlighet"
+
+#. module: sale_multi_approval
+#: model:ir.model.fields,help:sale_multi_approval.field_sale_order__order_line
+msgid "Product line of the sale order"
+msgstr "Produktraden för offerten"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__quotation_locked
@@ -497,7 +525,7 @@ msgid "Return"
 msgstr "Tillbaka"
 
 #. module: sale_multi_approval
-#: code:addons/sale_multi_approval/models/models.py:0
+#: code:addons/sale_multi_approval/models/rest_api.py:0
 #, python-format
 msgid "Role"
 msgstr "Roll"
@@ -547,6 +575,11 @@ msgid "Sign"
 msgstr "Signera"
 
 #. module: sale_multi_approval
+#: model:ir.model,name:sale_multi_approval.model_signport_request
+msgid "Sign Port Request"
+msgstr ""
+
+#. module: sale_multi_approval
 #: model_terms:ir.ui.view,arch_db:sale_multi_approval.sale_order_approval_inherited
 msgid "Sign and Lock"
 msgstr "Signera och lås"
@@ -559,7 +592,7 @@ msgstr "Signerat dokument"
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_sale_order__signed_xml_document
 msgid "Signed XML Document"
-msgstr ""
+msgstr "Signerat XML Dokument"
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__signed_on
@@ -576,11 +609,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:sale_multi_approval.field_signport_request__signing_service_url
 msgid "Signing Service Url"
 msgstr "Signeringstjänst Url"
-
-#. module: sale_multi_approval
-#: model:ir.model,name:sale_multi_approval.model_signport_request
-msgid "SingPort Request"
-msgstr ""
 
 #. module: sale_multi_approval
 #: model:ir.model.fields,field_description:sale_multi_approval.field_approval_line__approval_status
@@ -636,7 +664,7 @@ msgid "Website communication history"
 msgstr "Webbplats kommunikationshistorik"
 
 #. module: sale_multi_approval
-#: code:addons/sale_multi_approval/models/models.py:0
+#: code:addons/sale_multi_approval/models/sale_approval.py:0
 #, python-format
 msgid "You are not allowed to remove this approval line"
-msgstr "Du tillåts inte ta bort den här signeringsraden"
+msgstr ""

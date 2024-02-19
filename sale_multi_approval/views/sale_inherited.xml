@@ -195,7 +195,7 @@
         <field name="inherit_id" ref="sale.view_quotation_tree"/>
         <field name="arch" type="xml">
             <field name="state" position="after">
-                <field name="many_approval_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="many_approval_ids" widget="many2many_tags" options="{'color_field': 'color'}" optional="show"/>
             </field>
         </field>
     </record>
