@@ -11,7 +11,11 @@ class SaleOrder(models.Model):
 
     state = fields.Selection(selection_add=[('ready_to_deliver', 'Ready to Deliver'), ('delivered', 'Delivered')])
 
-    def _prepare_confirmation_values(self):
+    def action_confirm(self):
+        res = super().action_confirm()
+        self.write(self._prepare_confirmation_values2())
+
+    def _prepare_confirmation_values2(self):
         not_ready_to_deliver = list(self.order_line.filtered(lambda line: not line.ready_to_deliver))
         if not_ready_to_deliver:
             return {
