@@ -6,7 +6,7 @@
             <field name="inherit_id" ref="sale_project.product_template_form_view_invoice_policy_inherit_sale_project"/>
             <field name="arch" type="xml">
                   <field name="service_tracking" widget="radio" attrs="{'invisible': [('type','!=','service')]}" position="replace">
-			<field name="service_tracking" attrs="{'invisible': [('type','=','product')]}" widget="radio"/>
+			<field name="service_tracking"/>
                   </field>
             </field>
         </record>
