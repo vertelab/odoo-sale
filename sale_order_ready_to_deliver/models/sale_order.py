@@ -14,6 +14,7 @@ class SaleOrder(models.Model):
     def action_confirm(self):
         res = super().action_confirm()
         self.write(self._prepare_confirmation_values2())
+        return res
 
     def _prepare_confirmation_values2(self):
         not_ready_to_deliver = list(self.order_line.filtered(lambda line: not line.ready_to_deliver))
