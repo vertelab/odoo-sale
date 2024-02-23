@@ -12,12 +12,12 @@ class SaleOrderLine(models.Model):
     @api.depends('product_id.type')
     def _compute_is_service(self):
         for so_line in self:
-            so_line.is_service = so_line.product_id.type in ['service','consu']
+            so_line.is_service = so_line.product_id.type in ['service','consu','product']
 
     @api.depends('product_id.type')
     def _compute_product_updatable(self):
         for line in self:
-            if line.product_id.type in ['service','consu'] and line.state == 'sale':
+            if line.product_id.type in ['service','consu','product'] and line.state == 'sale':
                 line.product_updatable = False
             else:
                 super(SaleOrderLine, line)._compute_product_updatable()
