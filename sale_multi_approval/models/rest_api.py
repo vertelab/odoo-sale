@@ -57,12 +57,17 @@ class RestApiSignport(models.Model):
             ]
         }
 
+        _logger.warning(f"headers {headers}")
+
         res = self.call_endpoint(
             method="POST",
             endpoint_url="/AddSignaturePage",
             headers=headers,
             data_vals=add_signature_page_vals,
         )
+
+        # _logger.info(f"first res call ==== {res}")
+
         document_content = res['documents'][0]['content']
 
         displayname = False
@@ -78,11 +83,12 @@ class RestApiSignport(models.Model):
             "username": f"{self.user}",
             "password": f"{self.password}",
             "spEntityId": f"{self.sp_entity_id}",  # "https://serviceprovider.com/", # lägg som inställning på rest api
-            "idpEntityId": f"{self.idp_entity_id}",
+            "idpEntityId": f"{self.idp_entity_id}", #
             "signResponseUrl": response_url,
             "signatureAlgorithm": f"{self.signature_algorithm}",
             "loa": f"{self.loa}",
             "certificateType": "PKC",
+            "metadata": "secure-authenticator-binding",
             "signingMessage": {
                 "body": f"{message}",
                 "mustShow": True,
@@ -106,6 +112,22 @@ class RestApiSignport(models.Model):
                     "value": f"{ssn}",
                 }
             ],
+            # "requestedSignerAttribute": [
+            #     {
+            #         "name": "http://macedir.org/entity-category",
+            #         "type": "xs:string",
+            #         "value": "http://id.swedenconnect.se/general-ec/1.0/secure-authenticator-binding"
+            #     }
+
+            # ],
+            # "entityAttributes": [
+            #     {
+            #         "name": "http://macedir.org/entity-category",
+            #         "type": "xs:uri",
+            #         "value": "http://id.swedenconnect.se/general-ec/1.0/secure-authenticator-binding"
+            #     }
+
+            # ],
             "signaturePage": {
                 "initialPosition": "last",
                 "templateId": "e33d2a21-1d23-4b4f-9baa-def11634ceb4",
@@ -129,6 +151,8 @@ class RestApiSignport(models.Model):
             headers=headers,
             data_vals=get_sign_request_vals,
         )
+
+        # _logger.info(f"second res call ==== {res}")
 
         return res
 
