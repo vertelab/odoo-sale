@@ -20,22 +20,20 @@
                         <field name="latest_pdf_export" invisible="1"/>
                         <field name="signed_xml_document"/>
                     </group>
-                    <group>
-                        <button name="%(add_approver_action)d" class="oe_highlight"
-                                string="Add Approver" type="action"/>
-                        <field name="approval_ids" mode="tree">
-                            <tree string="Approval lines" create="0" edit="0" delete="1">
-                                <field name="approver_id"/>
-                                <field name="approval_status"/>
-                                <field name="signed_xml_document"/>
-                                <field name="signed_on"/>
-                                <field name="color" invisible="1"/>
-                                <field name="signer_ca" groups="base.group_no_one"/>
-                                <field name="assertion" groups="base.group_no_one"/>
-                                <field name="relay_state" groups="base.group_no_one"/>
-                            </tree>
-                        </field>
-                    </group>
+                    <button name="%(add_approver_action)d" class="oe_highlight" string="Add Approver" type="action"/>
+                    <br/><label for="approval_ids"/><br/>
+                    <field name="approval_ids" mode="tree" nolabel="1">
+                        <tree string="Approval lines" create="0" edit="0" delete="1">
+                            <field name="approver_id"/>
+                            <field name="approval_status"/>
+                            <field name="signed_xml_document"/>
+                            <field name="signed_on"/>
+                            <field name="color" invisible="1"/>
+                            <field name="signer_ca" groups="base.group_no_one"/>
+                            <field name="assertion" groups="base.group_no_one"/>
+                            <field name="relay_state" groups="base.group_no_one"/>
+                        </tree>
+                    </field>
                 </page>
             </xpath>
             <xpath expr="//button[@name='action_quotation_send'][1]" position="attributes">
