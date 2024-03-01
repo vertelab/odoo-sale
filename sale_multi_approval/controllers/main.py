@@ -30,6 +30,7 @@ class SaleMultiApproval(http.Controller):
             'eid_sign_request': signport_request.eid_sign_request,
             'binding': signport_request.binding,
             'signing_service_url': signport_request.signing_service_url,
+            'signport_form_url': signport_request.signport_form_url,
         }
         return request.render("sale_multi_approval.signport_form", values)
 

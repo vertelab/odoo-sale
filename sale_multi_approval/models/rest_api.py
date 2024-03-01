@@ -19,6 +19,8 @@ import requests
 class RestApiSignport(models.Model):
     _inherit = "rest.api"
 
+    signport_form_url = fields.Char(string="SignPort Form URL")
+
     def post_sign_sale_order(self, ssn, order_id, access_token, message=False, sign_type="customer", approval_id=False):
         document = self.env['sale.order'].browse(order_id).latest_pdf_export
         if self.env['sale.order'].browse(order_id).signed_xml_document:
