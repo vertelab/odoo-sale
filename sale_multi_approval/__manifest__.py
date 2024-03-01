@@ -55,6 +55,7 @@
         'views/sale_approval_view.xml',
         'views/sale_inherited.xml',
         'views/assets.xml',
+        'views/rest_api.xml',
     ],
     'qweb': [
         # 'static/src/xml/form_buttons.xml'

@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <record id="view_rest_api_form_signport" model="ir.ui.view">
+            <field name="name">rest.api.form.signport</field>
+            <field name="model">rest.api</field>
+            <field name="inherit_id" ref="rest_signport.view_rest_api_form_signport"/>
+            <field name="arch" type="xml">
+                <field name="idp_entity_id" position="after">
+                    <field name="signport_form_url" attrs="{'invisible': [('api_type',  '!=', 'signport')]}"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>
