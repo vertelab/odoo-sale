@@ -13,12 +13,7 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
                 this.$buttons.find('.o_form_button_sign').click(this.proxy('action_sign')) ;
             }
 
-
             this.get_sale_order_info()
-
-//            if (this.sale_order_data.check_approve_ability == false || this.sale_order_data.document_fully_approved == true || this.sale_order_data.is_approved == true) {
-//                this.$buttons.find('.o_form_button_sign').addClass("o_invisible_modifier")
-//            }
         },
 
         get_sale_order_info: function () {
@@ -33,7 +28,6 @@ odoo.define("sale_multi_approval.sale_action_button", function (require) {
             if (this.sale_order_data.check_approve_ability == false || this.sale_order_data.document_fully_approved == true || this.sale_order_data.is_approved == true || this.sale_order_data.has_sign_group == false) {
                 return alert("You cannot perform this operation")
             }
-
 
             await self._rpc({
                 model: 'sale.order',
