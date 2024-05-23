@@ -6,7 +6,7 @@
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//div[@name='standard_price_uom']" position="after">
-                    <field name="estimated_time" widget="float_time" attrs="{'invisible': [('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}"/>
+                    <!-- <field name="estimated_time" widget="float_time" attrs="{'invisible': [('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}"/> -->
                 </xpath>
             </field>
         </record>

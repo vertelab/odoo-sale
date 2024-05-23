@@ -21,7 +21,7 @@ class ProjectTaskDeadlineOverview(models.Model):
 
     date = fields.Char(string='Date')
     count = fields.Integer(string='Count')
-    sale_order_id = fields.Many2one('sale.order', string='Sale Order')
+    sale_order_id = fields.Many2one('sale.order', required = False, string='Sale Order')
     max_tasks = fields.Integer(string="Max Tasks")
 
     
@@ -34,7 +34,7 @@ class SaleOrder(models.Model):
         _logger.warning(f"{current_date=}")
         icp = self.env['ir.config_parameter'].sudo()
         days = icp.get_param('sale_order_deadline_task.sale_order_deadline_default', default=14)
-        
+        _logger.warning(f"{days=}")
         two_weeks_forward = current_date + relativedelta(days =+ int(days))
         _logger.warning(f"{two_weeks_forward=}")
         # your logic goes here
@@ -48,32 +48,48 @@ class SaleOrder(models.Model):
     def _compute_task_deadline_overview(self):
         icp = self.env['ir.config_parameter'].sudo()
         max_tasks = icp.get_param('sale_order_deadline_task.deadline_max_tasks', default=10)
+        _logger.warning(f"{max_tasks=}")
         for record in self:
+            _logger.warning(f"{record=}")
             record.task_deadline_overview = False
             if record.date_deadline:
                 deadline_overview_count = self.env['ir.config_parameter'].sudo().get_param('sale_order_deadline_task.deadline_overview_count', default=5)
                 date_domain = [('date_deadline', '=', record.date_deadline)]
+
                 for rcount in range(1, int(deadline_overview_count)):
-                    date_domain = expression.OR([date_domain, [('date_deadline', '=', record.date_deadline + relativedelta(days=+rcount))]])
-                    
+                     date_domain = expression.OR([date_domain, [('date_deadline', '=', record.date_deadline + relativedelta(days=+rcount))]])
+
+                _logger.warning(f"{date_domain=}")   
                 task_ids = self.env['project.task'].search(date_domain)
+                _logger.warning(f"{task_ids=}")
+                
                 if task_ids:
                     for date, count in Counter(task_ids.mapped('date_deadline')).items():
                         _logger.warning(f"{date}: {count}")
-                        
-                    record.task_deadline_overview.create({
-                        'max_tasks':max_tasks,
-                        'date': date,
-                        'count': count,
-                        'sale_order_id': record.id
-                    } for date, count in Counter(task_ids.mapped('date_deadline')).items())
+                        rec1 = record.env['project.task.deadline.overview'].create({
+                            "date":date, 
+                            "count":count, 
+                            "max_tasks":max_tasks})
+                        _logger.warning(f"{rec1=}")
+                        _logger.warning(f"{record.id=}")
+                        record.env['project.task.deadline.overview'].write({'task_deadline_overview':[(4,rec1.id,0)]})
+
+                        # record.env['project.task.deadline.overview'].write({'task_deadline_overview':[(0,0,
+                        # {
+                        # 'max_tasks':max_tasks,
+                        # 'date':date,
+                        # 'count':count,
+                        # 'sale_order_id':self.id
+                        # })]
+                        # })
+                        _logger.warning(f"{record.task_deadline_overview=} aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+
                 else:
                     record.task_deadline_overview = False
                     
             else:
                 record.task_deadline_overview = False
 
-    
     
     # ~ @api.onchange("date_deadline")
     # ~ def _set_delivery_date(self):
@@ -132,11 +148,3 @@ class SaleOrderLine(models.Model):
             'date_deadline': self.date_deadline,
         })                
         return res
-
-
-
-
-
-       
-
-

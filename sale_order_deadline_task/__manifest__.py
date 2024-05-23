@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
@@ -22,7 +21,7 @@
 
 {
     'name': 'Sale: Order Deadline Task',
-    'version': '14.0.1.0',
+    'version': '17.0.0.0',
     # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
     'summary': '',
     'category': 'Sales',
@@ -41,7 +40,7 @@
     'data': [
         'security/ir.model.access.csv',
         'views/sale_order_view.xml',
-        'views/res_config_settings.xml'
+        'views/res_config_settings.xml',
     ],
     'installable': 'True',
     'application': 'False',
