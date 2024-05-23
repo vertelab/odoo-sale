@@ -64,25 +64,16 @@ class SaleOrder(models.Model):
                 _logger.warning(f"{task_ids=}")
                 
                 if task_ids:
+                    lines = []
                     for date, count in Counter(task_ids.mapped('date_deadline')).items():
                         _logger.warning(f"{date}: {count}")
-                        rec1 = record.env['project.task.deadline.overview'].create({
+                        val = {
                             "date":date, 
                             "count":count, 
-                            "max_tasks":max_tasks})
-                        _logger.warning(f"{rec1=}")
-                        _logger.warning(f"{record.id=}")
-                        record.env['project.task.deadline.overview'].write({'task_deadline_overview':[(4,rec1.id,0)]})
-
-                        # record.env['project.task.deadline.overview'].write({'task_deadline_overview':[(0,0,
-                        # {
-                        # 'max_tasks':max_tasks,
-                        # 'date':date,
-                        # 'count':count,
-                        # 'sale_order_id':self.id
-                        # })]
-                        # })
-                        _logger.warning(f"{record.task_deadline_overview=} aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                            "max_tasks":max_tasks}
+                        lines.append((0,0, val))
+                        
+                    record.task_deadline_overview = lines
 
                 else:
                     record.task_deadline_overview = False
