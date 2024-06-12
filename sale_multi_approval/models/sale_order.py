@@ -198,41 +198,42 @@ class SaleOrder(models.Model):
                     raise ValidationError(
                         _("Singport returned an unkown error.\n Please contact support for assistance."))
 
+    @api.depends('approval_ids')
     def _compute_is_approved(self):
         """In this compute function we are verifying whether the document
         is approved/not approved by the current logged in user"""
-        current_user = self.env.uid
-        if self.order_line and self.approval_ids:
-            for approval_id in self.approval_ids:
-                if current_user == approval_id.approver_id.id:
-                    if approval_id.approval_status:
-                        self.is_approved = True
-                        break
-                    else:
-                        self.is_approved = False
-                else:
-                    self.is_approved = False
-        else:
-            self.is_approved = False
+        for rec in self:
+            current_user_line = rec.approval_ids.filtered(lambda line: line.approver_id.id == self.env.uid)[0]
+            if current_user_line.approval_status:
+                rec.is_approved = True
+            else:
+                rec.is_approved = False
+
 
     @api.depends('approval_ids')
     def _compute_document_fully_approved(self):
         """This is the compute function which verifies whether
         the document is completely approved or not"""
-        approval_ids = self.approval_ids
-        approve_lines = approval_ids.filtered(lambda item: item.approval_status)
-        length_approve_lines = len(approve_lines)
-        if length_approve_lines >= 1:
-            self.quotation_locked = True
-        else:
-            self.quotation_locked = False
-        if length_approve_lines >= 1 and self.amount_total < self.env.ref(
-                "sale_multi_approval.default_sale_multi_approval_config").threshold:
-            self.document_fully_approved = True
-        elif length_approve_lines >= 2:
-            self.document_fully_approved = True
-        else:
-            self.document_fully_approved = False
+        for rec in self:
+            document_fully_approved = all([approval.approval_status for approval in self.approval_ids])
+            rec.document_fully_approved = document_fully_approved
+
+            document_partly_approved = any([approval.approval_status for approval in self.approval_ids])
+
+            if document_fully_approved and not document_partly_approved:
+                rec.quotation_locked = True
+            elif not document_fully_approved and document_partly_approved:
+                rec.quotation_locked = True
+
+        # TODO: verify this with SKS
+
+        # if length_approve_lines >= 1 and self.amount_total < self.env.ref(
+        #         "sale_multi_approval.default_sale_multi_approval_config").threshold:
+        #     self.document_fully_approved = True
+        # elif length_approve_lines >= 2:
+        #     self.document_fully_approved = True
+        # else:
+        #     self.document_fully_approved = False
 
     latest_pdf_export = fields.Many2one("ir.attachment", string="Latest PDF Export", copy=False)
 
