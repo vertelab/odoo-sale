@@ -209,7 +209,6 @@ class SaleOrder(models.Model):
             else:
                 rec.is_approved = False
 
-
     @api.depends('approval_ids')
     def _compute_document_fully_approved(self):
         """This is the compute function which verifies whether
