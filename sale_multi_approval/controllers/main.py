@@ -25,12 +25,13 @@ class SaleMultiApproval(http.Controller):
                 website=True)
     def start_sign(self, order_id, signport_id, **kw):
         signport_request = request.env["signport.request"].sudo().browse(signport_id)
+        rest_signport = request.env.ref('rest_signport.api_signport').sudo()
         values = {
             'relay_state': signport_request.relay_state,
             'eid_sign_request': signport_request.eid_sign_request,
             'binding': signport_request.binding,
             'signing_service_url': signport_request.signing_service_url,
-            'signport_form_url': signport_request.signport_form_url,
+            'signport_form_url': rest_signport.signport_form_url,
         }
         return request.render("sale_multi_approval.signport_form", values)
 
