@@ -207,6 +207,7 @@ class SaleOrder(models.Model):
                 current_user_line = rec.approval_ids.filtered(lambda line: line.approver_id.id == self.env.uid)[0]
                 if current_user_line.approval_status:
                     rec.is_approved = True
+                    return
             rec.is_approved = False
 
     @api.depends('approval_ids')
