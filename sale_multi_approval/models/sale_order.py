@@ -215,6 +215,10 @@ class SaleOrder(models.Model):
         the document is completely approved or not"""
         for rec in self:
             document_fully_approved = all([approval.approval_status for approval in self.approval_ids])
+            if document_fully_approved and self.amount_total >= self.env.ref(
+                    "sale_multi_approval.default_sale_multi_approval_config").threshold and len(self.approval_ids) < 2:
+                document_fully_approved = False
+
             rec.document_fully_approved = document_fully_approved
 
             document_partly_approved = any([approval.approval_status for approval in self.approval_ids])
@@ -226,13 +230,13 @@ class SaleOrder(models.Model):
 
         # TODO: verify this with SKS
 
-        # if length_approve_lines >= 1 and self.amount_total < self.env.ref(
-        #         "sale_multi_approval.default_sale_multi_approval_config").threshold:
-        #     self.document_fully_approved = True
-        # elif length_approve_lines >= 2:
-        #     self.document_fully_approved = True
-        # else:
-        #     self.document_fully_approved = False
+        if length_approve_lines >= 1 and self.amount_total < self.env.ref(
+                "sale_multi_approval.default_sale_multi_approval_config").threshold:
+            self.document_fully_approved = True
+        elif length_approve_lines >= 2:
+            self.document_fully_approved = True
+        else:
+            self.document_fully_approved = False
 
     latest_pdf_export = fields.Many2one("ir.attachment", string="Latest PDF Export", copy=False)
 
