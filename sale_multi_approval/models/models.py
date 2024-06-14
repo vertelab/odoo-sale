@@ -28,7 +28,7 @@ class AddApproverWizard(models.TransientModel):
 
     def set_approver(self):
         if self.user_id.id in self.sale_order.approval_ids.mapped('approver_id').ids:
-            raise ValidationError(_(f"{self.user_id.name} is already listed as a signature"))
+            raise ValidationError(_(f"{self.user_id.name} is already listed as a signature."))
         line = self.env["approval.line"].create(
             {'approver_id': self.user_id.id, 'sale_order_id': self.sale_order.id, 'approval_status': False})
         self.sale_order.write({'approval_ids': [(4, line.id, 0)]})
