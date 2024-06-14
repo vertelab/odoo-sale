@@ -228,16 +228,6 @@ class SaleOrder(models.Model):
             elif not document_fully_approved and document_partly_approved:
                 rec.quotation_locked = True
 
-        # TODO: verify this with SKS
-
-        if length_approve_lines >= 1 and self.amount_total < self.env.ref(
-                "sale_multi_approval.default_sale_multi_approval_config").threshold:
-            self.document_fully_approved = True
-        elif length_approve_lines >= 2:
-            self.document_fully_approved = True
-        else:
-            self.document_fully_approved = False
-
     latest_pdf_export = fields.Many2one("ir.attachment", string="Latest PDF Export", copy=False)
 
     def access_token_sale_order(self, **kwargs):
