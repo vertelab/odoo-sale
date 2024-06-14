@@ -203,11 +203,11 @@ class SaleOrder(models.Model):
         """In this compute function we are verifying whether the document
         is approved/not approved by the current logged in user"""
         for rec in self:
-            current_user_line = rec.approval_ids.filtered(lambda line: line.approver_id.id == self.env.uid)[0]
-            if current_user_line.approval_status:
-                rec.is_approved = True
-            else:
-                rec.is_approved = False
+            if rec.approval_ids:
+                current_user_line = rec.approval_ids.filtered(lambda line: line.approver_id.id == self.env.uid)[0]
+                if current_user_line.approval_status:
+                    rec.is_approved = True
+            rec.is_approved = False
 
     @api.depends('approval_ids')
     def _compute_document_fully_approved(self):
