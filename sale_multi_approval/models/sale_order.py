@@ -215,6 +215,9 @@ class SaleOrder(models.Model):
         the document is completely approved or not"""
         for rec in self:
             document_fully_approved = all([approval.approval_status for approval in self.approval_ids])
+            if not self.approval_ids:
+                document_fully_approved = False
+
             if document_fully_approved and self.amount_total >= self.env.ref(
                     "sale_multi_approval.default_sale_multi_approval_config").threshold and len(self.approval_ids) < 2:
                 document_fully_approved = False
