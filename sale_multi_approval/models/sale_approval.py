@@ -54,7 +54,8 @@ class ApprovalLine(models.Model):
     color = fields.Integer(string="Color", compute=_compute_color)
 
     def unlink(self):
-        if self.signed_document or self.signed_xml_document or self.approval_status or self.signed_on:
-            raise UserError(_("You are not allowed to remove this approval line"))
+        for rec in self:
+            if rec.signed_document or rec.signed_xml_document or rec.approval_status or rec.signed_on:
+                raise UserError(_("You are not allowed to remove this approval line"))
         return super(ApprovalLine, self).unlink()
 
