@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Odoo SA, Open Source Management Solution, third party addon
-#    Copyright (C) 2022- Vertel AB (<https://vertel.se>).
+#    Copyright (C) 2024- Vertel AB (<https://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -36,7 +36,7 @@
     'contributor': '',
     'maintainer': 'Vertel AB',
     'repository': 'https://github.com/vertelab/odoo-sale',
-    'depends': ['sale','sale_management','sale_order_phone_number','elk46_send_sms' ],
+    'depends': ['sale','sale_management','sale_order_phone_number' ],
     'data': [
         'security/ir.model.access.csv',
         'views/sale_order_sms_view.xml',
