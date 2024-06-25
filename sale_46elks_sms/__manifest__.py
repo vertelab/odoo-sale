@@ -26,7 +26,9 @@
     'summary': '',
     'category': 'Sales',
     'description': """
-    
+
+    This module depends on module "sale_order_phone_number", can be found at:
+    https://github.com/vertelab/odoo-sale/tree/16.0
     """,
     #'sequence': '1',
     'author': 'Vertel AB',
