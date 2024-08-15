@@ -2,24 +2,24 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="140px"
    height="140px"
    viewBox="0 0 140 140"
    version="1.1"
    id="SVGRoot"
    sodipodi:docname="icon_140x140.svg"
-   inkscape:export-filename="/usr/share/odoo-sale/sale_order_phone_number/static/description/icon.png"
+   inkscape:export-filename="/home/jakob/Dokument/Odoo16/odoo-sale/sale_order_phone_number/static/description/icon.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
-   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs3475" />
   <sodipodi:namedview
@@ -30,16 +30,17 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="-254.39377"
-     inkscape:cy="-104.1462"
+     inkscape:cx="-276.5"
+     inkscape:cy="67.5"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1870"
      inkscape:window-height="962"
-     inkscape:window-x="144"
-     inkscape:window-y="67"
-     inkscape:window-maximized="0" />
+     inkscape:window-x="50"
+     inkscape:window-y="36"
+     inkscape:window-maximized="0"
+     inkscape:pagecheckerboard="0" />
   <metadata
      id="metadata3478">
     <rdf:RDF>
@@ -48,7 +49,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -67,40 +67,28 @@
        style="stroke-width:4.65477753" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.21201706px;line-height:125%;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.99999994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="69.149689"
-       y="58.94268"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6131px;line-height:125%;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.999999px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="69.631149"
+       y="92.719772"
        id="text2035"><tspan
          sodipodi:role="line"
-         x="69.149689"
-         y="58.94268"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.82135963px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;stroke-width:0.99999994px"
-         id="tspan825">Sale</tspan><tspan
+         x="69.631149"
+         y="92.719772"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.8677px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;stroke-width:0.999999px"
+         id="tspan825">Sale Order</tspan><tspan
          sodipodi:role="line"
-         x="69.149689"
-         y="83.084976"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.82135963px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;stroke-width:0.99999994px"
-         id="tspan824">Order</tspan><tspan
-         sodipodi:role="line"
-         x="69.149689"
-         y="107.22727"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.82135963px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;stroke-width:0.99999994px"
-         id="tspan822">Phone</tspan><tspan
-         sodipodi:role="line"
-         x="69.149689"
-         y="131.36957"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.82135963px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;stroke-width:0.99999994px"
-         id="tspan823">Number</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:35.75433731px;line-height:1.25;font-family:'Futura PT';-inkscape-font-specification:'Futura PT, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1"
-       x="5.1268387"
-       y="39.003582"
-       id="text839"><tspan
-         sodipodi:role="line"
-         id="tspan837"
-         x="5.1268387"
-         y="39.003582"
-         style="fill:#ffffff;stroke-width:1"></tspan></text>
+         x="69.631157"
+         y="108.52438"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.8677px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;stroke-width:0.999999px"
+         id="tspan1936">Phone Number</tspan></text>
+    <image
+       width="60"
+       height="38"
+       preserveAspectRatio="none"
+       style="image-rendering:optimizeQuality"
+       xlink:href="data:image/png;base64,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 "
+       id="image1643"
+       x="5"
+       y="6" />
   </g>
 </svg>

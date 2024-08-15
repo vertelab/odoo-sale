@@ -9,12 +9,12 @@ _logger = logging.getLogger(__name__)
 
 
 class ElkSmsSaleOrder(models.TransientModel):
-    _name = "elk.sms"
+    _name = "elks.sms"
     _inherit = ['mail.render.mixin']
     _description = "Send SMS to Partners"
 
     def _default_sms_body(self):
-        message = self.env['ir.config_parameter'].get_param('elk_sms_premade_message')
+        message = self.env['ir.config_parameter'].get_param('elks_sms_premade_message')
         return message
 
     @api.depends('partner_id')

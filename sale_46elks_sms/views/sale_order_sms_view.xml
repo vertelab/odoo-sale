@@ -3,7 +3,7 @@
     <record id="sms_wizard_action" model="ir.actions.act_window">
         <field name="name">Send SMS</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="res_model">elk.sms</field>
+        <field name="res_model">elks.sms</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
         <field name="binding_model_id" ref="sale.model_sale_order" />
