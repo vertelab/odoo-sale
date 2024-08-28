@@ -17,7 +17,7 @@ class MailComposer(models.TransientModel):
         res = super().onchange_template_id(template_id, composition_mode, model, res_id)
 
         _logger.error(f"{res.get('value', {}).get('attachment_ids')=} and {model=}")
-        if res.get("value", {}).get("attachment_ids") and model == "sale.order":
+        if res.get("value", {}).get("attachment_ids") and model == "sale.order" and res["value"]["attachment_ids"][0][2]:
             _logger.warning(f'{res=}')
             _logger.warning(f'{res["value"]=}')
             _logger.warning(f'{res["value"]["attachment_ids"]=}')
