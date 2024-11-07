@@ -6,6 +6,7 @@ class ProjectTask(models.Model):
 
     @api.onchange('stage_id')
     def update_sale_order_line(self):
+        self = self.sudo()
         if self.stage_id.ready_to_deliver:
             self.sale_line_id.write({
                 'ready_to_deliver': True
