@@ -1,0 +1,72 @@
+<odoo>
+    <data>
+        
+        
+     <template id="sale_order_portal_content_inherit_sale_stock"
+        name="Orders Dropshipping Followup"
+        inherit_id="sale.sale_order_portal_content">
+        
+            <span id="shipping_address" position="after">
+            <t t-set="ds_orders" t-value="sale_order.picking_ids.filtered(lambda picking: picking.picking_type_id.code == 'dropship').sorted('date', reverse=True)[:3]"/>
+            <div t-if="ds_orders" class="col-12 col-lg-6 mb-4">
+<!--
+                <h4 class="mb-1">Last Dropshipping Orders</h4>
+-->
+                <hr class="mt-1 mb-2"/>
+                <div>
+                    <t t-foreach="ds_orders" t-as="picking">
+                        <t t-set="delivery_report_url"
+                           t-value="'/my/picking/pdf/%s?%s' % (picking.id, keep_query())"/>
+                        <div name="delivery_order"
+                            class="d-flex flex-column">
+                            <div name="delivery_details" class="d-flex align-items-center justify-content-between">
+                                <a t-att-href="delivery_report_url">
+                                    <span t-esc="picking.name"/>
+                                </a>
+                                <div t-if="picking.state == 'done'">
+                                    <span class="small badge text-bg-success orders_label_text_align">
+                                        <i class="fa fa-fw fa-truck"/> Shipped
+                                   </span>
+                                    <!-- return orders ??? -->
+                                    <span>
+                                    <a class="badge text-bg-secondary orders_label_text_align" target="_blank"
+                                        t-att-href="'/my/picking/return/pdf/%s?%s' % (picking.id, keep_query())">
+                                        RETURN
+                                    </a>
+                                     </span>
+                                </div>
+                                <span t-elif="picking.state == 'cancel'"
+                                    class="small badge text-bg-danger orders_label_text_align">
+                                    <i class="fa fa-fw fa-times"/>Cancelled
+                                </span>
+                                <span t-elif="picking.state in ['draft', 'waiting', 'confirmed', 'assigned']"
+                                    class="small badge text-bg-info orders_label_text_align">
+                                    <i class="fa fa-fw fa-clock-o"/>Preparation
+                                </span>
+                            
+                            <span class="small d-lg-inline-block" t-if="picking.date_done or picking.scheduled_date">
+                                <span>Date:</span>
+                                <span class="text-muted"
+                                        t-field="picking.date_done"
+                                        t-options="{'date_only': True}"/>
+                                <span t-if="picking.state in ['draft', 'waiting', 'confirmed', 'assigned']"
+                                        class="text-muted"
+                                        t-field="picking.scheduled_date"
+                                        t-options="{'date_only': True}"/>
+                            </span>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+
+                </div>
+            
+            
+            </span>
+            
+            </template>
+        
+    </data>
+</odoo>
+
+
