@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 14.0-20220426\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 09:16+0000\n"
-"PO-Revision-Date: 2022-07-01 11:19+0200\n"
+"PO-Revision-Date: 2024-12-23 14:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
-"Language: sv\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #. module: sale_order_deadline_task
 #: model:ir.model,name:sale_order_deadline_task.model_res_config_settings
@@ -30,12 +30,12 @@ msgstr "Antal"
 #. module: sale_order_deadline_task
 #: model:ir.model.fields,field_description:sale_order_deadline_task.field_project_task_deadline_overview__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Skapad av"
 
 #. module: sale_order_deadline_task
 #: model:ir.model.fields,field_description:sale_order_deadline_task.field_project_task_deadline_overview__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Skapad den"
 
 #. module: sale_order_deadline_task
 #: model:ir.model.fields,field_description:sale_order_deadline_task.field_project_task_deadline_overview__date
@@ -57,7 +57,7 @@ msgstr "Tidsfrist"
 #: model:ir.model.fields,field_description:sale_order_deadline_task.field_res_config_settings__deadline_overview_count
 #: model_terms:ir.ui.view,arch_db:sale_order_deadline_task.res_config_settings_view_form_inherit_sale
 msgid "Deadline Overview Count"
-msgstr ""
+msgstr "Tidsfrist översikt räkna"
 
 #. module: sale_order_deadline_task
 #: model:ir.model.fields,field_description:sale_order_deadline_task.field_project_task__display_name
@@ -89,12 +89,12 @@ msgstr "Senast redigerad"
 #. module: sale_order_deadline_task
 #: model:ir.model.fields,field_description:sale_order_deadline_task.field_project_task_deadline_overview__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Senast uppdaterad av"
 
 #. module: sale_order_deadline_task
 #: model:ir.model.fields,field_description:sale_order_deadline_task.field_project_task_deadline_overview__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Senast uppdaterad den"
 
 #. module: sale_order_deadline_task
 #: model:ir.model.fields,field_description:sale_order_deadline_task.field_res_config_settings__deadline_max_tasks
@@ -124,7 +124,7 @@ msgstr "Aktivitet tidsfrist  Översikt"
 #. module: sale_order_deadline_task
 #: model:ir.model.fields,field_description:sale_order_deadline_task.field_project_task_deadline_overview__sale_order_id
 msgid "Sale Order"
-msgstr ""
+msgstr "Försäljningsorder"
 
 #. module: sale_order_deadline_task
 #: model:ir.model,name:sale_order_deadline_task.model_sale_order
