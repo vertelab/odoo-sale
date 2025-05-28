@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="sale_order_portal_template" inherit_id="sale.sale_order_portal_template">
+        <!-- Add BankID Sign button to sidebar -->
+        <xpath expr="//div[hasclass('o_portal_sale_sidebar')]/t[@id='sale_order_portal_sidebar']/t[@t-set='entries']//div[@id='sale_order_sidebar_button']/a[1]" position="before">
+            <a t-if="sale_order._has_to_be_signed()" role="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_bankid_ssn" href="#">
+                <i class="fa fa-pencil"/> Sign with BankID
+            </a>
+        </xpath>
+
+        <!-- Add BankID modal -->
+        <xpath expr="//div[hasclass('o_portal_sale_sidebar')]/div[@id='quote_content']" position="inside">
+            <!-- BankID Modal -->
+            <t t-call="sale_sign_bankid.bankid_modal"/>
+        </xpath>
+    </template>
+
+    <template id="bankid_modal">
+        <!-- advance modal relative to the actions bankid ssn -->
+        <div role="dialog" class="modal fade" id="modal_bankid_ssn" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-lg">
+                <form id="bankid_sign"
+                      t-att-data-res-id="sale_order.id"
+                      t-att-data-res-model="sale_order._name"
+                      t-att-data-token="sale_order.access_token"
+                      class="modal-content">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                    <header class="modal-header">
+                        <h4 class="modal-title">Sign with BankID</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
+                    </header>
+
+                    <main class="modal-body">
+                        <!-- Initial view - SSN input -->
+                        <div id="bankid_init_view">
+                            <p>
+                                By signing with BankID, you confirm acceptance on behalf of
+                                <b t-field="sale_order.partner_id.commercial_partner_id"/>
+                                for the <b t-field="sale_order.amount_total" t-options='{"widget": "monetary", "display_currency": sale_order.currency_id}'/> quote.
+                            </p>
+
+                            <p t-if="sale_order.payment_term_id">
+                                <b t-field="sale_order.payment_term_id.note"/>
+                            </p>
+
+                            <div class="form-group mt-4">
+                                <label class="form-label" for="ssn">Personal Number</label>
+                                <input type="text" name="ssn" class="form-control" placeholder="YYYYMMDD-NNNN"/>
+                                <small class="form-text text-muted">Enter your Swedish personal number</small>
+                            </div>
+                        </div>
+
+                        <!-- BankID signing view (initially hidden) -->
+                        <div id="bankid_signing_view" style="display: none;">
+                            <div id="bankid_status" class="alert alert-info text-center mb-4">
+                                Starting BankID...
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 text-center mb-4">
+                                    <h5>Scan with BankID app</h5>
+                                    <div id="qrcode-container" class="d-flex justify-content-center">
+                                        <!-- QR code will be inserted here -->
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 text-center mb-4">
+                                    <h5>Or launch app on this device</h5>
+                                    <a id="bankid-autostart-link" href="#" class="btn btn-primary mt-3">
+                                        <i class="fa fa-mobile-phone"/> Launch BankID App
+                                    </a>
+                                    <p class="small mt-2">
+                                        Click the button above if you have the BankID app installed on this device.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+
+                    <footer class="modal-footer">
+                        <!-- Initial footer -->
+                        <div id="bankid_init_footer">
+                            <button type="button" class="btn btn-primary bankid_sign_init">
+                                <i class="fa fa-pencil"/> Sign with BankID
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
+
+                        <!-- Signing footer (initially hidden) -->
+                        <div id="bankid_signing_footer" style="display: none;">
+                            <button type="button" class="btn btn-danger bankid_sign_cancel">
+                                <i class="fa fa-times"/> Cancel
+                            </button>
+                        </div>
+                    </footer>
+                </form>
+            </div>
+        </div>
+    </template>
+
+</odoo>

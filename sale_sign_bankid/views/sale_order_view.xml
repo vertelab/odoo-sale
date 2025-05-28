@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="view_order_form_bankid" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.bankid</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[last()]" position="after">
+                    <page string="Sign with BankID">
+                        <group>
+                            <group>
+                                <field name="bankid_order_ref"/>
+                                <field name="bankid_auto_start_token"/>
+                                <field name="bankid_qr_start_token"/>
+                            </group>
+                            <group>
+                                <field name="bankid_qr_start_secret"/>
+                                <field name="bankid_status"/>
+                                <field name="bankid_start_time"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
