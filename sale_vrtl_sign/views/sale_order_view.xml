@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+        <record id="view_sale_order_template_form" model="ir.ui.view">
+            <field name="name">sale.order.template.inherit.scrive</field>
+            <field name="model">sale.order.template</field>
+            <field name="inherit_id" ref="sale_management.sale_order_template_view_form"/>
+            <field name="arch" type="xml">
+                <field name="require_signature" position="after">
+                    <field name="sign_provider_id" invisible="1"/>
+                    <field name="sign_definition_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_order_form_scrive" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.scrive</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <button name="action_confirm" position="after">
+                     <button name="generate" string="Generate Sign" type="object" invisible="sign_request_id" />
+                </button>
+                <field name="sale_order_template_id" position="after">
+                    <field name="sign_definition_id"/>
+                    <field name="sign_provider_id" invisible="1" />
+                    <field name="sign_request_id" readonly="1"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>
