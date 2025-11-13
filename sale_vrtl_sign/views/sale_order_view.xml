@@ -20,7 +20,8 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <button name="action_confirm" position="after">
-                     <button name="generate" string="Generate Sign" type="object" invisible="sign_request_id" />
+<!--                     <button name="generate" string="Generate Sign" type="object" invisible="sign_request_id" />-->
+                     <button name="generate" string="Generate Sign" type="object" />
                 </button>
                 <field name="sale_order_template_id" position="after">
                     <field name="sign_definition_id"/>
