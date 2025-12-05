@@ -1,0 +1,83 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sale_clear_warning
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0-20251205\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-05 13:13+0000\n"
+"PO-Revision-Date: 2025-12-05 14:44+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#. module: sale_clear_warning
+#: model:ir.model,name:sale_clear_warning.model_sale_order_warning_wizard
+msgid "A wizard thet replaces the standard warning in odoo"
+msgstr "En guide som ersätter standardvarningen i Odoo"
+
+#. module: sale_clear_warning
+#: model_terms:ir.ui.view,arch_db:sale_clear_warning.sale_order_warning_wizard
+msgid "Cancel"
+msgstr "Avbryt"
+
+#. module: sale_clear_warning
+#: model:ir.model.fields,field_description:sale_clear_warning.field_sale_order_warning_wizard__create_uid
+msgid "Created by"
+msgstr "Skapad av"
+
+#. module: sale_clear_warning
+#: model:ir.model.fields,field_description:sale_clear_warning.field_sale_order_warning_wizard__create_date
+msgid "Created on"
+msgstr "Skapad den"
+
+#. module: sale_clear_warning
+#: model:ir.model.fields,field_description:sale_clear_warning.field_sale_order_warning_wizard__display_name
+msgid "Display Name"
+msgstr "Visningsnamn"
+
+#. module: sale_clear_warning
+#: model:ir.model.fields,field_description:sale_clear_warning.field_sale_order_warning_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sale_clear_warning
+#: model:ir.model.fields,field_description:sale_clear_warning.field_sale_order_warning_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Senast uppdaterad av"
+
+#. module: sale_clear_warning
+#: model:ir.model.fields,field_description:sale_clear_warning.field_sale_order_warning_wizard__write_date
+msgid "Last Updated on"
+msgstr "Senast uppdaterad den"
+
+#. module: sale_clear_warning
+#: model:ir.model.fields,field_description:sale_clear_warning.field_sale_order_warning_wizard__message
+msgid "Message"
+msgstr "Meddelande"
+
+#. module: sale_clear_warning
+#: model_terms:ir.ui.view,arch_db:sale_clear_warning.sale_order_warning_wizard
+msgid "Ok"
+msgstr "Ok"
+
+#. module: sale_clear_warning
+#: model:ir.model.fields,field_description:sale_clear_warning.field_sale_order_warning_wizard__partner_id
+msgid "Partner"
+msgstr "Partner"
+
+#. module: sale_clear_warning
+#: model:ir.model,name:sale_clear_warning.model_sale_order
+msgid "Sales Order"
+msgstr "Försäljningsorder"
+
+#. module: sale_clear_warning
+#: model_terms:ir.ui.view,arch_db:sale_clear_warning.sale_order_warning_wizard
+msgid "Warning"
+msgstr "Varning"
