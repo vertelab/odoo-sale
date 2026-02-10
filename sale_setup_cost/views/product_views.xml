@@ -1,0 +1,35 @@
+<odoo>
+    <data>
+
+        <record id="product_template_form_view" model="ir.ui.view">
+            <field name="name">product.product.add.costs.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <field name="categ_id" position="after">
+                    <field name="setup_type"/>
+                    <field name="setup_cost_product_id" invisible="setup_type != 'normal'"/>
+                    <field name="handling_cost_product_id" invisible="setup_type != 'normal'"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_order_form" model="ir.ui.view">
+            <field name="name">view_order_form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//list/field[@name='product_template_id']" position="after">
+                    <field name="setup_cost_product_id" optional="hide"/>
+                    <field name="handling_cost_product_id" optional="hide"/>
+                </xpath>
+
+                <xpath expr="//list/field[@name='price_unit']" position="after">
+                    <field name="setup_cost" optional="hide"/>
+                    <field name="handling_cost" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
