@@ -22,7 +22,7 @@
 # https://www.odoo.com/documentation/14.0/reference/module.html
 #
 {
-    'name': 'Sale: Setup Cost',
+    'name': 'Sale: Set Dimensions',
     'version': '1.0',
     'summary': """
         Short (1 phrase/line) summary of the module's purpose, used as
@@ -35,7 +35,7 @@
     'website': 'https://vertel.se/apps/odoo-',
     'images': ['static/description/banner.png'],
     'license': 'AGPL-3',
-    'depends': ["sale","account","uom"],
+    'depends': ["sale"],
     'data': ["views/product_views.xml","views/sale_order_views.xml"],
     'demo': [],
     'application': False,

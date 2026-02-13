@@ -7,9 +7,8 @@
             <field name="inherit_id" ref="product.product_normal_form_view"/>
             <field name="arch" type="xml">
                 <field name="categ_id" position="after">
-                    <field name="setup_type"/>
-                    <field name="setup_cost_product_id" invisible="setup_type != 'normal'"/>
-                    <field name="handling_cost_product_id" invisible="setup_type != 'normal'"/>
+                    <field name="should_set_dimensions"/>
+                    <field name="from_uom" required="should_set_dimensions"/>
                 </field>
             </field>
         </record>
