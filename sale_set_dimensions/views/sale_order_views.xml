@@ -1,0 +1,19 @@
+<odoo>
+  <data>
+
+    <record id="view_order_form" model="ir.ui.view">
+      <field name="name">view_order_form</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//list/field[@name='product_uom_qty']" position="after">
+          <field name="should_set_dimensions" invisible="1" />
+          <field name="qty" optional="show" required="should_set_dimensions" invisible="not should_set_dimensions"/>
+          <field name="hight" optional="show" required="should_set_dimensions" invisible="not should_set_dimensions"/>
+          <field name="width" optional="show" required="should_set_dimensions" invisible="not should_set_dimensions"/>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
+</odoo>
