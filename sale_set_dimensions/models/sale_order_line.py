@@ -7,11 +7,11 @@ _logger = logging.getLogger(__name__)
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
+    should_set_dimensions = fields.Boolean(related="product_id.should_set_dimensions", store=False)
     qty = fields.Integer()
     hight = fields.Float()
     width = fields.Float()
     from_uom = fields.Many2one(related="product_id.from_uom")
-    should_set_dimensions = fields.Boolean(related="product_id.should_set_dimensions")
 
     @api.depends('display_type', 'product_id', 'product_packaging_qty', 'qty', 'hight', 'width', 'product_id.should_set_dimensions')
     def _compute_product_uom_qty(self):

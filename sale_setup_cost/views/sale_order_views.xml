@@ -12,8 +12,8 @@
                 </xpath>
 
                 <xpath expr="//list/field[@name='price_unit']" position="after">
-                    <field name="setup_cost" optional="hide"/>
-                    <field name="handling_cost" optional="hide"/>
+                    <field name="setup_cost" optional="hide" invisible="not setup_cost_product_id" />
+                    <field name="handling_cost" optional="hide" invisible="not handling_cost_product_id" />
                 </xpath>
             </field>
         </record>

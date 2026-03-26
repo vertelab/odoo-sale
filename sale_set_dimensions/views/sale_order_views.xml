@@ -6,12 +6,18 @@
       <field name="model">sale.order</field>
       <field name="inherit_id" ref="sale.view_order_form"/>
       <field name="arch" type="xml">
+
         <xpath expr="//list/field[@name='product_uom_qty']" position="after">
-          <field name="should_set_dimensions" invisible="1" />
+          <field name="should_set_dimensions" column_invisible="1"/>
           <field name="qty" optional="show" required="should_set_dimensions" invisible="not should_set_dimensions"/>
           <field name="hight" optional="show" required="should_set_dimensions" invisible="not should_set_dimensions"/>
-          <field name="width" optional="show" required="should_set_dimensions" invisible="not should_set_dimensions"/>
+          <field name="width" optional="show" required="should_set_dimensions" invisible="not should_set_dimensions"/> 
         </xpath>
+
+        <xpath expr="//list/field[@name='product_uom_qty']" position="attributes">
+          <attribute name="readonly">should_set_dimensions</attribute>        
+        </xpath>
+      
       </field>
     </record>
 
