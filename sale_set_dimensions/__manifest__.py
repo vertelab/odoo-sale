@@ -32,7 +32,7 @@
         Long description of module's purpose
     """,
     'author': 'Vertel AB',
-    'website': 'https://vertel.se/apps/odoo-',
+    'website': 'https://vertel.se/apps/odoo-sale/sale_set_dimensions',
     'images': ['static/description/banner.png'],
     'license': 'AGPL-3',
     'depends': ["sale"],

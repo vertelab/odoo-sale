@@ -7,7 +7,7 @@
     """,
     "version": "18.0.1.0.0",
     "license": "AGPL-3",
-    "website": "https://github.com/vertel/odoo-sale",
+    "website": "https://vertel.se/apps/odoo-sale/sale_hr_validation",
     "depends": ['sale', 'sale_tier_validation'],
     "data": [
         'views/sale_order_views.xml',
