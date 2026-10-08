@@ -23,23 +23,16 @@
 #
 {
     'name': 'Sale: Clear Warning',
-    'version': '18.0.1.0.0',
-    'summary': "Clears sale order warnings after confirmation.",
+    'version': '1.0',
+    'summary': """
+        Short (1 phrase/line) summary of the module's purpose, used as
+        subtitle on modules listing or apps.odoo.com""",
     'category': '', # Technical Settings|Localization|Payroll Localization|Account Charts|User types|Invoicing|Sales|Human Resources|Operations|Marketing|Manufacturing|Website|Theme|Administration|Appraisals|Sign|Helpdesk|Administration|Extra Rights|Other Extra Rights|
-    'description': '''
-Clear Warning
-=============
-
-    Clears sale order warnings after confirmation.
-
-    Features:
-
-        - Guided Wizards: Step-by-step dialogs for data entry.
-        - UI Integration: Extends 2 view(s) in the Odoo interface.
-        - Extends Odoo: Builds on sale.order.
-    ''',
-    'author': 'Vertel AB',
-    'website': 'https://vertel.se/apps/odoo-sale/sale_clear_warning',
+    'description': """
+        Long description of module's purpose
+    """,
+    'author': 'Vertel Sverige AB',
+    'website': 'https://vertel.se/apps/odoo-',
     'images': ['static/description/banner.png'],
     'license': 'AGPL-3',
     'depends': ["sale"],
