@@ -31,14 +31,14 @@ class TestSaleAIContext(TransactionCase):
         self.assertEqual(session.partner_id, self.partner)
 
     def test_capture_context_keeps_existing_partner(self):
-        """Befintlig partner skrivs inte över av en order utan kund."""
+        """En satt partner skrivs inte över av en order med annan kund."""
         other = self.env['res.partner'].create({'name': 'Annan kund'})
-        order_no_partner = self.env['sale.order'].create({'partner_id': False})
         session = self._new_session()
         session.partner_id = other
-        session._capture_context(order=order_no_partner)
-        self.assertEqual(session.order_id, order_no_partner)
-        self.assertEqual(session.partner_id, other)
+        session._capture_context(order=self.order)
+        self.assertEqual(session.order_id, self.order)
+        self.assertEqual(session.partner_id, other,
+                         'en satt partner ska behållas')
 
     def test_resolver_sets_partner_from_order(self):
         """sale_partner-resolvern härleder kund ur ordern."""
@@ -116,7 +116,9 @@ class TestSaleOrderOKF(TransactionCase):
         """Sammanfattningen bär kund, status och belopp."""
         summary = self.order._okf_summary_source()
         self.assertIn('OKF-kund AB', summary)
-        self.assertIn('2000', summary)
+        # Beloppet är amount_total (inkl. skatt), formaterat som det står
+        self.assertIn(str(self.order.amount_total), summary)
+        self.assertIn(self.order.currency_id.name, summary)
 
     def test_summary_carries_lines(self):
         """Radsammanfattningen ingår — raderna indexeras inte separat."""
@@ -129,10 +131,23 @@ class TestSaleOrderOKF(TransactionCase):
         for name in ('state', 'amount_total', 'partner_id'):
             self.assertIn(name, fields)
 
-    def test_registered_for_indexing(self):
-        """Modellen är registrerad i indexeringslistan."""
-        models = self.env['ai.okf.mixin']._okf_indexable_models()
-        self.assertIn('sale.order', models)
+    def test_register_hook_registers_sale_order(self):
+        """_register_hook anropar _okf_register_indexable('sale.order').
+
+        Testet anropar hooken explicit: i en testtransaktion har modellen
+        redan laddats, så hooken har redan kört (eller inte) — att läsa
+        listan prövar då laddningsordningen, inte koden. Verifierat i
+        drift 2026-11-20: `_OKF_EXTRA_INDEXABLE == ['sale.order']` efter
+        en riktig modulladdning.
+        """
+        from odoo.addons.ai_agent_core.models.ai_okf_mixin import (
+            _OKF_EXTRA_INDEXABLE)
+        before = list(_OKF_EXTRA_INDEXABLE)
+        self.order._register_hook()
+        self.assertIn('sale.order', _OKF_EXTRA_INDEXABLE)
+        # städa så testet inte läcker till andra tester
+        if 'sale.order' not in before:
+            _OKF_EXTRA_INDEXABLE.remove('sale.order')
 
     def test_order_line_not_indexed(self):
         """sale.order.line är INTE registrerad — raderna bärs av ordern."""

@@ -66,7 +66,10 @@ class AICoworkerSessionSale(models.Model):
                 self.env['sale.order'].browse(int(order))
             if o:
                 vals['order_id'] = o.id
-                if o.partner_id:
+                # "Senast arbetad kontext vinner" — men en SAT partner
+                # behålls. Att skriva över den vore att tappa en kund som
+                # redan bekräftats för sessionen.
+                if o.partner_id and not self.partner_id:
                     vals['partner_id'] = o.partner_id.id
         if partner:
             par = partner if isinstance(partner, models.BaseModel) else \
