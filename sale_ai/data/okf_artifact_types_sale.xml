@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Artifact type for the sale bridge (okf-mixin D12).
+
+             `bridge_module` points at sale_ai, so the taxonomy can be
+             traced back to ONE bridge. A quotation is a business event,
+             not a document and not a record — hence its own type, so it
+             can be filtered, retentioned and injected separately. -->
+        <record id="artifact_type_sale_order" model="ai.artifact.type">
+            <field name="name">sale_order</field>
+            <field name="kind">knowledge</field>
+            <field name="bridge_module">sale_ai</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="okf_contract" eval="{'generated_by': 'process', 'stale_policy': 'source', 'stale_ttl_days': 0, 'retention_purpose': 'none', 'retention_days': 0}"/>
+        </record>
+    </data>
+</odoo>
